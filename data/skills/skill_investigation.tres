@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_investigation"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://skill_investigation"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_investigation"
 display_name = "Investigation"
 description = "Your ability to look around for clues and make deductions from evidence."
 ability_key = "int"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"

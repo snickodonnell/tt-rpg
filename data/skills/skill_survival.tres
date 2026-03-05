@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_survival"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://skill_survival"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_survival"
 display_name = "Survival"
 description = "Your ability to survive in harsh environments, such as when you track prey or find food and water."
 ability_key = "wis"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"

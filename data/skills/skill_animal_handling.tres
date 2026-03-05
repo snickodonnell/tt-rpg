@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_animal_handling"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://skill_animal_handling"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_animal_handling"
 display_name = "Animal Handling"
 description = "Your ability to calm and control animals, such as when you try to calm a frightened horse or teach a dog a new trick."
 ability_key = "wis"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"

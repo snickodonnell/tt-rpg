@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_athletics"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://cj28t1acbbx18"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_athletics"
 display_name = "Athletics"
 description = "Your athletic ability, such as when you try to climb, jump, or swim."
-ability_key = "str"
+flavor_text = "str"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"

@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_arcana"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://skill_arcana"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_arcana"
 display_name = "Arcana"
 description = "Your knowledge of spells, magic items, and the workings of the Weave."
 ability_key = "int"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"

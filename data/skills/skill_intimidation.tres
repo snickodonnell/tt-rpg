@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_intimidation"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://skill_intimidation"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_intimidation"
 display_name = "Intimidation"
 description = "Your ability to influence others through threats, hostility, or physical violence."
 ability_key = "cha"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"

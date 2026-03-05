@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_acrobatics"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://skill_acrobatics"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_acrobatics"
 display_name = "Acrobatics"
 description = "Your ability to stay on your feet in tricky situations, such as when you’re trying to run across a slippery deck or tumble away from an attack."
 ability_key = "dex"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"

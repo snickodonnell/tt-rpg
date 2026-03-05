@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_stealth"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://skill_stealth"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_stealth"
 display_name = "Stealth"
 description = "Your ability to remain hidden from notice, such as when you try to sneak past guards."
 ability_key = "dex"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"

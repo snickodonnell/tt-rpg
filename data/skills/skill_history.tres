@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_history"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://skill_history"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_history"
 display_name = "History"
 description = "Your knowledge of historical events, legendary people, and ancient kingdoms."
 ability_key = "int"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"

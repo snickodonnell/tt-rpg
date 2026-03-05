@@ -1,7 +1,11 @@
-[gd_resource type="SkillResource" format=3 uid="uid://skill_performance"]
+[gd_resource type="Resource" script_class="SkillResource" format=3 uid="uid://skill_performance"]
+
+[ext_resource type="Script" uid="uid://3u62itbgdmnj" path="res://data/skills/SkillResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "skill_performance"
 display_name = "Performance"
 description = "Your ability to delight an audience with music, dance, acting, or storytelling."
 ability_key = "cha"
+metadata/_custom_type_script = "uid://3u62itbgdmnj"
