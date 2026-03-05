@@ -1,0 +1,12 @@
+[gd_resource type="ClassResource" format=3 uid="uid://class_druid"]
+
+[resource]
+resource_id = "class_druid"
+display_name = "Druid"
+description = "A nature priest who can shape-shift."
+hit_die = "d8"
+saving_throw_proficiencies = ["int", "wis"]
+skill_proficiency_count = 2
+armor_proficiencies = ["Light", "Medium", "Shields"]
+weapon_proficiencies = ["Clubs", "Daggers", "Darts", "Javelins", "Maces", "Quarterstaffs", "Scimitars", "Sickles", "Spears"]
+modifiers = []

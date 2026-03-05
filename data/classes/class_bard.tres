@@ -1,0 +1,12 @@
+[gd_resource type="ClassResource" format=3 uid="uid://class_bard"]
+
+[resource]
+resource_id = "class_bard"
+display_name = "Bard"
+description = "An inspiring performer whose music weaves magic."
+hit_die = "d8"
+saving_throw_proficiencies = ["dex", "cha"]
+skill_proficiency_count = 3
+armor_proficiencies = ["Light"]
+weapon_proficiencies = ["Simple", "Hand Crossbows", "Longswords", "Rapiers", "Shortswords"]
+modifiers = []

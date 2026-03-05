@@ -1,1 +1,12 @@
 [gd_resource type="ClassResource" format=3 uid="uid://class_fighter"]
+
+[resource]
+resource_id = "class_fighter"
+display_name = "Fighter"
+description = "A master of martial combat."
+hit_die = "d10"
+saving_throw_proficiencies = ["str", "con"]
+skill_proficiency_count = 2
+armor_proficiencies = ["Light", "Medium", "Heavy", "Shields"]
+weapon_proficiencies = ["Simple", "Martial"]
+modifiers = []

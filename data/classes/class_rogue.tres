@@ -1,0 +1,12 @@
+[gd_resource type="ClassResource" format=3 uid="uid://class_rogue"]
+
+[resource]
+resource_id = "class_rogue"
+display_name = "Rogue"
+description = "A stealthy adventurer who strikes from the shadows."
+hit_die = "d8"
+saving_throw_proficiencies = ["dex", "int"]
+skill_proficiency_count = 4
+armor_proficiencies = ["Light"]
+weapon_proficiencies = ["Simple", "Hand Crossbows", "Longswords", "Rapiers", "Shortswords"]
+modifiers = []

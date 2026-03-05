@@ -1,0 +1,12 @@
+[gd_resource type="ClassResource" format=3 uid="uid://class_paladin"]
+
+[resource]
+resource_id = "class_paladin"
+display_name = "Paladin"
+description = "A holy warrior bound by an oath."
+hit_die = "d10"
+saving_throw_proficiencies = ["wis", "cha"]
+skill_proficiency_count = 2
+armor_proficiencies = ["Light", "Medium", "Heavy", "Shields"]
+weapon_proficiencies = ["Simple", "Martial"]
+modifiers = []

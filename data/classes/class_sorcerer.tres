@@ -1,0 +1,12 @@
+[gd_resource type="ClassResource" format=3 uid="uid://class_sorcerer"]
+
+[resource]
+resource_id = "class_sorcerer"
+display_name = "Sorcerer"
+description = "A spellcaster with innate magic."
+hit_die = "d6"
+saving_throw_proficiencies = ["con", "cha"]
+skill_proficiency_count = 2
+armor_proficiencies = []
+weapon_proficiencies = ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light Crossbows"]
+modifiers = []
