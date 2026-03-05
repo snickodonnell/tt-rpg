@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_scholar_pack"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_scholar_pack"
+display_name = "Scholar's Pack"
+category = 6
+cost_gp = 40
+weight_lb = 0.0
+description = "A pack for scholars and scribes."
+is_container = true
+default_contents = ["item_backpack", "item_book_lore", "item_ink_bottle", "item_ink_pen", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_rations", "item_rations", "item_rations", "item_rations", "item_rations", "item_waterskin"]
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

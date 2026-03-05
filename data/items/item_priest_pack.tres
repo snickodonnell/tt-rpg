@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_priest_pack"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_priest_pack"
+display_name = "Priest's Pack"
+category = 6
+cost_gp = 19
+weight_lb = 0.0
+description = "A pack for traveling clergy."
+is_container = true
+default_contents = ["item_backpack", "item_blanket", "item_candle", "item_candle", "item_candle", "item_candle", "item_candle", "item_candle", "item_candle", "item_candle", "item_candle", "item_candle", "item_tinderbox", "item_rations", "item_rations", "item_rations", "item_rations", "item_rations", "item_waterskin"]
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

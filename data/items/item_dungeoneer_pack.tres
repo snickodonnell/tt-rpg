@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_dungeoneer_pack"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_dungeoneer_pack"
+display_name = "Dungeoneer's Pack"
+category = 6
+cost_gp = 12
+weight_lb = 0.0
+description = "A pack for dungeon delving."
+is_container = true
+default_contents = ["item_backpack", "item_crowbar", "item_hammer", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_torch", "item_torch", "item_torch", "item_torch", "item_torch", "item_torch", "item_50ft_hempen_rope", "item_rations", "item_rations", "item_rations", "item_rations", "item_rations"]
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_burglar_pack"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_burglar_pack"
+display_name = "Burglar's Pack"
+category = 6
+cost_gp = 16
+weight_lb = 0.0
+description = "A pack for breaking and entering."
+is_container = true
+default_contents = ["item_backpack", "item_50ft_hempen_rope", "item_torch", "item_torch", "item_torch", "item_torch", "item_torch", "item_crowbar", "item_hammer", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton", "item_piton"]
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

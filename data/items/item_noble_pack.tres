@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_noble_pack"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_noble_pack"
+display_name = "Noble's Pack"
+category = 6
+cost_gp = 50
+weight_lb = 0.0
+description = "A pack befitting nobility."
+is_container = true
+default_contents = ["item_chest", "item_clothes_fine", "item_ink_bottle", "item_ink_pen", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_sealing_wax", "item_signet_ring"]
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

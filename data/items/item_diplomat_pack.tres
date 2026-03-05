@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_diplomat_pack"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_diplomat_pack"
+display_name = "Diplomat's Pack"
+category = 6
+cost_gp = 39
+weight_lb = 0.0
+description = "A pack for the well-dressed traveler."
+is_container = true
+default_contents = ["item_chest", "item_ink_bottle", "item_ink_pen", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_paper_sheet", "item_lamp", "item_oil_flask", "item_oil_flask", "item_oil_flask", "item_oil_flask", "item_oil_flask"]
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"
