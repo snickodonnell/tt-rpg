@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_druidic_focus_sprig"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_druidic_focus_sprig"
+display_name = "Druidic Focus (Sprig of Mistletoe)"
+category = 6
+cost_gp = 1
+weight_lb = 0.0
+description = "A sprig of mistletoe used as a druidic focus."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

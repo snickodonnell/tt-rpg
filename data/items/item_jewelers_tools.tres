@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_jewelers_tools"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_jewelers_tools"
+display_name = "Jeweler's Tools"
+category = 3
+cost_gp = 25
+weight_lb = 2.0
+description = "Tools for cutting and setting gems."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

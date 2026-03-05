@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_tent_two_person"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_tent_two_person"
+display_name = "Tent (Two-Person)"
+category = 6
+cost_gp = 2
+weight_lb = 20.0
+description = "A simple two-person tent."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

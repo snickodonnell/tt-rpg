@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_trinket_lucky_rabbits_foot"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_trinket_lucky_rabbits_foot"
+display_name = "A Lucky Rabbit's Foot"
+category = 4
+cost_gp = 0
+weight_lb = 0.0
+description = "A worn rabbit's foot tied with faded red thread."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

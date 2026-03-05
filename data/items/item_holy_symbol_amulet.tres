@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_holy_symbol_amulet"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_holy_symbol_amulet"
+display_name = "Holy Symbol (Amulet)"
+category = 6
+cost_gp = 5
+weight_lb = 1.0
+description = "A holy symbol worn as an amulet."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

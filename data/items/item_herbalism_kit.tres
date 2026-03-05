@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_herbalism_kit"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_herbalism_kit"
+display_name = "Herbalism Kit"
+category = 3
+cost_gp = 5
+weight_lb = 3.0
+description = "A bag of herbs, poultices, and tools for healing."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

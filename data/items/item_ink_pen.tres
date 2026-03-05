@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_ink_pen"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_ink_pen"
+display_name = "Ink Pen"
+category = 6
+cost_gp = 0.02
+weight_lb = 0.0
+description = "A quill pen."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

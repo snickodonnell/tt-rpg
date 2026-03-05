@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_mess_kit"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_mess_kit"
+display_name = "Mess Kit"
+category = 6
+cost_gp = 0.2
+weight_lb = 1.0
+description = "A tin plate, cup, and utensils."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

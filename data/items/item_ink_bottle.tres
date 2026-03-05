@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_ink_bottle"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_ink_bottle"
+display_name = "Ink (1 oz. Bottle)"
+category = 6
+cost_gp = 10
+weight_lb = 0.0
+description = "A bottle of black ink."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

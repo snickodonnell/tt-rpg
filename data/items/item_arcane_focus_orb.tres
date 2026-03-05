@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_arcane_focus_orb"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_arcane_focus_orb"
+display_name = "Arcane Focus (Orb)"
+category = 6
+cost_gp = 20
+weight_lb = 3.0
+description = "An orb used as an arcane focus."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

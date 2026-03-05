@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_blanket"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_blanket"
+display_name = "Blanket"
+category = 6
+cost_gp = 0.5
+weight_lb = 3.0
+description = "A warm wool blanket."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

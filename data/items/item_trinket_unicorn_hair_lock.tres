@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_trinket_unicorn_hair_lock"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_trinket_unicorn_hair_lock"
+display_name = "A Lock of Unicorn Hair"
+category = 4
+cost_gp = 0
+weight_lb = 0.0
+description = "A silvery strand wrapped in blue silk."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

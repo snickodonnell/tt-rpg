@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_50ft_hempen_rope"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_50ft_hempen_rope"
+display_name = "50 ft Hempen Rope"
+category = 6
+cost_gp = 1
+weight_lb = 10.0
+description = "Strong hemp rope."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"
