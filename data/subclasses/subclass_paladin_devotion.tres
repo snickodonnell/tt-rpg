@@ -1,0 +1,9 @@
+[gd_resource type="SubclassResource" format=3 uid="uid://subclass_paladin_devotion"]
+
+[resource]
+resource_id = "subclass_paladin_devotion"
+display_name = "Oath of Devotion"
+description = "Holy knights sworn to protect the innocent."
+parent_class_id = "class_paladin"
+level_unlocked = 3
+modifiers = []
