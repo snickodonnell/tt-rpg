@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_history"]
+
+[resource]
+resource_id = "skill_history"
+display_name = "History"
+description = "Your knowledge of historical events, legendary people, and ancient kingdoms."
+ability_key = "int"

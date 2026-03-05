@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_insight"]
+
+[resource]
+resource_id = "skill_insight"
+display_name = "Insight"
+description = "Your ability to discern a person’s true intentions or read their mood."
+ability_key = "wis"

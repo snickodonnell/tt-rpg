@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_medicine"]
+
+[resource]
+resource_id = "skill_medicine"
+display_name = "Medicine"
+description = "Your knowledge of how to treat injuries and illnesses."
+ability_key = "wis"

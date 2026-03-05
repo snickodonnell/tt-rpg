@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_sleight_of_hand"]
+
+[resource]
+resource_id = "skill_sleight_of_hand"
+display_name = "Sleight of Hand"
+description = "Your ability to perform fine motor tasks like picking pockets or concealing an object on your person."
+ability_key = "dex"

@@ -1,1 +1,7 @@
 [gd_resource type="SkillResource" format=3 uid="uid://skill_athletics"]
+
+[resource]
+resource_id = "skill_athletics"
+display_name = "Athletics"
+description = "Your athletic ability, such as when you try to climb, jump, or swim."
+ability_key = "str"

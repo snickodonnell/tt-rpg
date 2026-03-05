@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_intimidation"]
+
+[resource]
+resource_id = "skill_intimidation"
+display_name = "Intimidation"
+description = "Your ability to influence others through threats, hostility, or physical violence."
+ability_key = "cha"

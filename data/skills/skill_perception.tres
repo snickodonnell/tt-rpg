@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_perception"]
+
+[resource]
+resource_id = "skill_perception"
+display_name = "Perception"
+description = "Your awareness of your surroundings and ability to notice hidden things."
+ability_key = "wis"

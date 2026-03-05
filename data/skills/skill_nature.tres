@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_nature"]
+
+[resource]
+resource_id = "skill_nature"
+display_name = "Nature"
+description = "Your knowledge of terrain, plants, animals, and the natural world."
+ability_key = "int"

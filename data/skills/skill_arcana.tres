@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_arcana"]
+
+[resource]
+resource_id = "skill_arcana"
+display_name = "Arcana"
+description = "Your knowledge of spells, magic items, and the workings of the Weave."
+ability_key = "int"

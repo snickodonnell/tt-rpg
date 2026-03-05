@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_acrobatics"]
+
+[resource]
+resource_id = "skill_acrobatics"
+display_name = "Acrobatics"
+description = "Your ability to stay on your feet in tricky situations, such as when you’re trying to run across a slippery deck or tumble away from an attack."
+ability_key = "dex"

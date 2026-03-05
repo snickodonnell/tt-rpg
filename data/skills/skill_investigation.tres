@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_investigation"]
+
+[resource]
+resource_id = "skill_investigation"
+display_name = "Investigation"
+description = "Your ability to look around for clues and make deductions from evidence."
+ability_key = "int"

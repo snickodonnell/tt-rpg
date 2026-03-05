@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_performance"]
+
+[resource]
+resource_id = "skill_performance"
+display_name = "Performance"
+description = "Your ability to delight an audience with music, dance, acting, or storytelling."
+ability_key = "cha"

@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_survival"]
+
+[resource]
+resource_id = "skill_survival"
+display_name = "Survival"
+description = "Your ability to survive in harsh environments, such as when you track prey or find food and water."
+ability_key = "wis"

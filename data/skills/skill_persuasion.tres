@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_persuasion"]
+
+[resource]
+resource_id = "skill_persuasion"
+display_name = "Persuasion"
+description = "Your ability to influence others with tact, social graces, or good reasoning."
+ability_key = "cha"

@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_stealth"]
+
+[resource]
+resource_id = "skill_stealth"
+display_name = "Stealth"
+description = "Your ability to remain hidden from notice, such as when you try to sneak past guards."
+ability_key = "dex"

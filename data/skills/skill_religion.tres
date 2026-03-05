@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_religion"]
+
+[resource]
+resource_id = "skill_religion"
+display_name = "Religion"
+description = "Your knowledge of gods, rites, prayers, cults, and religious practices."
+ability_key = "int"

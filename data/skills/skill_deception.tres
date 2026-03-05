@@ -1,0 +1,7 @@
+[gd_resource type="SkillResource" format=3 uid="uid://skill_deception"]
+
+[resource]
+resource_id = "skill_deception"
+display_name = "Deception"
+description = "Your ability to convincingly hide the truth or mislead others."
+ability_key = "cha"
