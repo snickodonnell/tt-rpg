@@ -1,0 +1,7 @@
+[gd_resource type="BackgroundResource" format=3 uid="uid://background_noble"]
+[resource]
+resource_id = "background_noble"
+display_name = "Noble"
+skill_proficiencies = ["skill_history", "skill_persuasion"]
+description = "You were born into a noble family."
+modifiers = []

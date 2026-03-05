@@ -1,1 +1,7 @@
 [gd_resource type="BackgroundResource" format=3 uid="uid://background_acolyte"]
+[resource]
+resource_id = "background_acolyte"
+display_name = "Acolyte"
+skill_proficiencies = ["skill_insight", "skill_religion"]
+description = "You have spent your life in the service of a temple or religious order."
+modifiers = []

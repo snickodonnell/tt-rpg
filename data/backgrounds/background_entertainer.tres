@@ -1,0 +1,7 @@
+[gd_resource type="BackgroundResource" format=3 uid="uid://background_entertainer"]
+[resource]
+resource_id = "background_entertainer"
+display_name = "Entertainer"
+skill_proficiencies = ["skill_acrobatics", "skill_performance"]
+description = "You thrive in front of an audience as a performer."
+modifiers = []

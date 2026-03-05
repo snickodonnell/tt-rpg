@@ -1,0 +1,7 @@
+[gd_resource type="BackgroundResource" format=3 uid="uid://background_hermit"]
+[resource]
+resource_id = "background_hermit"
+display_name = "Hermit"
+skill_proficiencies = ["skill_medicine", "skill_religion"]
+description = "You lived in seclusion and discovered great truths."
+modifiers = []

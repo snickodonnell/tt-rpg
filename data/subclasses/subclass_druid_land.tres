@@ -1,9 +1,8 @@
 [gd_resource type="SubclassResource" format=3 uid="uid://subclass_druid_land"]
-
 [resource]
 resource_id = "subclass_druid_land"
 display_name = "Circle of the Land (Forest)"
-description = "Guardians of ancient forests."
 parent_class_id = "class_druid"
 level_unlocked = 2
+description = "Guardians of ancient forests."
 modifiers = []

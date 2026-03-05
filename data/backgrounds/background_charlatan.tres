@@ -1,0 +1,7 @@
+[gd_resource type="BackgroundResource" format=3 uid="uid://background_charlatan"]
+[resource]
+resource_id = "background_charlatan"
+display_name = "Charlatan"
+skill_proficiencies = ["skill_deception", "skill_sleight_of_hand"]
+description = "You are a master of deception and trickery."
+modifiers = []

@@ -1,9 +1,8 @@
 [gd_resource type="SubclassResource" format=3 uid="uid://subclass_bard_lore"]
-
 [resource]
 resource_id = "subclass_bard_lore"
 display_name = "College of Lore"
-description = "Masters of knowledge and cutting words."
 parent_class_id = "class_bard"
 level_unlocked = 3
+description = "Masters of knowledge and cutting words."
 modifiers = []

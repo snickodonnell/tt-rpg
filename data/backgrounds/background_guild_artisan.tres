@@ -1,0 +1,7 @@
+[gd_resource type="BackgroundResource" format=3 uid="uid://background_guild_artisan"]
+[resource]
+resource_id = "background_guild_artisan"
+display_name = "Guild Artisan"
+skill_proficiencies = ["skill_insight", "skill_persuasion"]
+description = "You are a skilled artisan with guild connections."
+modifiers = []
