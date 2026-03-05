@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_padded_armor"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_padded_armor"
+display_name = "Padded Armor"
+category = 1
+armor_type = 0
+armor_class = 11
+armor_strength_req = 0
+stealth_disadvantage = true
+cost_gp = 5
+weight_lb = 8.0
+description = "Light armor made of quilted fabric."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

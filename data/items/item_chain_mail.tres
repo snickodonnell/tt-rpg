@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_chain_mail"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_chain_mail"
+display_name = "Chain Mail"
+category = 1
+armor_type = 2
+armor_class = 16
+armor_strength_req = 13
+stealth_disadvantage = true
+cost_gp = 75
+weight_lb = 55.0
+description = "Heavy armor of interlocking metal rings."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

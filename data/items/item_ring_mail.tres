@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_ring_mail"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_ring_mail"
+display_name = "Ring Mail"
+category = 1
+armor_type = 2
+armor_class = 14
+armor_strength_req = 0
+stealth_disadvantage = true
+cost_gp = 30
+weight_lb = 40.0
+description = "Heavy armor of metal rings sewn to leather."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"
