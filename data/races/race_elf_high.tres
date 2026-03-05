@@ -1,6 +1,9 @@
-[gd_resource type="RaceResource" format=3 uid="uid://race_elf_high"]
+[gd_resource type="Resource" script_class="RaceResource" format=3 uid="uid://race_elf_high"]
+
+[ext_resource type="Script" uid="uid://cfa4c0oss23wn" path="res://data/races/RaceResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "race_elf_high"
 display_name = "High Elf"
 description = "High elves are graceful and studious."
@@ -10,3 +13,4 @@ darkvision = true
 ability_increases = {"dex": 2, "int": 1}
 modifiers = []
 languages = ["common", "elvish"]
+metadata/_custom_type_script = "uid://cfa4c0oss23wn"

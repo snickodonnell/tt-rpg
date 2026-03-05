@@ -1,6 +1,9 @@
-[gd_resource type="RaceResource" format=3 uid="uid://race_dwarf_hill"]
+[gd_resource type="Resource" script_class="RaceResource" format=3 uid="uid://race_dwarf_hill"]
+
+[ext_resource type="Script" uid="uid://cfa4c0oss23wn" path="res://data/races/RaceResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "race_dwarf_hill"
 display_name = "Hill Dwarf"
 description = "Hill dwarves are tough and wise."
@@ -10,3 +13,4 @@ darkvision = true
 ability_increases = {"con": 2, "wis": 1}
 modifiers = []
 languages = ["common", "dwarvish"]
+metadata/_custom_type_script = "uid://cfa4c0oss23wn"

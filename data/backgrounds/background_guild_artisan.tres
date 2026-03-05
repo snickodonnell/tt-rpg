@@ -1,7 +1,12 @@
-[gd_resource type="BackgroundResource" format=3 uid="uid://background_guild_artisan"]
+[gd_resource type="Resource" script_class="BackgroundResource" format=3 uid="uid://background_guild_artisan"]
+
+[ext_resource type="Script" uid="uid://25blxsg2786h" path="res://data/backgrounds/BackgroundResource.gd" id="1_pri6g"]
+
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "background_guild_artisan"
 display_name = "Guild Artisan"
 skill_proficiencies = ["skill_insight", "skill_persuasion"]
 description = "You are a skilled artisan with guild connections."
 modifiers = []
+metadata/_custom_type_script = "uid://25blxsg2786h"

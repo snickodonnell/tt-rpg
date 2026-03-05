@@ -1,7 +1,12 @@
-[gd_resource type="BackgroundResource" format=3 uid="uid://background_hermit"]
+[gd_resource type="Resource" script_class="BackgroundResource" format=3 uid="uid://background_hermit"]
+
+[ext_resource type="Script" uid="uid://25blxsg2786h" path="res://data/backgrounds/BackgroundResource.gd" id="1_pri6g"]
+
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "background_hermit"
 display_name = "Hermit"
 skill_proficiencies = ["skill_medicine", "skill_religion"]
 description = "You lived in seclusion and discovered great truths."
 modifiers = []
+metadata/_custom_type_script = "uid://25blxsg2786h"

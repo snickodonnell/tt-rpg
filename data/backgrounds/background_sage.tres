@@ -1,7 +1,12 @@
-[gd_resource type="BackgroundResource" format=3 uid="uid://background_sage"]
+[gd_resource type="Resource" script_class="BackgroundResource" format=3 uid="uid://background_sage"]
+
+[ext_resource type="Script" uid="uid://25blxsg2786h" path="res://data/backgrounds/BackgroundResource.gd" id="1_pri6g"]
+
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "background_sage"
 display_name = "Sage"
 skill_proficiencies = ["skill_arcana", "skill_history"]
 description = "You are a scholar who has devoted your life to learning."
 modifiers = []
+metadata/_custom_type_script = "uid://25blxsg2786h"

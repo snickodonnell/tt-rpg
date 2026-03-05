@@ -1,6 +1,9 @@
-[gd_resource type="RaceResource" format=3 uid="uid://race_gnome_rock"]
+[gd_resource type="Resource" script_class="RaceResource" format=3 uid="uid://race_gnome_rock"]
+
+[ext_resource type="Script" uid="uid://cfa4c0oss23wn" path="res://data/races/RaceResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "race_gnome_rock"
 display_name = "Rock Gnome"
 description = "Rock gnomes are inventive tinkerers."
@@ -10,3 +13,4 @@ darkvision = true
 ability_increases = {"int": 2, "con": 1}
 modifiers = []
 languages = ["common", "gnomish"]
+metadata/_custom_type_script = "uid://cfa4c0oss23wn"

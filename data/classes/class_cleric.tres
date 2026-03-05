@@ -1,6 +1,9 @@
-[gd_resource type="ClassResource" format=3 uid="uid://class_cleric"]
+[gd_resource type="Resource" script_class="ClassResource" format=3 uid="uid://class_cleric"]
+
+[ext_resource type="Script" uid="uid://bv3hhsuo2v7yk" path="res://data/classes/ClassResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "class_cleric"
 display_name = "Cleric"
 description = "A holy warrior who channels divine power."
@@ -10,3 +13,4 @@ skill_proficiency_count = 2
 armor_proficiencies = ["Light", "Medium", "Shields"]
 weapon_proficiencies = ["Simple"]
 modifiers = []
+metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

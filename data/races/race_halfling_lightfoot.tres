@@ -1,6 +1,9 @@
-[gd_resource type="RaceResource" format=3 uid="uid://race_halfling_lightfoot"]
+[gd_resource type="Resource" script_class="RaceResource" format=3 uid="uid://race_halfling_lightfoot"]
+
+[ext_resource type="Script" uid="uid://cfa4c0oss23wn" path="res://data/races/RaceResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "race_halfling_lightfoot"
 display_name = "Lightfoot Halfling"
 description = "Lightfoot halflings are stealthy and friendly."
@@ -10,3 +13,4 @@ darkvision = false
 ability_increases = {"dex": 2, "cha": 1}
 modifiers = []
 languages = ["common", "halfling"]
+metadata/_custom_type_script = "uid://cfa4c0oss23wn"

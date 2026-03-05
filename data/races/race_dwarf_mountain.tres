@@ -1,6 +1,9 @@
-[gd_resource type="RaceResource" format=3 uid="uid://race_dwarf_mountain"]
+[gd_resource type="Resource" script_class="RaceResource" format=3 uid="uid://race_dwarf_mountain"]
+
+[ext_resource type="Script" uid="uid://cfa4c0oss23wn" path="res://data/races/RaceResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "race_dwarf_mountain"
 display_name = "Mountain Dwarf"
 description = "Mountain dwarves are strong and hardy."
@@ -10,3 +13,4 @@ darkvision = true
 ability_increases = {"str": 2, "con": 2}
 modifiers = []
 languages = ["common", "dwarvish"]
+metadata/_custom_type_script = "uid://cfa4c0oss23wn"

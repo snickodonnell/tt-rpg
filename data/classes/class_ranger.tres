@@ -1,6 +1,9 @@
-[gd_resource type="ClassResource" format=3 uid="uid://class_ranger"]
+[gd_resource type="Resource" script_class="ClassResource" format=3 uid="uid://class_ranger"]
+
+[ext_resource type="Script" uid="uid://bv3hhsuo2v7yk" path="res://data/classes/ClassResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "class_ranger"
 display_name = "Ranger"
 description = "A warrior of the wilderness."
@@ -10,3 +13,4 @@ skill_proficiency_count = 3
 armor_proficiencies = ["Light", "Medium", "Shields"]
 weapon_proficiencies = ["Simple", "Martial"]
 modifiers = []
+metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

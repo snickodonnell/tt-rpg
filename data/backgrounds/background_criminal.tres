@@ -1,7 +1,12 @@
-[gd_resource type="BackgroundResource" format=3 uid="uid://background_criminal"]
+[gd_resource type="Resource" script_class="BackgroundResource" format=3 uid="uid://background_criminal"]
+
+[ext_resource type="Script" uid="uid://25blxsg2786h" path="res://data/backgrounds/BackgroundResource.gd" id="1_pri6g"]
+
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "background_criminal"
 display_name = "Criminal"
 skill_proficiencies = ["skill_deception", "skill_stealth"]
 description = "You are an experienced criminal with contacts in the underworld."
 modifiers = []
+metadata/_custom_type_script = "uid://25blxsg2786h"

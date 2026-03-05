@@ -1,7 +1,12 @@
-[gd_resource type="BackgroundResource" format=3 uid="uid://background_soldier"]
+[gd_resource type="Resource" script_class="BackgroundResource" format=3 uid="uid://background_soldier"]
+
+[ext_resource type="Script" uid="uid://25blxsg2786h" path="res://data/backgrounds/BackgroundResource.gd" id="1_pri6g"]
+
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "background_soldier"
 display_name = "Soldier"
 skill_proficiencies = ["skill_athletics", "skill_intimidation"]
 description = "You trained as a soldier and fought in wars."
 modifiers = []
+metadata/_custom_type_script = "uid://25blxsg2786h"

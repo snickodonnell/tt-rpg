@@ -1,6 +1,9 @@
-[gd_resource type="ClassResource" format=3 uid="uid://class_druid"]
+[gd_resource type="Resource" script_class="ClassResource" format=3 uid="uid://class_druid"]
+
+[ext_resource type="Script" uid="uid://bv3hhsuo2v7yk" path="res://data/classes/ClassResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "class_druid"
 display_name = "Druid"
 description = "A nature priest who can shape-shift."
@@ -10,3 +13,4 @@ skill_proficiency_count = 2
 armor_proficiencies = ["Light", "Medium", "Shields"]
 weapon_proficiencies = ["Clubs", "Daggers", "Darts", "Javelins", "Maces", "Quarterstaffs", "Scimitars", "Sickles", "Spears"]
 modifiers = []
+metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

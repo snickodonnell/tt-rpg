@@ -1,6 +1,9 @@
-[gd_resource type="RaceResource" format=3 uid="uid://race_half_elf"]
+[gd_resource type="Resource" script_class="RaceResource" format=3 uid="uid://race_half_elf"]
+
+[ext_resource type="Script" uid="uid://cfa4c0oss23wn" path="res://data/races/RaceResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "race_half_elf"
 display_name = "Half-Elf"
 description = "Half-elves blend human versatility and elven grace."
@@ -10,3 +13,4 @@ darkvision = true
 ability_increases = {"cha": 2}
 modifiers = []
 languages = ["common", "elvish"]
+metadata/_custom_type_script = "uid://cfa4c0oss23wn"

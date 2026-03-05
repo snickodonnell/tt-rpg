@@ -1,8 +1,13 @@
-[gd_resource type="SubclassResource" format=3 uid="uid://subclass_sorcerer_wildmagic"]
+[gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_sorcerer_wildmagic"]
+
+[ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "subclass_sorcerer_wildmagic"
 display_name = "Wild Magic"
 parent_class_id = "class_sorcerer"
 level_unlocked = 1
 description = "Chaos and raw magic surge through you."
 modifiers = []
+metadata/_custom_type_script = "uid://ceukaih165tsx"

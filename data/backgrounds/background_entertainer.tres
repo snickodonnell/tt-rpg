@@ -1,7 +1,12 @@
-[gd_resource type="BackgroundResource" format=3 uid="uid://background_entertainer"]
+[gd_resource type="Resource" script_class="BackgroundResource" format=3 uid="uid://background_entertainer"]
+
+[ext_resource type="Script" uid="uid://25blxsg2786h" path="res://data/backgrounds/BackgroundResource.gd" id="1_pri6g"]
+
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "background_entertainer"
 display_name = "Entertainer"
 skill_proficiencies = ["skill_acrobatics", "skill_performance"]
 description = "You thrive in front of an audience as a performer."
 modifiers = []
+metadata/_custom_type_script = "uid://25blxsg2786h"

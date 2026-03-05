@@ -1,6 +1,9 @@
-[gd_resource type="RaceResource" format=3 uid="uid://race_tiefling"]
+[gd_resource type="Resource" script_class="RaceResource" format=3 uid="uid://race_tiefling"]
+
+[ext_resource type="Script" uid="uid://cfa4c0oss23wn" path="res://data/races/RaceResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "race_tiefling"
 display_name = "Tiefling"
 description = "Tieflings carry the blood of fiends."
@@ -10,3 +13,4 @@ darkvision = true
 ability_increases = {"int": 1, "cha": 2}
 modifiers = []
 languages = ["common", "infernal"]
+metadata/_custom_type_script = "uid://cfa4c0oss23wn"

@@ -1,6 +1,9 @@
-[gd_resource type="RaceResource" format=3 uid="uid://race_elf_wood"]
+[gd_resource type="Resource" script_class="RaceResource" format=3 uid="uid://race_elf_wood"]
+
+[ext_resource type="Script" uid="uid://cfa4c0oss23wn" path="res://data/races/RaceResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "race_elf_wood"
 display_name = "Wood Elf"
 description = "Wood elves are swift and in tune with nature."
@@ -10,3 +13,4 @@ darkvision = true
 ability_increases = {"dex": 2, "wis": 1}
 modifiers = []
 languages = ["common", "elvish"]
+metadata/_custom_type_script = "uid://cfa4c0oss23wn"

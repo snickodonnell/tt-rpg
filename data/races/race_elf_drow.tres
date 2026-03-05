@@ -1,6 +1,9 @@
-[gd_resource type="RaceResource" format=3 uid="uid://race_elf_drow"]
+[gd_resource type="Resource" script_class="RaceResource" format=3 uid="uid://race_elf_drow"]
+
+[ext_resource type="Script" uid="uid://cfa4c0oss23wn" path="res://data/races/RaceResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "race_elf_drow"
 display_name = "Drow"
 description = "Drow are dark elves with superior darkvision."
@@ -10,3 +13,4 @@ darkvision = true
 ability_increases = {"dex": 2, "cha": 1}
 modifiers = []
 languages = ["common", "elvish", "undercommon"]
+metadata/_custom_type_script = "uid://cfa4c0oss23wn"

@@ -1,8 +1,13 @@
-[gd_resource type="SubclassResource" format=3 uid="uid://subclass_cleric_war"]
+[gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_cleric_war"]
+
+[ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "subclass_cleric_war"
 display_name = "War Domain"
 parent_class_id = "class_cleric"
 level_unlocked = 1
 description = "Gods of war grant martial might."
 modifiers = []
+metadata/_custom_type_script = "uid://ceukaih165tsx"

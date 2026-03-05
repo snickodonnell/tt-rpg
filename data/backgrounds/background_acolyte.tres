@@ -1,7 +1,12 @@
-[gd_resource type="BackgroundResource" format=3 uid="uid://background_acolyte"]
+[gd_resource type="Resource" script_class="BackgroundResource" format=3 uid="uid://background_acolyte"]
+
+[ext_resource type="Script" uid="uid://25blxsg2786h" path="res://data/backgrounds/BackgroundResource.gd" id="1_pri6g"]
+
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "background_acolyte"
 display_name = "Acolyte"
 skill_proficiencies = ["skill_insight", "skill_religion"]
 description = "You have spent your life in the service of a temple or religious order."
 modifiers = []
+metadata/_custom_type_script = "uid://25blxsg2786h"

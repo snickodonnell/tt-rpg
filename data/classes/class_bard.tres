@@ -1,6 +1,9 @@
-[gd_resource type="ClassResource" format=3 uid="uid://class_bard"]
+[gd_resource type="Resource" script_class="ClassResource" format=3 uid="uid://class_bard"]
+
+[ext_resource type="Script" uid="uid://bv3hhsuo2v7yk" path="res://data/classes/ClassResource.gd" id="1_pri6g"]
 
 [resource]
+script = ExtResource("1_pri6g")
 resource_id = "class_bard"
 display_name = "Bard"
 description = "An inspiring performer whose music weaves magic."
@@ -10,3 +13,4 @@ skill_proficiency_count = 3
 armor_proficiencies = ["Light"]
 weapon_proficiencies = ["Simple", "Hand Crossbows", "Longswords", "Rapiers", "Shortswords"]
 modifiers = []
+metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"
