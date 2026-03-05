@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="FeatResource" format=3 uid="uid://feat_alert"]
+
+[ext_resource type="Script" path="res://data/feats/FeatResource.gd" id="1_pri6g"]
+[ext_resource type="Script" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_alert_1"]
+script = ExtResource("2_mod")
+modifier_type = 0
+target_key = "initiative"
+value = 5
+source = ""
+condition = ""
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "feat_alert"
+display_name = "Alert"
+prerequisites = ""
+description = "You are always on the lookout for danger."
+modifiers = [SubResource("StatModifier_alert_1")]
+special_rules = ""

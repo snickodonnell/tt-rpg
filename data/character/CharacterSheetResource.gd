@@ -12,6 +12,7 @@ class_name CharacterSheetResource
     "int": 8, "wis": 8, "cha": 8
 }
 @export var modifiers: Array[StatModifier] = []
+@export var feats: Array[FeatResource] = []
 @export var inventory: Array[ItemResource] = []
 @export var equipped_items: Dictionary = {}
 @export var current_level: int = 1

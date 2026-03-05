@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FeatResource" format=3 uid="uid://feat_grappler"]
+
+[ext_resource type="Script" path="res://data/feats/FeatResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "feat_grappler"
+display_name = "Grappler"
+prerequisites = ""
+description = "You have advantage on attack rolls against creatures you are grappling."
+modifiers = []
+special_rules = ""

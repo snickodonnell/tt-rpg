@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FeatResource" format=3 uid="uid://feat_lucky"]
+
+[ext_resource type="Script" path="res://data/feats/FeatResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "feat_lucky"
+display_name = "Lucky"
+prerequisites = ""
+description = "You have 3 luck points you can spend to reroll dice."
+modifiers = []
+special_rules = "luck_points = 3"

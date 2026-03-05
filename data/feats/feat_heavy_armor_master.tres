@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FeatResource" format=3 uid="uid://feat_heavy_armor_master"]
+
+[ext_resource type="Script" path="res://data/feats/FeatResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "feat_heavy_armor_master"
+display_name = "Heavy Armor Master"
+prerequisites = ""
+description = "You reduce bludgeoning, piercing, and slashing damage from non-magical weapons."
+modifiers = []
+special_rules = ""

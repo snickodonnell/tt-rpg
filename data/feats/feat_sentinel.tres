@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FeatResource" format=3 uid="uid://feat_sentinel"]
+
+[ext_resource type="Script" path="res://data/feats/FeatResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "feat_sentinel"
+display_name = "Sentinel"
+prerequisites = ""
+description = "You can stop enemies from moving past you."
+modifiers = []
+special_rules = ""

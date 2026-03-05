@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FeatResource" format=3 uid="uid://feat_ritual_caster"]
+
+[ext_resource type="Script" path="res://data/feats/FeatResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "feat_ritual_caster"
+display_name = "Ritual Caster"
+prerequisites = ""
+description = "You can cast spells as rituals."
+modifiers = []
+special_rules = ""

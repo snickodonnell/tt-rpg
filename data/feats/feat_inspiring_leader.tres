@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FeatResource" format=3 uid="uid://feat_inspiring_leader"]
+
+[ext_resource type="Script" path="res://data/feats/FeatResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "feat_inspiring_leader"
+display_name = "Inspiring Leader"
+prerequisites = ""
+description = "You can spend 10 minutes inspiring your companions."
+modifiers = []
+special_rules = ""

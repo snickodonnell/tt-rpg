@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FeatResource" format=3 uid="uid://feat_tavern_brawler"]
+
+[ext_resource type="Script" path="res://data/feats/FeatResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "feat_tavern_brawler"
+display_name = "Tavern Brawler"
+prerequisites = ""
+description = "You are proficient with improvised weapons."
+modifiers = []
+special_rules = ""
