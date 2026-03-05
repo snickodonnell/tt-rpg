@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_elf_drow"]
+
+[resource]
+resource_id = "race_elf_drow"
+display_name = "Drow"
+description = "Drow are dark elves with superior darkvision."
+size = "Medium"
+speed = 30
+darkvision = true
+ability_increases = {"dex": 2, "cha": 1}
+modifiers = []
+languages = ["common", "elvish", "undercommon"]

@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_tiefling"]
+
+[resource]
+resource_id = "race_tiefling"
+display_name = "Tiefling"
+description = "Tieflings carry the blood of fiends."
+size = "Medium"
+speed = 30
+darkvision = true
+ability_increases = {"int": 1, "cha": 2}
+modifiers = []
+languages = ["common", "infernal"]

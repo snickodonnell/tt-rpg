@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_half_orc"]
+
+[resource]
+resource_id = "race_half_orc"
+display_name = "Half-Orc"
+description = "Half-orcs combine human and orcish strength."
+size = "Medium"
+speed = 30
+darkvision = true
+ability_increases = {"str": 2, "con": 1}
+modifiers = []
+languages = ["common", "orc"]

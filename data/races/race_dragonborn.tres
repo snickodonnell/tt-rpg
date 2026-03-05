@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_dragonborn"]
+
+[resource]
+resource_id = "race_dragonborn"
+display_name = "Dragonborn"
+description = "Dragonborn are proud dragon-like humanoids with breath weapons."
+size = "Medium"
+speed = 30
+darkvision = false
+ability_increases = {"str": 2, "cha": 1}
+modifiers = []
+languages = ["common", "draconic"]

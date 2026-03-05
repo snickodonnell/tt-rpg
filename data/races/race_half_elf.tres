@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_half_elf"]
+
+[resource]
+resource_id = "race_half_elf"
+display_name = "Half-Elf"
+description = "Half-elves blend human versatility and elven grace."
+size = "Medium"
+speed = 30
+darkvision = true
+ability_increases = {"cha": 2}
+modifiers = []
+languages = ["common", "elvish"]

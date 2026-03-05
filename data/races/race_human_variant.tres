@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_human_variant"]
+
+[resource]
+resource_id = "race_human_variant"
+display_name = "Variant Human"
+description = "Variant humans are versatile and ambitious, gaining flexibility in their abilities."
+size = "Medium"
+speed = 30
+darkvision = false
+ability_increases = {}
+modifiers = []
+languages = ["common"]

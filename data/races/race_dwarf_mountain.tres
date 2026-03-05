@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_dwarf_mountain"]
+
+[resource]
+resource_id = "race_dwarf_mountain"
+display_name = "Mountain Dwarf"
+description = "Mountain dwarves are strong and hardy."
+size = "Medium"
+speed = 25
+darkvision = true
+ability_increases = {"str": 2, "con": 2}
+modifiers = []
+languages = ["common", "dwarvish"]

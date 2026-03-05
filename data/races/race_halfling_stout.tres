@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_halfling_stout"]
+
+[resource]
+resource_id = "race_halfling_stout"
+display_name = "Stout Halfling"
+description = "Stout halflings are hardy and resistant to poison."
+size = "Small"
+speed = 25
+darkvision = false
+ability_increases = {"dex": 2, "con": 1}
+modifiers = []
+languages = ["common", "halfling"]

@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_gnome_forest"]
+
+[resource]
+resource_id = "race_gnome_forest"
+display_name = "Forest Gnome"
+description = "Forest gnomes are clever and stealthy."
+size = "Small"
+speed = 25
+darkvision = true
+ability_increases = {"int": 2, "dex": 1}
+modifiers = []
+languages = ["common", "gnomish"]

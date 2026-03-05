@@ -1,0 +1,12 @@
+[gd_resource type="RaceResource" format=3 uid="uid://race_dwarf_hill"]
+
+[resource]
+resource_id = "race_dwarf_hill"
+display_name = "Hill Dwarf"
+description = "Hill dwarves are tough and wise."
+size = "Medium"
+speed = 25
+darkvision = true
+ability_increases = {"con": 2, "wis": 1}
+modifiers = []
+languages = ["common", "dwarvish"]
