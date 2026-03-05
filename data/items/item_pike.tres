@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_pike"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_pike"
+display_name = "Pike"
+category = 0
+weapon_type = 2
+damage_die = "1d10"
+damage_type = "piercing"
+weapon_properties = ["heavy", "reach", "two_handed"]
+cost_gp = 5
+weight_lb = 18.0
+description = "A very long thrusting spear."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

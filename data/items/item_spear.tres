@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_spear"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_spear"
+display_name = "Spear"
+category = 0
+weapon_type = 0
+damage_die = "1d6"
+damage_type = "piercing"
+weapon_properties = ["thrown", "versatile"]
+cost_gp = 1
+weight_lb = 3.0
+description = "A versatile throwing weapon."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_lance"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_lance"
+display_name = "Lance"
+category = 0
+weapon_type = 2
+damage_die = "1d12"
+damage_type = "piercing"
+weapon_properties = ["reach", "special"]
+cost_gp = 10
+weight_lb = 6.0
+description = "A long cavalry weapon."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

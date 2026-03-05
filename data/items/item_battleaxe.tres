@@ -1,17 +1,17 @@
-[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_longsword"]
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_battleaxe"]
 
 [ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
 
 [resource]
 script = ExtResource("1_pri6g")
-resource_id = "item_longsword"
-display_name = "Longsword"
+resource_id = "item_battleaxe"
+display_name = "Battleaxe"
 category = 0
 weapon_type = 2
 damage_die = "1d8"
 damage_type = "slashing"
 weapon_properties = ["versatile"]
-cost_gp = 15
-weight_lb = 3.0
-description = "A versatile martial sword."
+cost_gp = 10
+weight_lb = 4.0
+description = "A martial chopping axe."
 metadata/_custom_type_script = "uid://fcag2sqt4k2x"

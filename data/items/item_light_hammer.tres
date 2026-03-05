@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_light_hammer"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_light_hammer"
+display_name = "Light Hammer"
+category = 0
+weapon_type = 0
+damage_die = "1d4"
+damage_type = "bludgeoning"
+weapon_properties = ["light", "thrown"]
+cost_gp = 2
+weight_lb = 2.0
+description = "A small throwing hammer."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"

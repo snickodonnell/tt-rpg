@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3 uid="uid://item_handaxe"]
+
+[ext_resource type="Script" uid="uid://fcag2sqt4k2x" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_handaxe"
+display_name = "Handaxe"
+category = 0
+weapon_type = 0
+damage_die = "1d6"
+damage_type = "slashing"
+weapon_properties = ["light", "thrown"]
+cost_gp = 5
+weight_lb = 2.0
+description = "A small throwing axe."
+metadata/_custom_type_script = "uid://fcag2sqt4k2x"
