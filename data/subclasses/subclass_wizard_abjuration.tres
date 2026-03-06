@@ -1,6 +1,23 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_wizard_abjuration"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_abjuration_savant"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_abjuration_savant"
+value = 1
+source = "subclass_wizard_abjuration"
+condition = "Level 2: Abjuration Savant halves the gold and time needed to copy abjuration spells into your spellbook."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_arcane_ward"]
+script = ExtResource("2_mod")
+modifier_type = 3
+target_key = "feature_arcane_ward"
+value = 1
+source = "subclass_wizard_abjuration"
+condition = "Level 2: Arcane Ward creates a protective ward with hit points equal to 2 × wizard level + Int modifier."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +26,5 @@ display_name = "School of Abjuration"
 parent_class_id = "class_wizard"
 level_unlocked = 2
 description = "Protective magic specialists."
-modifiers = []
+modifiers = [SubResource("StatModifier_abjuration_savant"), SubResource("StatModifier_arcane_ward")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

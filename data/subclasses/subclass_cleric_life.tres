@@ -1,6 +1,31 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_cleric_life"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_life_bonus_proficiency"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_bonus_proficiency"
+value = 1
+source = "subclass_cleric_life"
+condition = "Level 1: Bonus Proficiency grants heavy armor proficiency."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_disciple_of_life"]
+script = ExtResource("2_mod")
+modifier_type = 3
+target_key = "healing_bonus_spell_level_plus_2"
+value = 1
+source = "subclass_cleric_life"
+condition = "Level 1: Disciple of Life adds 2 + spell level to healing spells."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_preserve_life"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_preserve_life"
+value = 1
+source = "subclass_cleric_life"
+condition = "Level 2: Channel Divinity (Preserve Life) restores HP up to 5 × cleric level split among creatures."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +34,5 @@ display_name = "Life Domain"
 parent_class_id = "class_cleric"
 level_unlocked = 1
 description = "Channel divine healing power."
-modifiers = []
+modifiers = [SubResource("StatModifier_life_bonus_proficiency"), SubResource("StatModifier_disciple_of_life"), SubResource("StatModifier_preserve_life")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

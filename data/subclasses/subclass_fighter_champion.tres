@@ -1,6 +1,15 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_fighter_champion"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_improved_critical"]
+script = ExtResource("2_mod")
+modifier_type = 5
+target_key = "critical_threshold"
+value = 19
+source = "subclass_fighter_champion"
+condition = "Level 3: Improved Critical scores a critical hit on a roll of 19 or 20."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +18,5 @@ display_name = "Champion"
 parent_class_id = "class_fighter"
 level_unlocked = 3
 description = "Masters of physical perfection."
-modifiers = []
+modifiers = [SubResource("StatModifier_improved_critical")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

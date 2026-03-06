@@ -1,6 +1,23 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_rogue_thief"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_fast_hands"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_fast_hands"
+value = 1
+source = "subclass_rogue_thief"
+condition = "Level 3: Fast Hands lets Cunning Action use Sleight of Hand, thieves' tools, or Use an Object."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_second_story_work"]
+script = ExtResource("2_mod")
+modifier_type = 4
+target_key = "climb_speed_bonus"
+value = 1
+source = "subclass_rogue_thief"
+condition = "Level 3: Second-Story Work improves climbing and jumping."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +26,5 @@ display_name = "Thief"
 parent_class_id = "class_rogue"
 level_unlocked = 3
 description = "Masters of stealth and burglary."
-modifiers = []
+modifiers = [SubResource("StatModifier_fast_hands"), SubResource("StatModifier_second_story_work")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

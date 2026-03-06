@@ -1,6 +1,23 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_rogue_assassin"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_assassin_bonus_proficiencies"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_bonus_proficiencies"
+value = 1
+source = "subclass_rogue_assassin"
+condition = "Level 3: Bonus Proficiencies grants disguise kit and poisoner's kit proficiency."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_assassinate"]
+script = ExtResource("2_mod")
+modifier_type = 5
+target_key = "feature_assassinate"
+value = 1
+source = "subclass_rogue_assassin"
+condition = "Level 3: Assassinate grants advantage against creatures that haven't acted and crits against surprised targets."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +26,5 @@ display_name = "Assassin"
 parent_class_id = "class_rogue"
 level_unlocked = 3
 description = "Deadly killers who strike from the shadows."
-modifiers = []
+modifiers = [SubResource("StatModifier_assassin_bonus_proficiencies"), SubResource("StatModifier_assassinate")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

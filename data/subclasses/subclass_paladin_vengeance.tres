@@ -1,6 +1,31 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_paladin_vengeance"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_vengeance_oath"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_oath_of_vengeance"
+value = 1
+source = "subclass_paladin_vengeance"
+condition = "Level 3: Sacred Oath of Vengeance features become available."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_abjure_enemy"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_abjure_enemy"
+value = 1
+source = "subclass_paladin_vengeance"
+condition = "Level 3: Channel Divinity (Abjure Enemy) can frighten and halt a foe."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_vow_of_enmity"]
+script = ExtResource("2_mod")
+modifier_type = 5
+target_key = "feature_vow_of_enmity"
+value = 1
+source = "subclass_paladin_vengeance"
+condition = "Level 3: Channel Divinity (Vow of Enmity) grants advantage on attacks against one creature."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +34,5 @@ display_name = "Oath of Vengeance"
 parent_class_id = "class_paladin"
 level_unlocked = 3
 description = "Relentless hunters of evil."
-modifiers = []
+modifiers = [SubResource("StatModifier_vengeance_oath"), SubResource("StatModifier_abjure_enemy"), SubResource("StatModifier_vow_of_enmity")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

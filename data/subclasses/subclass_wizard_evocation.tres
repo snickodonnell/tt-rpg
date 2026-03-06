@@ -1,6 +1,23 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_wizard_evocation"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_evocation_savant"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_evocation_savant"
+value = 1
+source = "subclass_wizard_evocation"
+condition = "Level 2: Evocation Savant halves the gold and time needed to copy evocation spells into your spellbook."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_sculpt_spells"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_sculpt_spells"
+value = 1
+source = "subclass_wizard_evocation"
+condition = "Level 2: Sculpt Spells lets chosen creatures automatically save and take no damage from your evocation spells."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +26,5 @@ display_name = "School of Evocation"
 parent_class_id = "class_wizard"
 level_unlocked = 2
 description = "Masters of destructive magic."
-modifiers = []
+modifiers = [SubResource("StatModifier_evocation_savant"), SubResource("StatModifier_sculpt_spells")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

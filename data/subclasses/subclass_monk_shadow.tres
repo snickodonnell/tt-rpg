@@ -1,6 +1,15 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_monk_shadow"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_shadow_arts"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_shadow_arts"
+value = 1
+source = "subclass_monk_shadow"
+condition = "Level 3: Shadow Arts grants minor illusion and ki-fueled shadow spells."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +18,5 @@ display_name = "Way of Shadow"
 parent_class_id = "class_monk"
 level_unlocked = 3
 description = "Ninja-like monks who strike from darkness."
-modifiers = []
+modifiers = [SubResource("StatModifier_shadow_arts")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

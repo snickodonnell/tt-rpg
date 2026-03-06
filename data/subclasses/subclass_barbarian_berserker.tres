@@ -1,6 +1,15 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_barbarian_berserker"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_frenzy"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_frenzy"
+value = 1
+source = "subclass_barbarian_berserker"
+condition = "Level 3: Frenzy lets you make a single melee weapon attack as a bonus action while raging; gain one level of exhaustion when rage ends."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +18,5 @@ display_name = "Berserker"
 parent_class_id = "class_barbarian"
 level_unlocked = 3
 description = "A path of unbridled fury."
-modifiers = []
+modifiers = [SubResource("StatModifier_frenzy")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

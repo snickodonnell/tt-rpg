@@ -1,6 +1,15 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_ranger_hunter"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_hunters_prey"]
+script = ExtResource("2_mod")
+modifier_type = 5
+target_key = "feature_hunters_prey"
+value = 1
+source = "subclass_ranger_hunter"
+condition = "Level 3: Hunter's Prey grants one option: Colossus Slayer, Giant Killer, or Horde Breaker."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +18,5 @@ display_name = "Hunter"
 parent_class_id = "class_ranger"
 level_unlocked = 3
 description = "Deadly trackers and slayers."
-modifiers = []
+modifiers = [SubResource("StatModifier_hunters_prey")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

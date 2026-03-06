@@ -1,6 +1,31 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_paladin_devotion"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_devotion_oath"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_oath_of_devotion"
+value = 1
+source = "subclass_paladin_devotion"
+condition = "Level 3: Sacred Oath of Devotion features become available."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_sacred_weapon"]
+script = ExtResource("2_mod")
+modifier_type = 5
+target_key = "feature_sacred_weapon"
+value = 1
+source = "subclass_paladin_devotion"
+condition = "Level 3: Channel Divinity (Sacred Weapon) adds CHA modifier to attack rolls with one weapon."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_turn_unholy"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_turn_unholy"
+value = 1
+source = "subclass_paladin_devotion"
+condition = "Level 3: Channel Divinity (Turn the Unholy) turns fiends and undead."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +34,5 @@ display_name = "Oath of Devotion"
 parent_class_id = "class_paladin"
 level_unlocked = 3
 description = "Holy knights sworn to protect the innocent."
-modifiers = []
+modifiers = [SubResource("StatModifier_devotion_oath"), SubResource("StatModifier_sacred_weapon"), SubResource("StatModifier_turn_unholy")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

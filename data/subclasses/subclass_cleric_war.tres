@@ -1,6 +1,31 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_cleric_war"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_war_bonus_proficiencies"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_bonus_proficiencies"
+value = 1
+source = "subclass_cleric_war"
+condition = "Level 1: Bonus Proficiencies grants martial weapons and heavy armor."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_war_priest"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_war_priest"
+value = 1
+source = "subclass_cleric_war"
+condition = "Level 1: War Priest grants bonus-action weapon attacks a limited number of times per long rest."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_guided_strike"]
+script = ExtResource("2_mod")
+modifier_type = 5
+target_key = "attack_roll_bonus_channel_divinity"
+value = 10
+source = "subclass_cleric_war"
+condition = "Level 2: Channel Divinity (Guided Strike) gives +10 to an attack roll."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +34,5 @@ display_name = "War Domain"
 parent_class_id = "class_cleric"
 level_unlocked = 1
 description = "Gods of war grant martial might."
-modifiers = []
+modifiers = [SubResource("StatModifier_war_bonus_proficiencies"), SubResource("StatModifier_war_priest"), SubResource("StatModifier_guided_strike")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

@@ -1,6 +1,23 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_druid_moon"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_combat_wild_shape"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_combat_wild_shape"
+value = 1
+source = "subclass_druid_moon"
+condition = "Level 2: Combat Wild Shape allows Wild Shape as a bonus action and spell-slot healing while transformed."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_circle_forms"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_circle_forms"
+value = 1
+source = "subclass_druid_moon"
+condition = "Level 2: Circle Forms increases allowable beast CR for Wild Shape."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +26,5 @@ display_name = "Circle of the Moon"
 parent_class_id = "class_druid"
 level_unlocked = 2
 description = "Master shapeshifters in combat."
-modifiers = []
+modifiers = [SubResource("StatModifier_combat_wild_shape"), SubResource("StatModifier_circle_forms")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

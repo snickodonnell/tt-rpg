@@ -1,6 +1,23 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_sorcerer_wildmagic"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_wild_magic_surge"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_wild_magic_surge"
+value = 1
+source = "subclass_sorcerer_wildmagic"
+condition = "Level 1: Wild Magic Surge can trigger random magical effects after casting spells."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_tides_of_chaos"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_tides_of_chaos"
+value = 1
+source = "subclass_sorcerer_wildmagic"
+condition = "Level 1: Tides of Chaos grants advantage once, then recharges via wild surge at DM discretion."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +26,5 @@ display_name = "Wild Magic"
 parent_class_id = "class_sorcerer"
 level_unlocked = 1
 description = "Chaos and raw magic surge through you."
-modifiers = []
+modifiers = [SubResource("StatModifier_wild_magic_surge"), SubResource("StatModifier_tides_of_chaos")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"

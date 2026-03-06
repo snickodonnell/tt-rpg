@@ -1,6 +1,23 @@
 [gd_resource type="Resource" script_class="SubclassResource" format=3 uid="uid://subclass_fighter_battlemaster"]
 
 [ext_resource type="Script" uid="uid://ceukaih165tsx" path="res://data/classes/SubclassResource.gd" id="1_pri6g"]
+[ext_resource type="Script" uid="uid://dkb1uxa1pmx77" path="res://data/core/StatModifier.gd" id="2_mod"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_combat_superiority"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_combat_superiority"
+value = 1
+source = "subclass_fighter_battlemaster"
+condition = "Level 3: Combat Superiority grants maneuvers and superiority dice."
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_student_of_war"]
+script = ExtResource("2_mod")
+modifier_type = 1
+target_key = "feature_student_of_war"
+value = 1
+source = "subclass_fighter_battlemaster"
+condition = "Level 3: Student of War grants proficiency with one type of artisan's tools."
 
 [resource]
 script = ExtResource("1_pri6g")
@@ -9,5 +26,5 @@ display_name = "Battle Master"
 parent_class_id = "class_fighter"
 level_unlocked = 3
 description = "Tactical geniuses who use maneuvers."
-modifiers = []
+modifiers = [SubResource("StatModifier_combat_superiority"), SubResource("StatModifier_student_of_war")]
 metadata/_custom_type_script = "uid://ceukaih165tsx"
