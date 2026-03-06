@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_light"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_light"
+display_name = "Light"
+spell_level = 0
+school = "Evocation"
+casting_time = "1 action"
+range = "Touch"
+components = "V, M"
+duration = "1 hour"
+spell_lists = ["class_bard", "class_cleric", "class_sorcerer", "class_wizard"]
+spell_text = "You touch one object no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

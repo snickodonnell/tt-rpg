@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_acid_splash"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_acid_splash"
+display_name = "Acid Splash"
+spell_level = 0
+school = "Conjuration"
+casting_time = "1 action"
+range = "60 feet"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_sorcerer", "class_wizard"]
+spell_text = "You hurl a bubble of acid. One or two creatures within range that are within 5 feet of each other must succeed on a Dexterity saving throw or take acid damage."
+higher_levels = "The spell's damage increases by 1d6 when you reach 5th level (2d6), 11th level (3d6), and 17th level (4d6)."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

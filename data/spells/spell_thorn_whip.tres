@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_thorn_whip"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_thorn_whip"
+display_name = "Thorn Whip"
+spell_level = 0
+school = "Transmutation"
+casting_time = "1 action"
+range = "30 feet"
+components = "V, S, M"
+duration = "Instantaneous"
+spell_lists = ["class_druid"]
+spell_text = "You create a long, vine-like whip covered in thorns that lashes at your command. Make a melee spell attack against a creature within range; on a hit, it takes piercing damage and can be pulled closer to you."
+higher_levels = "The spell's damage increases by 1d6 when you reach 5th level (2d6), 11th level (3d6), and 17th level (4d6)."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

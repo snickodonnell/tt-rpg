@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_fire_bolt"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_fire_bolt"
+display_name = "Fire Bolt"
+spell_level = 0
+school = "Evocation"
+casting_time = "1 action"
+range = "120 feet"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_sorcerer", "class_wizard"]
+spell_text = "You hurl a mote of fire at a creature or object within range. Make a ranged spell attack; on a hit, the target takes fire damage."
+higher_levels = "The spell's damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10)."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

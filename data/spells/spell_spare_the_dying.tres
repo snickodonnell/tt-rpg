@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_spare_the_dying"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_spare_the_dying"
+display_name = "Spare the Dying"
+spell_level = 0
+school = "Necromancy"
+casting_time = "1 action"
+range = "Touch"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_cleric"]
+spell_text = "You touch a living creature that has 0 hit points. The creature becomes stable."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

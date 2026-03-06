@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_druidcraft"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_druidcraft"
+display_name = "Druidcraft"
+spell_level = 0
+school = "Transmutation"
+casting_time = "1 action"
+range = "30 feet"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_druid"]
+spell_text = "Whispering to the spirits of nature, you create one minor magical effect within range, such as predicting weather, causing flowers to bloom, or creating harmless sensory effects."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

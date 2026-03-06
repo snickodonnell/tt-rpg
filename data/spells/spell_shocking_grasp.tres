@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_shocking_grasp"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_shocking_grasp"
+display_name = "Shocking Grasp"
+spell_level = 0
+school = "Evocation"
+casting_time = "1 action"
+range = "Touch"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_sorcerer", "class_wizard"]
+spell_text = "Lightning springs from your hand to deliver a shock to a creature you try to touch. Make a melee spell attack; on a hit, the target takes lightning damage and can't take reactions until the start of its next turn."
+higher_levels = "The spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8)."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

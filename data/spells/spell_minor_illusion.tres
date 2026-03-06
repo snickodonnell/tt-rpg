@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_minor_illusion"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_minor_illusion"
+display_name = "Minor Illusion"
+spell_level = 0
+school = "Illusion"
+casting_time = "1 action"
+range = "30 feet"
+components = "S, M"
+duration = "1 minute"
+spell_lists = ["class_bard", "class_sorcerer", "class_warlock", "class_wizard"]
+spell_text = "You create a sound or an image of an object within range that lasts for the duration. The illusion is purely sensory and ends if a creature uses its action to examine it and succeeds on an Intelligence (Investigation) check against your spell save DC."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

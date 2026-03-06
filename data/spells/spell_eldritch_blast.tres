@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_eldritch_blast"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_eldritch_blast"
+display_name = "Eldritch Blast"
+spell_level = 0
+school = "Evocation"
+casting_time = "1 action"
+range = "120 feet"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_warlock"]
+spell_text = "A beam of crackling energy streaks toward a creature within range. Make a ranged spell attack; on a hit, the target takes force damage."
+higher_levels = "The spell creates more than one beam when you reach higher levels: two beams at 5th level, three beams at 11th level, and four beams at 17th level."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_poison_spray"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_poison_spray"
+display_name = "Poison Spray"
+spell_level = 0
+school = "Conjuration"
+casting_time = "1 action"
+range = "10 feet"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_druid", "class_sorcerer", "class_warlock", "class_wizard"]
+spell_text = "You extend your hand toward a creature you can see within range and project a puff of noxious gas. The creature must succeed on a Constitution saving throw or take poison damage."
+higher_levels = "The spell's damage increases by 1d12 when you reach 5th level (2d12), 11th level (3d12), and 17th level (4d12)."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

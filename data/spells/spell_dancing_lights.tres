@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_dancing_lights"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_dancing_lights"
+display_name = "Dancing Lights"
+spell_level = 0
+school = "Evocation"
+casting_time = "1 action"
+range = "120 feet"
+components = "V, S, M"
+duration = "Concentration, up to 1 minute"
+spell_lists = ["class_sorcerer", "class_wizard"]
+spell_text = "You create up to four torch-sized lights within range that can appear as torches, lanterns, or glowing orbs. As a bonus action, you can move the lights up to 60 feet to a new spot within range."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

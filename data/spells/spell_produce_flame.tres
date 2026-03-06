@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_produce_flame"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_produce_flame"
+display_name = "Produce Flame"
+spell_level = 0
+school = "Conjuration"
+casting_time = "1 action"
+range = "Self"
+components = "V, S"
+duration = "10 minutes"
+spell_lists = ["class_druid"]
+spell_text = "A flickering flame appears in your hand and remains there for the duration. You can also hurl the flame at a creature within 30 feet by making a ranged spell attack."
+higher_levels = "The spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8)."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

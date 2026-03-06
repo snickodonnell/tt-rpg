@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_prestidigitation"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_prestidigitation"
+display_name = "Prestidigitation"
+spell_level = 0
+school = "Transmutation"
+casting_time = "1 action"
+range = "10 feet"
+components = "V, S"
+duration = "Up to 1 hour"
+spell_lists = ["class_bard", "class_sorcerer", "class_warlock", "class_wizard"]
+spell_text = "This spell is a minor magical trick that novice spellcasters use for practice. You create one of several harmless sensory or cosmetic effects within range."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

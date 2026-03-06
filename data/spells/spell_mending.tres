@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_mending"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_mending"
+display_name = "Mending"
+spell_level = 0
+school = "Transmutation"
+casting_time = "1 minute"
+range = "Touch"
+components = "V, S, M"
+duration = "Instantaneous"
+spell_lists = ["class_bard", "class_cleric", "class_druid", "class_sorcerer", "class_wizard"]
+spell_text = "This spell repairs a single break or tear in an object you touch, such as a broken chain link, two halves of a broken key, a torn cloak, or a leaking wineskin."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

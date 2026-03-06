@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_friends"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_friends"
+display_name = "Friends"
+spell_level = 0
+school = "Enchantment"
+casting_time = "1 action"
+range = "Self"
+components = "S, M"
+duration = "Concentration, up to 1 minute"
+spell_lists = ["class_bard", "class_sorcerer", "class_warlock", "class_wizard"]
+spell_text = "For the duration, you have advantage on Charisma checks directed at one creature of your choice that isn't hostile toward you. When the spell ends, the creature realizes you used magic to influence its mood."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

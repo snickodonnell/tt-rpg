@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_thaumaturgy"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_thaumaturgy"
+display_name = "Thaumaturgy"
+spell_level = 0
+school = "Transmutation"
+casting_time = "1 action"
+range = "30 feet"
+components = "V"
+duration = "Up to 1 minute"
+spell_lists = ["class_cleric"]
+spell_text = "You manifest a minor wonder, a sign of supernatural power, within range, such as causing your voice to boom, harmless tremors in the ground, or instant sensory effects."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"
