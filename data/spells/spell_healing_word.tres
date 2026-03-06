@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_healing_word"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_healing_word"
+display_name = "Healing Word"
+spell_level = 1
+school = "Evocation"
+casting_time = "1 bonus action"
+range = "60 feet"
+components = "V"
+duration = "Instantaneous"
+spell_lists = ["class_bard", "class_cleric", "class_druid"]
+spell_text = "A creature of your choice that you can see within range regains hit points."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d4 for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

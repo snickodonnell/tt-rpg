@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_feather_fall"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_feather_fall"
+display_name = "Feather Fall"
+spell_level = 1
+school = "Transmutation"
+casting_time = "1 reaction"
+range = "60 feet"
+components = "V, M"
+duration = "1 minute"
+spell_lists = ["class_bard", "class_sorcerer", "class_wizard"]
+spell_text = "Choose up to five falling creatures within range. A falling creature's rate of descent slows to 60 feet per round until the spell ends."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

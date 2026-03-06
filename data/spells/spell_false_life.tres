@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_false_life"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_false_life"
+display_name = "False Life"
+spell_level = 1
+school = "Necromancy"
+casting_time = "1 action"
+range = "Self"
+components = "V, S, M"
+duration = "1 hour"
+spell_lists = ["class_sorcerer", "class_warlock", "class_wizard"]
+spell_text = "Bolstering yourself with a necromantic facsimile of life, you gain temporary hit points."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, you gain 5 additional temporary hit points for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_guiding_bolt"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_guiding_bolt"
+display_name = "Guiding Bolt"
+spell_level = 1
+school = "Evocation"
+casting_time = "1 action"
+range = "120 feet"
+components = "V, S"
+duration = "1 round"
+spell_lists = ["class_cleric"]
+spell_text = "A flash of light streaks toward a creature of your choice. Make a ranged spell attack; on a hit, the target takes radiant damage and the next attack roll against it has advantage."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

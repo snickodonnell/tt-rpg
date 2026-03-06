@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_burning_hands"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_burning_hands"
+display_name = "Burning Hands"
+spell_level = 1
+school = "Evocation"
+casting_time = "1 action"
+range = "Self (15-foot cone)"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_sorcerer", "class_wizard"]
+spell_text = "As you hold your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth. Creatures in a 15-foot cone take fire damage on a failed Dexterity save."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

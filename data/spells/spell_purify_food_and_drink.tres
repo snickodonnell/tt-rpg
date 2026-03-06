@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_purify_food_and_drink"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_purify_food_and_drink"
+display_name = "Purify Food and Drink"
+spell_level = 1
+school = "Transmutation"
+casting_time = "1 action"
+range = "10 feet"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_cleric", "class_druid"]
+spell_text = "All nonmagical food and drink within a 5-foot-radius sphere centered on a point of your choice is purified and rendered free of poison and disease."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_bless"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_bless"
+display_name = "Bless"
+spell_level = 1
+school = "Enchantment"
+casting_time = "1 action"
+range = "30 feet"
+components = "V, S, M"
+duration = "Concentration, up to 1 minute"
+spell_lists = ["class_cleric"]
+spell_text = "You bless up to three creatures of your choice. Whenever a target makes an attack roll or saving throw before the spell ends, it can add 1d4."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

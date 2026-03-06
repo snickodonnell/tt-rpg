@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_shield_of_faith"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_shield_of_faith"
+display_name = "Shield of Faith"
+spell_level = 1
+school = "Abjuration"
+casting_time = "1 bonus action"
+range = "60 feet"
+components = "V, S, M"
+duration = "Concentration, up to 10 minutes"
+spell_lists = ["class_cleric"]
+spell_text = "A shimmering field appears and surrounds a creature of your choice within range, granting it a bonus to AC for the duration."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

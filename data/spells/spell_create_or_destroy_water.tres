@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_create_or_destroy_water"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_create_or_destroy_water"
+display_name = "Create or Destroy Water"
+spell_level = 1
+school = "Transmutation"
+casting_time = "1 action"
+range = "30 feet"
+components = "V, S, M"
+duration = "Instantaneous"
+spell_lists = ["class_cleric", "class_druid"]
+spell_text = "You either create up to 10 gallons of clean water in an open container or destroy up to 10 gallons of water in an open container within range."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, you create or destroy 10 additional gallons for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

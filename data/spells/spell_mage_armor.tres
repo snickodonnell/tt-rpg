@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_mage_armor"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_mage_armor"
+display_name = "Mage Armor"
+spell_level = 1
+school = "Abjuration"
+casting_time = "1 action"
+range = "Touch"
+components = "V, S, M"
+duration = "8 hours"
+spell_lists = ["class_sorcerer", "class_wizard"]
+spell_text = "You touch a willing creature who isn't wearing armor, and a protective magical force surrounds it until the spell ends."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

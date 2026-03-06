@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_shield"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_shield"
+display_name = "Shield"
+spell_level = 1
+school = "Abjuration"
+casting_time = "1 reaction"
+range = "Self"
+components = "V, S"
+duration = "1 round"
+spell_lists = ["class_sorcerer", "class_wizard"]
+spell_text = "An invisible barrier of magical force appears and protects you. Until the start of your next turn, you gain a +5 bonus to AC."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

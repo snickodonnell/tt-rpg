@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_arms_of_hadar"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_arms_of_hadar"
+display_name = "Arms of Hadar"
+spell_level = 1
+school = "Conjuration"
+casting_time = "1 action"
+range = "Self (10-foot radius)"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_warlock"]
+spell_text = "You invoke the power of Hadar. Tendrils of dark energy erupt from you and batter nearby creatures."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

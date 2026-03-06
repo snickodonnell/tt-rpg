@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_identify"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_identify"
+display_name = "Identify"
+spell_level = 1
+school = "Divination"
+casting_time = "1 minute"
+range = "Touch"
+components = "V, S, M"
+duration = "Instantaneous"
+spell_lists = ["class_bard", "class_wizard"]
+spell_text = "You choose one object that you must touch throughout the casting. If it is a magic item or magically imbued, you learn its properties."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

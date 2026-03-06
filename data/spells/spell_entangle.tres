@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_entangle"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_entangle"
+display_name = "Entangle"
+spell_level = 1
+school = "Conjuration"
+casting_time = "1 action"
+range = "90 feet"
+components = "V, S"
+duration = "Concentration, up to 1 minute"
+spell_lists = ["class_druid"]
+spell_text = "Grasping weeds and vines sprout from the ground in a 20-foot square starting from a point within range, restraining creatures in the area."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

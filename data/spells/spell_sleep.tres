@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_sleep"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_sleep"
+display_name = "Sleep"
+spell_level = 1
+school = "Enchantment"
+casting_time = "1 action"
+range = "90 feet"
+components = "V, S, M"
+duration = "1 minute"
+spell_lists = ["class_bard", "class_sorcerer", "class_wizard"]
+spell_text = "This spell sends creatures into a magical slumber. Roll 5d8; the total is how many hit points of creatures this spell can affect."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

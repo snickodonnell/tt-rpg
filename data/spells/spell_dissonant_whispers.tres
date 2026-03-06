@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_dissonant_whispers"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_dissonant_whispers"
+display_name = "Dissonant Whispers"
+spell_level = 1
+school = "Enchantment"
+casting_time = "1 action"
+range = "60 feet"
+components = "V"
+duration = "Instantaneous"
+spell_lists = ["class_bard"]
+spell_text = "You whisper a discordant melody that only one creature of your choice can hear, wracking it with terrible pain."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

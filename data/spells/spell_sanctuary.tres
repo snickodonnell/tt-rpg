@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_sanctuary"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_sanctuary"
+display_name = "Sanctuary"
+spell_level = 1
+school = "Abjuration"
+casting_time = "1 bonus action"
+range = "30 feet"
+components = "V, S, M"
+duration = "1 minute"
+spell_lists = ["class_cleric"]
+spell_text = "You ward a creature within range against attack. Until the spell ends, any creature who targets the warded creature with an attack or harmful spell must first make a Wisdom saving throw."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_longstrider"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_longstrider"
+display_name = "Longstrider"
+spell_level = 1
+school = "Transmutation"
+casting_time = "1 action"
+range = "Touch"
+components = "V, S, M"
+duration = "1 hour"
+spell_lists = ["class_bard", "class_druid", "class_wizard"]
+spell_text = "You touch a creature. The target's speed increases by 10 feet until the spell ends."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

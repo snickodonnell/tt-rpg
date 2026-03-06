@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_expeditious_retreat"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_expeditious_retreat"
+display_name = "Expeditious Retreat"
+spell_level = 1
+school = "Transmutation"
+casting_time = "1 bonus action"
+range = "Self"
+components = "V, S"
+duration = "Concentration, up to 10 minutes"
+spell_lists = ["class_sorcerer", "class_warlock", "class_wizard"]
+spell_text = "This spell allows you to move at an incredible pace. When you cast it, and as a bonus action each turn, you can take the Dash action."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

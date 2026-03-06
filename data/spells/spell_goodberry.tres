@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_goodberry"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_goodberry"
+display_name = "Goodberry"
+spell_level = 1
+school = "Transmutation"
+casting_time = "1 action"
+range = "Touch"
+components = "V, S, M"
+duration = "Instantaneous"
+spell_lists = ["class_druid"]
+spell_text = "Up to ten berries appear in your hand and are infused with magic for 24 hours. A creature can use an action to eat one berry and regain hit points."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_animal_friendship"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_animal_friendship"
+display_name = "Animal Friendship"
+spell_level = 1
+school = "Enchantment"
+casting_time = "1 action"
+range = "30 feet"
+components = "V, S, M"
+duration = "24 hours"
+spell_lists = ["class_bard", "class_druid"]
+spell_text = "This spell lets you convince a beast that you mean it no harm."
+higher_levels = "When you cast this spell using a 2nd-level spell slot or higher, you can affect one additional beast for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

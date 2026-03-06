@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_unseen_servant"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_unseen_servant"
+display_name = "Unseen Servant"
+spell_level = 1
+school = "Conjuration"
+casting_time = "1 action"
+range = "60 feet"
+components = "V, S, M"
+duration = "1 hour"
+spell_lists = ["class_bard", "class_warlock", "class_wizard"]
+spell_text = "This spell creates an invisible, mindless, shapeless force that performs simple tasks at your command."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

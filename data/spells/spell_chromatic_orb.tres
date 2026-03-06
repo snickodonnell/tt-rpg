@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_chromatic_orb"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_chromatic_orb"
+display_name = "Chromatic Orb"
+spell_level = 1
+school = "Evocation"
+casting_time = "1 action"
+range = "90 feet"
+components = "V, S, M"
+duration = "Instantaneous"
+spell_lists = ["class_sorcerer", "class_wizard"]
+spell_text = "You hurl a 4-inch-diameter sphere of energy at a creature you can see within range. Choose acid, cold, fire, lightning, poison, or thunder; on a hit, the target takes that damage."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

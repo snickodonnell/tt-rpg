@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_find_familiar"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_find_familiar"
+display_name = "Find Familiar"
+spell_level = 1
+school = "Conjuration"
+casting_time = "1 hour"
+range = "10 feet"
+components = "V, S, M"
+duration = "Instantaneous"
+spell_lists = ["class_wizard"]
+spell_text = "You gain the service of a familiar, a spirit that takes an animal form you choose."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

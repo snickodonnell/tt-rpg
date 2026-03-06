@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_tensers_floating_disk"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_tensers_floating_disk"
+display_name = "Tenser's Floating Disk"
+spell_level = 1
+school = "Conjuration"
+casting_time = "1 action"
+range = "30 feet"
+components = "V, S, M"
+duration = "1 hour"
+spell_lists = ["class_wizard"]
+spell_text = "This spell creates a circular, horizontal plane of force that can hold weight and follows you while carrying gear."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

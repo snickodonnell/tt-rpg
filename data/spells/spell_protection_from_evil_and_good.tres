@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_protection_from_evil_and_good"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_protection_from_evil_and_good"
+display_name = "Protection from Evil and Good"
+spell_level = 1
+school = "Abjuration"
+casting_time = "1 action"
+range = "Touch"
+components = "V, S, M"
+duration = "Concentration, up to 10 minutes"
+spell_lists = ["class_cleric", "class_warlock", "class_wizard"]
+spell_text = "Until the spell ends, one willing creature you touch is protected against aberrations, celestials, elementals, fey, fiends, and undead."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

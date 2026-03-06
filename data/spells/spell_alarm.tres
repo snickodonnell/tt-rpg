@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_alarm"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_alarm"
+display_name = "Alarm"
+spell_level = 1
+school = "Abjuration"
+casting_time = "1 minute"
+range = "30 feet"
+components = "V, S, M"
+duration = "8 hours"
+spell_lists = ["class_wizard"]
+spell_text = "You set an alarm against unwanted intrusion on a door, window, or area within range."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_ray_of_sickness"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_ray_of_sickness"
+display_name = "Ray of Sickness"
+spell_level = 1
+school = "Necromancy"
+casting_time = "1 action"
+range = "60 feet"
+components = "V, S"
+duration = "Instantaneous"
+spell_lists = ["class_sorcerer", "class_wizard"]
+spell_text = "A ray of sickening greenish energy lashes out toward a creature within range. Make a ranged spell attack; on a hit, it takes poison damage and may be poisoned."
+higher_levels = "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st."
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"

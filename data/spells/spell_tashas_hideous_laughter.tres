@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SpellResource" format=3 uid="uid://spell_tashas_hideous_laughter"]
+
+[ext_resource type="Script" uid="uid://bvffi1hco1d21" path="res://data/spells/SpellResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "spell_tashas_hideous_laughter"
+display_name = "Tasha's Hideous Laughter"
+spell_level = 1
+school = "Enchantment"
+casting_time = "1 action"
+range = "30 feet"
+components = "V, S, M"
+duration = "Concentration, up to 1 minute"
+spell_lists = ["class_bard", "class_wizard"]
+spell_text = "A creature of your choice within range perceives everything as hilariously funny and falls into fits of laughter if it fails a Wisdom saving throw."
+higher_levels = ""
+scaling = {}
+modifiers = []
+metadata/_custom_type_script = "uid://bvffi1hco1d21"
