@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LanguageResource" format=3 uid="uid://language_elvish"]
+
+[ext_resource type="Script" path="res://data/languages/LanguageResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "language_elvish"
+display_name = "Elvish"
+common_name = "Elvish"
+spoken_by = "Elves"

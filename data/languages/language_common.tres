@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LanguageResource" format=3 uid="uid://language_common"]
+
+[ext_resource type="Script" path="res://data/languages/LanguageResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "language_common"
+display_name = "Common"
+common_name = "Common"
+spoken_by = "Most races"

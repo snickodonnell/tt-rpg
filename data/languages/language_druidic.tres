@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LanguageResource" format=3 uid="uid://language_druidic"]
+
+[ext_resource type="Script" path="res://data/languages/LanguageResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "language_druidic"
+display_name = "Druidic"
+common_name = "Druidic"
+spoken_by = "Druids"
