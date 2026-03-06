@@ -12,5 +12,7 @@ saving_throw_proficiencies = ["str", "dex"]
 skill_proficiency_count = 2
 armor_proficiencies = []
 weapon_proficiencies = ["Simple", "Shortswords"]
+starting_gold_dice = "5d4 gp"
+starting_equipment_options = ["item_shortsword", "item_spear", "item_dungeoneer_pack", "item_explorer_pack", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart"]
 modifiers = []
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

@@ -12,5 +12,7 @@ saving_throw_proficiencies = ["str", "con"]
 skill_proficiency_count = 2
 armor_proficiencies = ["Light", "Medium", "Shields"]
 weapon_proficiencies = ["Simple", "Martial"]
+starting_gold_dice = "2d4 × 10 gp"
+starting_equipment_options = ["item_greataxe", "item_longsword", "item_handaxe", "item_handaxe", "item_spear", "item_explorer_pack", "item_javelin", "item_javelin", "item_javelin", "item_javelin"]
 modifiers = []
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

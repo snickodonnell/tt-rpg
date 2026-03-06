@@ -12,5 +12,7 @@ saving_throw_proficiencies = ["dex", "cha"]
 skill_proficiency_count = 3
 armor_proficiencies = ["Light"]
 weapon_proficiencies = ["Simple", "Hand Crossbows", "Longswords", "Rapiers", "Shortswords"]
+starting_gold_dice = "5d4 × 10 gp"
+starting_equipment_options = ["item_rapier", "item_longsword", "item_diplomat_pack", "item_entertainer_pack", "item_lute", "item_lyre", "item_flute", "item_drum", "item_leather_armor", "item_dagger"]
 modifiers = []
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

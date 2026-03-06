@@ -12,5 +12,7 @@ saving_throw_proficiencies = ["str", "dex"]
 skill_proficiency_count = 3
 armor_proficiencies = ["Light", "Medium", "Shields"]
 weapon_proficiencies = ["Simple", "Martial"]
+starting_gold_dice = "5d4 × 10 gp"
+starting_equipment_options = ["item_scale_mail", "item_leather_armor", "item_shortsword", "item_longsword", "item_dungeoneer_pack", "item_explorer_pack", "item_longbow", "item_arrows"]
 modifiers = []
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

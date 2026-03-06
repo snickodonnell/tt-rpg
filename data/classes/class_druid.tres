@@ -12,5 +12,7 @@ saving_throw_proficiencies = ["int", "wis"]
 skill_proficiency_count = 2
 armor_proficiencies = ["Light", "Medium", "Shields"]
 weapon_proficiencies = ["Clubs", "Daggers", "Darts", "Javelins", "Maces", "Quarterstaffs", "Scimitars", "Sickles", "Spears"]
+starting_gold_dice = "2d4 × 10 gp"
+starting_equipment_options = ["item_shield", "item_spear", "item_scimitar", "item_leather_armor", "item_explorer_pack", "item_dungeoneer_pack", "item_druidic_focus_sprig"]
 modifiers = []
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

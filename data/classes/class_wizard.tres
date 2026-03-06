@@ -12,5 +12,7 @@ saving_throw_proficiencies = ["int", "wis"]
 skill_proficiency_count = 2
 armor_proficiencies = []
 weapon_proficiencies = ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light Crossbows"]
+starting_gold_dice = "4d4 × 10 gp"
+starting_equipment_options = ["item_quarterstaff", "item_dagger", "item_arcane_focus_orb", "item_arcane_focus_crystal", "item_scholar_pack", "item_explorer_pack", "item_book_lore"]
 modifiers = []
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

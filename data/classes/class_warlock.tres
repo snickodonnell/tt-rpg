@@ -12,5 +12,7 @@ saving_throw_proficiencies = ["wis", "cha"]
 skill_proficiency_count = 2
 armor_proficiencies = ["Light"]
 weapon_proficiencies = ["Simple"]
+starting_gold_dice = "4d4 × 10 gp"
+starting_equipment_options = ["item_light_crossbow", "item_crossbow_bolts", "item_mace", "item_arcane_focus_orb", "item_arcane_focus_crystal", "item_scholar_pack", "item_dungeoneer_pack", "item_leather_armor", "item_dagger", "item_dagger"]
 modifiers = []
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"
