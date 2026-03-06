@@ -23,3 +23,6 @@ static func validate_point_buy(base_scores: Dictionary) -> bool:
     for score in base_scores.values():
         total += get_point_buy_cost(score)
     return total <= 27
+
+static func get_proficiency_bonus(level: int) -> int:
+    return 2 + floor((level - 1) / 4)
