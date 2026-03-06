@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AbilityResource" format=3 uid="uid://ability_intelligence"]
+
+[ext_resource type="Script" uid="uid://dbcyqea5xuwni" path="res://data/abilities/AbilityResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "ability_intelligence"
+display_name = "Intelligence"
+short_key = "int"
+full_name = "Intelligence"
+metadata/_custom_type_script = "uid://dbcyqea5xuwni"
