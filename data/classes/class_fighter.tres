@@ -8,6 +8,7 @@ resource_id = "class_fighter"
 display_name = "Fighter"
 description = "A master of martial combat."
 hit_die = "d10"
+hit_points_at_1st_level = 10
 saving_throw_proficiencies = ["str", "con"]
 skill_proficiency_count = 2
 armor_proficiencies = ["Light", "Medium", "Heavy", "Shields"]

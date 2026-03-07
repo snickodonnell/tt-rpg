@@ -2,6 +2,7 @@
 extends TTResource
 class_name CharacterSheetResource
 
+@export var character_name: String = ""
 @export var race: RaceResource
 @export var class_resource: ClassResource
 @export var classes: Array[Dictionary] = []  # e.g. [{"class_resource": ClassResource, "level": 1}]
