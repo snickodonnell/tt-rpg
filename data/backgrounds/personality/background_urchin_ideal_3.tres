@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PersonalityTraitResource" format=3 uid="uid://background_urchin_ideal_3"]
+
+[ext_resource type="Script" path="res://data/backgrounds/personality/PersonalityTraitResource.gd" id="1_ptr"]
+
+[resource]
+script = ExtResource("1_ptr")
+category = "Ideal"
+text = "Revenge. I will make exploiters answer for what they did."

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BackgroundFeatureResource" format=3 uid="uid://background_feature_soldier"]
+
+[ext_resource type="Script" path="res://data/backgrounds/features/BackgroundFeatureResource.gd" id="1_bgf"]
+
+[resource]
+script = ExtResource("1_bgf")
+feature_name = "Military Rank"
+feature_text = "You retain rank and recognition among soldiers who may defer to your authority and offer practical support."

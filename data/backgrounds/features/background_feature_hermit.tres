@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BackgroundFeatureResource" format=3 uid="uid://background_feature_hermit"]
+
+[ext_resource type="Script" path="res://data/backgrounds/features/BackgroundFeatureResource.gd" id="1_bgf"]
+
+[resource]
+script = ExtResource("1_bgf")
+feature_name = "Discovery"
+feature_text = "During your isolation you uncovered a profound insight or secret that shapes your path."
