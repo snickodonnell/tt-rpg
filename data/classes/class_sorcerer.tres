@@ -14,5 +14,10 @@ armor_proficiencies = []
 weapon_proficiencies = ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light Crossbows"]
 starting_gold_dice = "3d4 × 10 gp"
 starting_equipment_options = ["item_light_crossbow", "item_crossbow_bolts", "item_quarterstaff", "item_arcane_focus_orb", "item_arcane_focus_crystal", "item_dungeoneer_pack", "item_explorer_pack", "item_dagger", "item_dagger"]
+spellcasting_ability = "cha"
+cantrips_known = 4
+spells_known_per_level = {
+1: 2,
+}
 modifiers = []
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

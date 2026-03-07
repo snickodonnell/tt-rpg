@@ -14,5 +14,10 @@ armor_proficiencies = ["Light", "Medium", "Shields"]
 weapon_proficiencies = ["Simple"]
 starting_gold_dice = "5d4 × 10 gp"
 starting_equipment_options = ["item_mace", "item_warhammer", "item_chain_mail", "item_leather_armor", "item_scale_mail", "item_light_crossbow", "item_crossbow_bolts", "item_shield", "item_priest_pack", "item_explorer_pack", "item_holy_symbol_amulet"]
+spellcasting_ability = "wis"
+cantrips_known = 3
+spells_known_per_level = {
+1: 2,
+}
 modifiers = []
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

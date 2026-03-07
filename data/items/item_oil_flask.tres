@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3]
+
+[ext_resource type="Script" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_oil_flask"
+display_name = "Oil (Flask)"
+category = 5
+cost_gp = 0.1
+weight_lb = 1.0
+description = "A flask of lamp oil used for fueling lanterns or starting fires."

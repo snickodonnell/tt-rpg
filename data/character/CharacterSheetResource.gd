@@ -14,6 +14,8 @@ class_name CharacterSheetResource
 }
 @export var modifiers: Array[StatModifier] = []
 @export var feats: Array[FeatResource] = []
+@export var known_spells: Array[SpellResource] = []
+@export var spell_selection_state: Dictionary = {}
 @export var inventory: Array[ItemResource] = []
 @export var equipped_items: Dictionary = {}
 @export var current_level: int = 1

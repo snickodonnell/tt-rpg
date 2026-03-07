@@ -8,6 +8,7 @@ const DEFAULT_STEP_NAMES := [
 	"Background",
 	"Abilities",
 	"Feats",
+	"Spells",
 	"Equipment",
 	"Summary",
 ]
@@ -15,10 +16,12 @@ const RACE_DATA_PATH := "res://data/races"
 const CLASS_DATA_PATH := "res://data/classes"
 const BACKGROUND_DATA_PATH := "res://data/backgrounds"
 const FEAT_DATA_PATH := "res://data/feats"
+const SPELL_DATA_PATH := "res://data/spells"
 const ITEM_DATA_PATH := "res://data/items"
 const SKILL_DATA_PATH := "res://data/skills"
 const UI_VARIANT_HUMAN_MODIFIER_SOURCE_PREFIX := "ui_variant_human_bonus_"
 const UI_FEAT_MODIFIER_SOURCE_PREFIX := "ui_feat_modifier_"
+const FEAT_MAGIC_INITIATE_ID := "feat_magic_initiate"
 const ABILITY_ORDER := ["str", "dex", "con", "int", "wis", "cha"]
 const ABILITY_LABELS := {
 	"str": "STR",
@@ -34,6 +37,7 @@ const ABILITY_LABELS := {
 @onready var class_background_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer
 @onready var abilities_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer
 @onready var feats_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer
+@onready var spells_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer
 @onready var equipment_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer
 @onready var class_selection_scroll: ScrollContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/ClassSelectionScroll
 @onready var background_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection
@@ -50,6 +54,20 @@ const ABILITY_LABELS := {
 @onready var variant_human_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/VariantHumanPanel/VariantHumanMargin/VariantHumanContent/VariantHumanStatusLabel
 @onready var feat_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatStatusLabel
 @onready var feat_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatsSelectionScroll/FeatList
+@onready var spell_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellStatusLabel
+@onready var no_spells_required_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/NoSpellsRequiredLabel
+@onready var class_spells_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection
+@onready var class_cantrips_counter_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/CantripsPanel/CantripsMargin/CantripsContent/CantripsCounterLabel
+@onready var class_cantrips_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/CantripsPanel/CantripsMargin/CantripsContent/CantripsScroll/CantripsList
+@onready var class_level_one_counter_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/LevelOneSpellsPanel/LevelOneSpellsMargin/LevelOneSpellsContent/LevelOneSpellsCounterLabel
+@onready var class_level_one_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/LevelOneSpellsPanel/LevelOneSpellsMargin/LevelOneSpellsContent/LevelOneSpellsScroll/LevelOneSpellsList
+@onready var feat_spells_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection
+@onready var feat_spells_description_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatSpellsDescriptionLabel
+@onready var magic_initiate_spell_list_option: OptionButton = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/MagicInitiateSpellList
+@onready var feat_cantrips_counter_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatCantripsPanel/FeatCantripsMargin/FeatCantripsContent/FeatCantripsCounterLabel
+@onready var feat_cantrips_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatCantripsPanel/FeatCantripsMargin/FeatCantripsContent/FeatCantripsScroll/FeatCantripsList
+@onready var feat_level_one_counter_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatLevelOneSpellsPanel/FeatLevelOneSpellsMargin/FeatLevelOneSpellsContent/FeatLevelOneSpellsCounterLabel
+@onready var feat_level_one_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatLevelOneSpellsPanel/FeatLevelOneSpellsMargin/FeatLevelOneSpellsContent/FeatLevelOneSpellsScroll/FeatLevelOneSpellsList
 @onready var use_default_gold_checkbox: CheckBox = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/UseDefaultGoldCheckBox
 @onready var equipment_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentStatusLabel
 @onready var pack_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/StartingPacksTab/PacksScroll/PackList
@@ -68,6 +86,7 @@ const ABILITY_LABELS := {
 @onready var int_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/INTPreview
 @onready var wis_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/WISPreview
 @onready var cha_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/CHAPreview
+@onready var known_spells_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/KnownSpellsPreview
 @onready var inventory_items_container: VBoxContainer = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent/InventoryGoldScroll/InventoryGoldList/InventoryItemsContainer
 @onready var inventory_gold_amount_label: Label = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent/InventoryGoldScroll/InventoryGoldList/InventoryGoldAmountLabel
 
@@ -77,6 +96,7 @@ var available_races := []
 var available_classes := []
 var available_backgrounds := []
 var available_feats := []
+var available_spells := []
 var available_pack_items := []
 var available_individual_items := []
 var race_buttons := []
@@ -94,6 +114,12 @@ var variant_human_bonus_choices := ["", ""]
 var selected_pack: ItemResource = null
 var selected_individual_item_ids := {}
 var selected_item_resources := {}
+var selected_class_cantrip_ids := {}
+var selected_class_level_one_spell_ids := {}
+var selected_feat_cantrip_ids := {}
+var selected_feat_level_one_spell_ids := {}
+var magic_initiate_spell_list := ""
+var spell_resource_cache := {}
 var use_default_starting_gold := false
 var skill_name_cache := {}
 var ability_controls := {}
@@ -107,6 +133,7 @@ func _ready() -> void:
 	_load_available_classes()
 	_load_available_backgrounds()
 	_load_available_feats()
+	_load_available_spells()
 	_load_available_equipment()
 	_sync_selected_state_from_manager()
 	_refresh_allowed_equipment_options()
@@ -117,6 +144,7 @@ func _ready() -> void:
 	_update_selection_buttons()
 	_refresh_ability_scores_ui()
 	_refresh_feat_ui()
+	_refresh_spells_ui()
 	_refresh_equipment_ui()
 	_update_next_button_state()
 	_refresh_preview()
@@ -135,18 +163,23 @@ func apply_debug_test_build() -> void:
 	_ensure_current_character()
 
 	var dragonborn := _find_race_by_id("race_dragonborn")
-	var fighter := _find_class_by_id("class_fighter")
-	var soldier := _find_background_by_id("background_soldier")
-	if dragonborn == null or fighter == null or soldier == null:
+	var sorcerer := _find_class_by_id("class_sorcerer")
+	var charlatan := _find_background_by_id("background_charlatan")
+	if dragonborn == null or sorcerer == null or charlatan == null:
 		push_warning("Character creation debug preset could not be applied because a required resource was missing.")
 		return
 
 	var character := CharacterCreationManager.current_character
 	selected_race = dragonborn
-	selected_class = fighter
-	selected_background = soldier
+	selected_class = sorcerer
+	selected_background = charlatan
 	selected_feat = null
 	variant_human_bonus_choices = ["", ""]
+	selected_class_cantrip_ids.clear()
+	selected_class_level_one_spell_ids.clear()
+	selected_feat_cantrip_ids.clear()
+	selected_feat_level_one_spell_ids.clear()
+	magic_initiate_spell_list = ""
 	selected_pack = null
 	selected_individual_item_ids.clear()
 	use_default_starting_gold = false
@@ -170,12 +203,13 @@ func apply_debug_test_build() -> void:
 	_recalculate_character_hp()
 	_update_selection_buttons()
 	_refresh_feat_ui()
+	_refresh_spells_ui()
 	_refresh_equipment_ui()
 	_refresh_ability_scores_ui()
 	_update_next_button_state()
 	_refresh_preview()
 	go_to_step(3)
-	print("Applied debug character preset: Dragonborn / Fighter / Soldier")
+	print("Applied debug character preset: Dragonborn / Sorcerer / Charlatan")
 
 
 func go_to_step(index: int) -> void:
@@ -187,6 +221,7 @@ func go_to_step(index: int) -> void:
 	_update_main_content()
 	_refresh_ability_scores_ui()
 	_refresh_feat_ui()
+	_refresh_spells_ui()
 	_refresh_equipment_ui()
 	_update_next_button_state()
 	_announce_step_change()
@@ -205,6 +240,7 @@ func _bind_main_area_actions() -> void:
 	next_button.pressed.connect(go_to_next_step)
 	variant_human_bonus_one.item_selected.connect(_on_variant_human_bonus_selected.bind(0))
 	variant_human_bonus_two.item_selected.connect(_on_variant_human_bonus_selected.bind(1))
+	magic_initiate_spell_list_option.item_selected.connect(_on_magic_initiate_spell_list_selected)
 	use_default_gold_checkbox.toggled.connect(_on_use_default_gold_toggled)
 	item_search_line_edit.text_changed.connect(_on_item_search_text_changed)
 
@@ -303,6 +339,25 @@ func _load_available_feats() -> void:
 		var feat_button := _build_feat_button(feat, available_feats.size() - 1)
 		feat_buttons.append(feat_button)
 		feat_list_container.add_child(feat_button)
+
+
+func _load_available_spells() -> void:
+	available_spells.clear()
+	spell_resource_cache.clear()
+
+	var spell_files := DirAccess.get_files_at(SPELL_DATA_PATH)
+	spell_files.sort()
+
+	for file_name in spell_files:
+		if not file_name.begins_with("spell_") or not file_name.ends_with(".tres"):
+			continue
+
+		var spell := load("%s/%s" % [SPELL_DATA_PATH, file_name]) as SpellResource
+		if spell == null:
+			continue
+
+		available_spells.append(spell)
+		spell_resource_cache[spell.resource_id] = spell
 
 
 func _load_available_equipment() -> void:
@@ -506,6 +561,36 @@ func _build_feat_button(feat: FeatResource, index: int) -> Button:
 	ability_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ability_label.text = "Ability Score Increases: %s" % _format_feat_ability_score_increases(feat)
 	info_column.add_child(ability_label)
+
+	return button
+
+
+func _build_spell_button(spell: SpellResource, selected: bool, callback: Callable) -> Button:
+	var button := _create_card_button(130)
+	button.toggle_mode = true
+	button.button_pressed = selected
+	button.pressed.connect(callback)
+
+	var content_row := _create_card_row(button)
+	var preview_rect := ColorRect.new()
+	preview_rect.custom_minimum_size = Vector2(44, 44)
+	preview_rect.color = _get_resource_color(spell.resource_id)
+	content_row.add_child(preview_rect)
+
+	var info_column := _create_info_column(content_row)
+	var title_label := Label.new()
+	title_label.text = spell.display_name
+	title_label.add_theme_font_size_override("font_size", 18)
+	info_column.add_child(title_label)
+
+	var meta_label := Label.new()
+	meta_label.text = "%s | %s | %s" % [_format_spell_level_label(spell.spell_level), spell.school, spell.casting_time]
+	info_column.add_child(meta_label)
+
+	var description_label := Label.new()
+	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description_label.text = spell.spell_text
+	info_column.add_child(description_label)
 
 	return button
 
@@ -742,10 +827,11 @@ func _update_main_content() -> void:
 	class_background_step_container.visible = current_step == 1 or current_step == 2
 	abilities_step_container.visible = current_step == 3
 	feats_step_container.visible = current_step == 4
-	equipment_step_container.visible = current_step == 5
+	spells_step_container.visible = current_step == 5
+	equipment_step_container.visible = current_step == 6
 	class_selection_scroll.visible = current_step == 1
 	background_section.visible = current_step == 2
-	next_button.visible = current_step >= 0 and current_step <= 5
+	next_button.visible = current_step >= 0 and current_step <= 6
 
 	match current_step:
 		0:
@@ -759,6 +845,8 @@ func _update_main_content() -> void:
 		4:
 			current_step_content_label.text = "Feats Selection"
 		5:
+			current_step_content_label.text = "Spells Selection"
+		6:
 			current_step_content_label.text = "Equipment Selection"
 		_:
 			current_step_content_label.text = "Current Step Content"
@@ -830,6 +918,8 @@ func _update_next_button_state() -> void:
 		4:
 			next_button.disabled = not _can_advance_from_feats_step()
 		5:
+			next_button.disabled = not _can_advance_from_spells_step()
+		6:
 			next_button.disabled = not _can_advance_from_equipment_step()
 		_:
 			next_button.disabled = true
@@ -889,6 +979,116 @@ func _refresh_feat_ui() -> void:
 	_update_feat_status()
 
 
+func _refresh_spells_ui() -> void:
+	_sanitize_spell_selection_state()
+
+	var has_class_spellcasting := _has_class_spellcasting()
+	var has_magic_initiate := _requires_magic_initiate_spell_selection()
+	class_spells_section.visible = has_class_spellcasting
+	feat_spells_section.visible = has_magic_initiate
+	no_spells_required_label.visible = not has_class_spellcasting and not has_magic_initiate
+
+	_populate_magic_initiate_spell_list_option()
+	_rebuild_class_spell_lists()
+	_rebuild_feat_spell_lists()
+	_update_spell_status()
+	_sync_spells_to_character()
+
+
+func _rebuild_class_spell_lists() -> void:
+	_clear_container_children(class_cantrips_list_container)
+	_clear_container_children(class_level_one_list_container)
+
+	var cantrip_limit := _get_required_class_cantrip_count()
+	var level_one_limit := _get_required_class_level_one_spell_count()
+	class_cantrips_counter_label.text = "Selected %d / %d" % [selected_class_cantrip_ids.size(), cantrip_limit]
+	class_level_one_counter_label.text = "Selected %d / %d" % [selected_class_level_one_spell_ids.size(), level_one_limit]
+
+	var cantrip_options := _get_class_spells_by_level(0)
+	if cantrip_options.is_empty():
+		_add_empty_state_label(class_cantrips_list_container, "No class cantrips available.")
+	else:
+		for spell in cantrip_options:
+			class_cantrips_list_container.add_child(_build_spell_button(spell, selected_class_cantrip_ids.has(spell.resource_id), _on_class_spell_toggled.bind(spell.resource_id, 0)))
+
+	var level_one_options := _get_class_spells_by_level(1)
+	if level_one_options.is_empty():
+		_add_empty_state_label(class_level_one_list_container, "No class level 1 spells available.")
+	else:
+		for spell in level_one_options:
+			class_level_one_list_container.add_child(_build_spell_button(spell, selected_class_level_one_spell_ids.has(spell.resource_id), _on_class_spell_toggled.bind(spell.resource_id, 1)))
+
+
+func _rebuild_feat_spell_lists() -> void:
+	_clear_container_children(feat_cantrips_list_container)
+	_clear_container_children(feat_level_one_list_container)
+
+	if not _requires_magic_initiate_spell_selection():
+		feat_spells_description_label.text = "Selected feat grants additional spell choices."
+		feat_cantrips_counter_label.text = "Selected 0 / 0"
+		feat_level_one_counter_label.text = "Selected 0 / 0"
+		return
+
+	feat_spells_description_label.text = "Magic Initiate grants 2 cantrips and 1 level 1 spell from one spell list."
+	feat_cantrips_counter_label.text = "Selected %d / 2" % selected_feat_cantrip_ids.size()
+	feat_level_one_counter_label.text = "Selected %d / 1" % selected_feat_level_one_spell_ids.size()
+
+	var cantrip_options := _get_magic_initiate_spells_by_level(0)
+	if cantrip_options.is_empty():
+		_add_empty_state_label(feat_cantrips_list_container, "Choose a spell list to see feat cantrips.")
+	else:
+		for spell in cantrip_options:
+			feat_cantrips_list_container.add_child(_build_spell_button(spell, selected_feat_cantrip_ids.has(spell.resource_id), _on_feat_spell_toggled.bind(spell.resource_id, 0)))
+
+	var level_one_options := _get_magic_initiate_spells_by_level(1)
+	if level_one_options.is_empty():
+		_add_empty_state_label(feat_level_one_list_container, "Choose a spell list to see feat level 1 spells.")
+	else:
+		for spell in level_one_options:
+			feat_level_one_list_container.add_child(_build_spell_button(spell, selected_feat_level_one_spell_ids.has(spell.resource_id), _on_feat_spell_toggled.bind(spell.resource_id, 1)))
+
+
+func _update_spell_status() -> void:
+	if not _has_spell_selection_requirements():
+		spell_status_label.text = "No spell selection required for this build."
+		_set_label_color(spell_status_label, Color(0.7, 0.7, 0.7))
+		return
+
+	var missing_parts: Array[String] = []
+	var class_cantrip_limit := _get_required_class_cantrip_count()
+	var class_level_one_limit := _get_required_class_level_one_spell_count()
+	if selected_class_cantrip_ids.size() != class_cantrip_limit:
+		missing_parts.append("class cantrips %d/%d" % [selected_class_cantrip_ids.size(), class_cantrip_limit])
+	if selected_class_level_one_spell_ids.size() != class_level_one_limit:
+		missing_parts.append("class spells %d/%d" % [selected_class_level_one_spell_ids.size(), class_level_one_limit])
+	if _requires_magic_initiate_spell_selection():
+		if magic_initiate_spell_list.is_empty():
+			missing_parts.append("Magic Initiate list")
+		if selected_feat_cantrip_ids.size() != 2:
+			missing_parts.append("feat cantrips %d/2" % selected_feat_cantrip_ids.size())
+		if selected_feat_level_one_spell_ids.size() != 1:
+			missing_parts.append("feat spells %d/1" % selected_feat_level_one_spell_ids.size())
+
+	if missing_parts.is_empty():
+		spell_status_label.text = "Spell selection complete."
+		_set_label_color(spell_status_label, Color(0.2, 0.7, 0.3))
+	else:
+		spell_status_label.text = "Complete selections: %s" % ", ".join(missing_parts)
+		_set_label_color(spell_status_label, Color(0.85, 0.65, 0.2))
+
+
+func _clear_container_children(container: Node) -> void:
+	for child in container.get_children():
+		child.queue_free()
+
+
+func _add_empty_state_label(container: VBoxContainer, text: String) -> void:
+	var label := Label.new()
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.text = text
+	container.add_child(label)
+
+
 func _refresh_equipment_ui() -> void:
 	use_default_gold_checkbox.visible = false
 	use_default_gold_checkbox.button_pressed = false
@@ -919,6 +1119,7 @@ func _refresh_preview() -> void:
 		var preview_label := ability_previews[ability_key] as RichTextLabel
 		preview_label.text = "[b]%s:[/b] %s" % [ABILITY_LABELS[ability_key], _format_ability_preview(character, race, ability_key)]
 
+	known_spells_preview.text = "[b]Known Spells:[/b] %s" % _format_known_spells_preview(character)
 	_refresh_inventory_gold_preview(character)
 
 
@@ -945,6 +1146,7 @@ func _on_race_selected(index: int) -> void:
 	_recalculate_character_hp()
 	_update_selection_buttons()
 	_refresh_feat_ui()
+	_refresh_spells_ui()
 	_refresh_ability_scores_ui()
 	_update_next_button_state()
 	_refresh_preview()
@@ -963,6 +1165,7 @@ func _on_class_selected(index: int) -> void:
 	_recalculate_character_hp()
 	_update_selection_buttons()
 	_refresh_feat_ui()
+	_refresh_spells_ui()
 	_refresh_equipment_ui()
 	_refresh_ability_scores_ui()
 	_update_next_button_state()
@@ -980,6 +1183,7 @@ func _on_background_selected(index: int) -> void:
 	_sync_equipment_to_character()
 	_update_selection_buttons()
 	_refresh_feat_ui()
+	_refresh_spells_ui()
 	_refresh_equipment_ui()
 	_refresh_ability_scores_ui()
 	_update_next_button_state()
@@ -1000,6 +1204,7 @@ func _on_feat_selected(index: int) -> void:
 	_recalculate_character_hp()
 	_update_selection_buttons()
 	_refresh_feat_ui()
+	_refresh_spells_ui()
 	_refresh_ability_scores_ui()
 	_update_next_button_state()
 	_refresh_preview()
@@ -1013,6 +1218,7 @@ func _on_ability_score_changed(value: float, ability_key: String) -> void:
 	_recalculate_character_hp()
 	_refresh_ability_scores_ui()
 	_refresh_feat_ui()
+	_refresh_spells_ui()
 	_update_next_button_state()
 	_refresh_preview()
 
@@ -1032,9 +1238,53 @@ func _on_variant_human_bonus_selected(index: int, slot: int) -> void:
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
 	_refresh_feat_ui()
+	_refresh_spells_ui()
 	_refresh_ability_scores_ui()
 	_update_next_button_state()
 	_refresh_preview()
+
+
+func _on_magic_initiate_spell_list_selected(index: int) -> void:
+	var metadata = magic_initiate_spell_list_option.get_item_metadata(index)
+	magic_initiate_spell_list = metadata if metadata is String else ""
+	selected_feat_cantrip_ids.clear()
+	selected_feat_level_one_spell_ids.clear()
+	_refresh_spells_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_class_spell_toggled(resource_id: String, spell_level: int) -> void:
+	if spell_level == 0:
+		_toggle_spell_selection(selected_class_cantrip_ids, resource_id, _get_required_class_cantrip_count())
+	else:
+		_toggle_spell_selection(selected_class_level_one_spell_ids, resource_id, _get_required_class_level_one_spell_count())
+
+	_refresh_spells_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_feat_spell_toggled(resource_id: String, spell_level: int) -> void:
+	if spell_level == 0:
+		_toggle_spell_selection(selected_feat_cantrip_ids, resource_id, 2)
+	else:
+		_toggle_spell_selection(selected_feat_level_one_spell_ids, resource_id, 1)
+
+	_refresh_spells_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _toggle_spell_selection(selected_ids: Dictionary, resource_id: String, limit: int) -> void:
+	if selected_ids.has(resource_id):
+		selected_ids.erase(resource_id)
+		return
+
+	if limit <= 0 or selected_ids.size() >= limit:
+		return
+
+	selected_ids[resource_id] = true
 
 
 func _on_pack_selected(index: int) -> void:
@@ -1100,6 +1350,7 @@ func _sync_selected_state_from_manager() -> void:
 	if not CharacterCreationManager.current_character.feats.is_empty():
 		selected_feat = CharacterCreationManager.current_character.feats[0]
 	_sync_variant_human_choices_from_character()
+	_sync_spell_state_from_character()
 	_sync_equipment_state_from_character()
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
@@ -1141,6 +1392,20 @@ func _can_advance_from_feats_step() -> bool:
 		return true
 
 	return selected_feat_valid
+
+
+func _can_advance_from_spells_step() -> bool:
+	if not _has_spell_selection_requirements():
+		return true
+
+	if selected_class_cantrip_ids.size() != _get_required_class_cantrip_count():
+		return false
+	if selected_class_level_one_spell_ids.size() != _get_required_class_level_one_spell_count():
+		return false
+	if _requires_magic_initiate_spell_selection():
+		return not magic_initiate_spell_list.is_empty() and selected_feat_cantrip_ids.size() == 2 and selected_feat_level_one_spell_ids.size() == 1
+
+	return true
 
 
 func _can_advance_from_equipment_step() -> bool:
@@ -1319,6 +1584,28 @@ func _format_ability_preview(character: CharacterSheetResource, race: RaceResour
 	return "%d (%s total)" % [total_score, _format_signed_value(total_bonus)]
 
 
+func _format_known_spells_preview(character: CharacterSheetResource) -> String:
+	if character == null or character.known_spells.is_empty():
+		return "-"
+
+	var cantrip_names: Array[String] = []
+	var level_one_names: Array[String] = []
+	for spell in character.known_spells:
+		if spell == null:
+			continue
+		if spell.spell_level == 0:
+			cantrip_names.append(spell.display_name)
+		elif spell.spell_level == 1:
+			level_one_names.append(spell.display_name)
+
+	var parts: Array[String] = []
+	if not cantrip_names.is_empty():
+		parts.append("Cantrips: %s" % ", ".join(cantrip_names))
+	if not level_one_names.is_empty():
+		parts.append("Level 1: %s" % ", ".join(level_one_names))
+	return " | ".join(parts) if not parts.is_empty() else "-"
+
+
 func _format_saving_throw_proficiencies(class_resource: ClassResource) -> String:
 	var labels: Array[String] = []
 	for ability_key in class_resource.saving_throw_proficiencies:
@@ -1365,6 +1652,224 @@ func _format_item_meta(item: ItemResource) -> String:
 			return "Tool | %s gp" % str(item.cost_gp)
 		_:
 			return "%s gp" % str(item.cost_gp)
+
+
+func _has_class_spellcasting() -> bool:
+	return selected_class != null and not selected_class.spellcasting_ability.strip_edges().is_empty()
+
+
+func _requires_magic_initiate_spell_selection() -> bool:
+	return selected_feat != null and selected_feat_valid and selected_feat.resource_id == FEAT_MAGIC_INITIATE_ID
+
+
+func _has_spell_selection_requirements() -> bool:
+	return _has_class_spellcasting() or _requires_magic_initiate_spell_selection()
+
+
+func _get_required_class_cantrip_count() -> int:
+	if not _has_class_spellcasting():
+		return 0
+	return max(selected_class.cantrips_known, 0)
+
+
+func _get_required_class_level_one_spell_count() -> int:
+	if not _has_class_spellcasting():
+		return 0
+	return max(_get_spells_known_for_level(selected_class, 1), 0)
+
+
+func _get_spells_known_for_level(class_resource: ClassResource, spell_level: int) -> int:
+	if class_resource == null:
+		return 0
+	if class_resource.spells_known_per_level.has(spell_level):
+		return int(class_resource.spells_known_per_level[spell_level])
+	var spell_level_key := str(spell_level)
+	if class_resource.spells_known_per_level.has(spell_level_key):
+		return int(class_resource.spells_known_per_level[spell_level_key])
+	return 0
+
+
+func _sanitize_spell_selection_state() -> void:
+	_filter_selected_ids(selected_class_cantrip_ids, _collect_spell_id_set(_get_class_spells_by_level(0)))
+	_filter_selected_ids(selected_class_level_one_spell_ids, _collect_spell_id_set(_get_class_spells_by_level(1)))
+	_trim_selected_spell_ids(selected_class_cantrip_ids, _get_required_class_cantrip_count())
+	_trim_selected_spell_ids(selected_class_level_one_spell_ids, _get_required_class_level_one_spell_count())
+
+	if not _requires_magic_initiate_spell_selection():
+		magic_initiate_spell_list = ""
+		selected_feat_cantrip_ids.clear()
+		selected_feat_level_one_spell_ids.clear()
+		return
+
+	var valid_magic_initiate_lists := _get_magic_initiate_spell_list_ids()
+	if not valid_magic_initiate_lists.has(magic_initiate_spell_list):
+		magic_initiate_spell_list = ""
+
+	_filter_selected_ids(selected_feat_cantrip_ids, _collect_spell_id_set(_get_magic_initiate_spells_by_level(0)))
+	_filter_selected_ids(selected_feat_level_one_spell_ids, _collect_spell_id_set(_get_magic_initiate_spells_by_level(1)))
+	_trim_selected_spell_ids(selected_feat_cantrip_ids, 2)
+	_trim_selected_spell_ids(selected_feat_level_one_spell_ids, 1)
+
+
+func _filter_selected_ids(selected_ids: Dictionary, valid_ids: Dictionary) -> void:
+	for resource_id in selected_ids.keys():
+		if not valid_ids.has(resource_id):
+			selected_ids.erase(resource_id)
+
+
+func _trim_selected_spell_ids(selected_ids: Dictionary, limit: int) -> void:
+	if limit < 0:
+		return
+	var resource_ids := selected_ids.keys()
+	resource_ids.sort()
+	for index in range(limit, resource_ids.size()):
+		selected_ids.erase(resource_ids[index])
+
+
+func _collect_spell_id_set(spells: Array) -> Dictionary:
+	var spell_ids := {}
+	for spell in spells:
+		if spell != null:
+			spell_ids[spell.resource_id] = true
+	return spell_ids
+
+
+func _get_class_spells_by_level(spell_level: int) -> Array:
+	if selected_class == null:
+		return []
+	return _get_spells_for_list(selected_class.resource_id, spell_level)
+
+
+func _get_magic_initiate_spells_by_level(spell_level: int) -> Array:
+	if magic_initiate_spell_list.is_empty():
+		return []
+	return _get_spells_for_list(magic_initiate_spell_list, spell_level)
+
+
+func _get_spells_for_list(list_id: String, spell_level: int) -> Array:
+	var spells: Array = []
+	for spell in available_spells:
+		if spell == null or spell.spell_level != spell_level:
+			continue
+		if not spell.spell_lists.has(list_id):
+			continue
+		spells.append(spell)
+	return spells
+
+
+func _get_magic_initiate_spell_list_ids() -> Array[String]:
+	var list_ids: Array[String] = []
+	var seen := {}
+	for spell in available_spells:
+		if spell == null or (spell.spell_level != 0 and spell.spell_level != 1):
+			continue
+		for list_id in spell.spell_lists:
+			if seen.has(list_id):
+				continue
+			seen[list_id] = true
+			list_ids.append(list_id)
+	list_ids.sort()
+	return list_ids
+
+
+func _populate_magic_initiate_spell_list_option() -> void:
+	magic_initiate_spell_list_option.clear()
+	magic_initiate_spell_list_option.add_item("Choose a spell list")
+	magic_initiate_spell_list_option.set_item_metadata(0, "")
+
+	for list_id in _get_magic_initiate_spell_list_ids():
+		var item_index := magic_initiate_spell_list_option.item_count
+		magic_initiate_spell_list_option.add_item(_get_class_display_name_by_id(list_id))
+		magic_initiate_spell_list_option.set_item_metadata(item_index, list_id)
+
+	_select_option_by_metadata(magic_initiate_spell_list_option, magic_initiate_spell_list)
+
+
+func _select_option_by_metadata(selector: OptionButton, value: String) -> void:
+	for index in range(selector.item_count):
+		if selector.get_item_metadata(index) == value:
+			selector.select(index)
+			return
+	selector.select(0)
+
+
+func _get_class_display_name_by_id(class_id: String) -> String:
+	for class_resource in available_classes:
+		if class_resource != null and class_resource.resource_id == class_id:
+			return class_resource.display_name
+	return class_id.trim_prefix("class_").replace("_", " ").capitalize()
+
+
+func _sync_spell_state_from_character() -> void:
+	selected_class_cantrip_ids.clear()
+	selected_class_level_one_spell_ids.clear()
+	selected_feat_cantrip_ids.clear()
+	selected_feat_level_one_spell_ids.clear()
+	magic_initiate_spell_list = ""
+
+	var character := CharacterCreationManager.current_character
+	if character == null:
+		return
+
+	var selection_state := character.spell_selection_state
+	_load_selected_spell_ids(selected_class_cantrip_ids, selection_state.get("class_cantrips", []))
+	_load_selected_spell_ids(selected_class_level_one_spell_ids, selection_state.get("class_level_one", []))
+	_load_selected_spell_ids(selected_feat_cantrip_ids, selection_state.get("feat_cantrips", []))
+	_load_selected_spell_ids(selected_feat_level_one_spell_ids, selection_state.get("feat_level_one", []))
+	if selection_state.get("magic_initiate_spell_list", "") is String:
+		magic_initiate_spell_list = selection_state.get("magic_initiate_spell_list", "")
+
+
+func _load_selected_spell_ids(selected_ids: Dictionary, values: Variant) -> void:
+	if values is Array:
+		for value in values:
+			if value is String:
+				selected_ids[value] = true
+
+
+func _sync_spells_to_character() -> void:
+	var character := CharacterCreationManager.current_character
+	if character == null:
+		return
+
+	character.known_spells.clear()
+	var seen := {}
+	_append_selected_spells(character.known_spells, seen, selected_class_cantrip_ids)
+	_append_selected_spells(character.known_spells, seen, selected_class_level_one_spell_ids)
+	_append_selected_spells(character.known_spells, seen, selected_feat_cantrip_ids)
+	_append_selected_spells(character.known_spells, seen, selected_feat_level_one_spell_ids)
+	character.spell_selection_state = {
+		"class_cantrips": _get_sorted_selected_spell_ids(selected_class_cantrip_ids),
+		"class_level_one": _get_sorted_selected_spell_ids(selected_class_level_one_spell_ids),
+		"feat_cantrips": _get_sorted_selected_spell_ids(selected_feat_cantrip_ids),
+		"feat_level_one": _get_sorted_selected_spell_ids(selected_feat_level_one_spell_ids),
+		"magic_initiate_spell_list": magic_initiate_spell_list,
+	}
+
+
+func _append_selected_spells(target: Array[SpellResource], seen: Dictionary, selected_ids: Dictionary) -> void:
+	for resource_id in _get_sorted_selected_spell_ids(selected_ids):
+		if seen.has(resource_id):
+			continue
+		var spell := spell_resource_cache.get(resource_id) as SpellResource
+		if spell == null:
+			continue
+		target.append(spell)
+		seen[resource_id] = true
+
+
+func _get_sorted_selected_spell_ids(selected_ids: Dictionary) -> Array[String]:
+	var resource_ids: Array[String] = []
+	for resource_id in selected_ids.keys():
+		resource_ids.append(resource_id)
+	resource_ids.sort()
+	return resource_ids
+
+
+func _format_spell_level_label(spell_level: int) -> String:
+	if spell_level <= 0:
+		return "Cantrip"
+	return "Level %d" % spell_level
 
 
 func _sync_equipment_state_from_character() -> void:

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemResource" format=3]
+
+[ext_resource type="Script" path="res://data/items/ItemResource.gd" id="1_pri6g"]
+
+[resource]
+script = ExtResource("1_pri6g")
+resource_id = "item_sealing_wax"
+display_name = "Sealing Wax"
+category = 6
+cost_gp = 0.5
+weight_lb = 0.0
+description = "Wax used to seal letters and documents with an emblem or signet."
