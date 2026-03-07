@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ConditionResource" format=3 uid="uid://condition_restrained"]
+
+[ext_resource type="Script" uid="uid://conditionrescript" path="res://data/conditions/ConditionResource.gd" id="1_cond"]
+
+[resource]
+script = ExtResource("1_cond")
+resource_id = "condition_restrained"
+display_name = "Restrained"
+effect_text = "A restrained creature’s speed becomes 0, and it can’t benefit from any bonus to its speed."
+metadata/_custom_type_script = "uid://conditionrescript"

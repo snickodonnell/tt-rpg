@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ConditionResource" format=3 uid="uid://condition_blinded"]
+
+[ext_resource type="Script" uid="uid://conditionrescript" path="res://data/conditions/ConditionResource.gd" id="1_cond"]
+
+[resource]
+script = ExtResource("1_cond")
+resource_id = "condition_blinded"
+display_name = "Blinded"
+effect_text = "A blinded creature can’t see and automatically fails any ability check that requires sight. Attack rolls against the creature have advantage, and the creature’s attack rolls have disadvantage."
+metadata/_custom_type_script = "uid://conditionrescript"
