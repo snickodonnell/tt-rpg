@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PersonalityTraitResource" format=3 uid="uid://background_charlatan_trait_3"]
+
+[ext_resource type="Script" path="res://data/backgrounds/personality/PersonalityTraitResource.gd" id="1_ptr"]
+
+[resource]
+script = ExtResource("1_ptr")
+category = "Trait"
+text = "I collect little tells that reveal when people are vulnerable."

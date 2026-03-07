@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PersonalityTraitResource" format=3 uid="uid://background_sage_flaw_6"]
+
+[ext_resource type="Script" path="res://data/backgrounds/personality/PersonalityTraitResource.gd" id="1_ptr"]
+
+[resource]
+script = ExtResource("1_ptr")
+category = "Flaw"
+text = "I am easily distracted by intellectual curiosities."

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BackgroundFeatureResource" format=3 uid="uid://background_feature_guild_artisan"]
+
+[ext_resource type="Script" path="res://data/backgrounds/features/BackgroundFeatureResource.gd" id="1_bgf"]
+
+[resource]
+script = ExtResource("1_bgf")
+feature_name = "Guild Membership"
+feature_text = "Your guild provides contacts, shared resources, and professional standing in places where it has influence."

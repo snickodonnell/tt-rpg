@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BackgroundFeatureResource" format=3 uid="uid://background_feature_sailor"]
+
+[ext_resource type="Script" path="res://data/backgrounds/features/BackgroundFeatureResource.gd" id="1_bgf"]
+
+[resource]
+script = ExtResource("1_bgf")
+feature_name = "Ship’s Passage"
+feature_text = "You can generally secure free travel by ship for yourself and companions in exchange for service aboard."

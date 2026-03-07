@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PersonalityTraitResource" format=3 uid="uid://background_guild_artisan_flaw_4"]
+
+[ext_resource type="Script" path="res://data/backgrounds/personality/PersonalityTraitResource.gd" id="1_ptr"]
+
+[resource]
+script = ExtResource("1_ptr")
+category = "Flaw"
+text = "I hoard rare materials instead of sharing them."

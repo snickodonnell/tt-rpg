@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BackgroundFeatureResource" format=3 uid="uid://background_feature_folk_hero"]
+
+[ext_resource type="Script" path="res://data/backgrounds/features/BackgroundFeatureResource.gd" id="1_bgf"]
+
+[resource]
+script = ExtResource("1_bgf")
+feature_name = "Rustic Hospitality"
+feature_text = "Common folk offer shelter, food, and help to someone known for defending ordinary people."
