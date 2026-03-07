@@ -1,0 +1,306 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/character_creation/CharacterCreationManagerUI.gd" id="1_character_creation_manager_ui"]
+
+[node name="CharacterCreationUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_character_creation_manager_ui")
+
+[node name="RootMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="ThreePanelLayout" type="HBoxContainer" parent="RootMargin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="LeftSidebar" type="PanelContainer" parent="RootMargin/ThreePanelLayout"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.0
+
+[node name="SidebarMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/LeftSidebar"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="SidebarContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ProgressTitle" type="Label" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent"]
+layout_mode = 2
+text = "Progress Steps"
+
+[node name="StepButtons" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent" unique_name_in_owner=true]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RaceButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Race"
+button_pressed = true
+
+[node name="ClassButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Class"
+
+[node name="BackgroundButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Background"
+
+[node name="AbilitiesButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Abilities"
+
+[node name="FeatsButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Feats"
+
+[node name="EquipmentButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Equipment"
+
+[node name="SummaryButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Summary"
+
+[node name="SidebarSpacer" type="Control" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DiceRollerPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent"]
+layout_mode = 2
+
+[node name="DiceRollerMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/DiceRollerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="DiceRollerContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/DiceRollerPanel/DiceRollerMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DiceRollerTitle" type="Label" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/DiceRollerPanel/DiceRollerMargin/DiceRollerContent"]
+layout_mode = 2
+text = "Dice Roller"
+
+[node name="RollD20Button" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/DiceRollerPanel/DiceRollerMargin/DiceRollerContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Roll d20"
+
+[node name="MainArea" type="PanelContainer" parent="RootMargin/ThreePanelLayout"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="MainAreaMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="MainAreaContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="CurrentStepContentLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+layout_mode = 2
+text = "Current Step Content"
+
+[node name="RaceStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="RaceSelectionScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="RaceList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer/RaceSelectionScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="ClassBackgroundStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="ClassSelectionScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ClassList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/ClassSelectionScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="BackgroundSection" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="BackgroundSectionLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection"]
+layout_mode = 2
+text = "Background Selection"
+
+[node name="BackgroundSelectionScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="BackgroundList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection/BackgroundSelectionScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="NextButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+layout_mode = 2
+size_flags_horizontal = 10
+disabled = true
+text = "Next"
+
+[node name="RightPreviewPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.0
+
+[node name="PreviewMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="PreviewContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PreviewTitle" type="Label" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
+layout_mode = 2
+text = "Live Preview"
+
+[node name="PreviewLabels" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="CharacterNamePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]Character Name:[/b] -"
+
+[node name="RacePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]Race:[/b] -"
+
+[node name="ClassPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]Class:[/b] -"
+
+[node name="BackgroundPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]Background:[/b] -"
+
+[node name="HPPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]HP:[/b] -"
+
+[node name="STRPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]STR:[/b] -"
+
+[node name="DEXPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]DEX:[/b] -"
+
+[node name="CONPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]CON:[/b] -"
+
+[node name="INTPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]INT:[/b] -"
+
+[node name="WISPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]WIS:[/b] -"
+
+[node name="CHAPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+text = "[b]CHA:[/b] -"
