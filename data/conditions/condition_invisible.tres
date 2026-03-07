@@ -5,6 +5,4 @@
 [resource]
 script = ExtResource("1_cond")
 resource_id = "condition_invisible"
-display_name = "Invisible"
-effect_text = "An invisible creature is impossible to see without the aid of magic or a special sense."
-metadata/_custom_type_script = "uid://conditionrescript"
+effect_text = "An invisible creature is impossible to see without the aid of magic or a special sense. For the purpose of hiding, the creature is heavily obscured. The creature’s location can be detected by any noise it makes or any tracks it leaves."

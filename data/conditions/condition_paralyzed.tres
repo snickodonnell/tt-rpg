@@ -5,6 +5,4 @@
 [resource]
 script = ExtResource("1_cond")
 resource_id = "condition_paralyzed"
-display_name = "Paralyzed"
-effect_text = "A paralyzed creature is incapacitated and can’t move or speak."
-metadata/_custom_type_script = "uid://conditionrescript"
+effect_text = "A paralyzed creature is incapacitated and can’t move or speak. The creature automatically fails Strength and Dexterity saving throws. Attack rolls against the creature have advantage. Any attack that hits the creature is a critical hit if the attacker is within 5 feet of the creature."

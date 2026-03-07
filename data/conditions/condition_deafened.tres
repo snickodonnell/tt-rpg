@@ -5,6 +5,4 @@
 [resource]
 script = ExtResource("1_cond")
 resource_id = "condition_deafened"
-display_name = "Deafened"
 effect_text = "A deafened creature can’t hear and automatically fails any ability check that requires hearing."
-metadata/_custom_type_script = "uid://conditionrescript"
