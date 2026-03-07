@@ -5,6 +5,4 @@
 [resource]
 script = ExtResource("1_cond")
 resource_id = "condition_charmed"
-display_name = "Charmed"
-effect_text = "A charmed creature can’t attack the charmer or target the charmer with harmful abilities or magical effects."
-metadata/_custom_type_script = "uid://conditionrescript"
+effect_text = "A charmed creature can’t attack the charmer or target the charmer with harmful abilities or magical effects. The charmer has advantage on any ability check to interact socially with the creature."
