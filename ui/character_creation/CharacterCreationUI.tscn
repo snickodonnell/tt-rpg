@@ -293,6 +293,34 @@ text = "Choose two different abilities for your +1 bonuses."
 layout_mode = 2
 text = "Choose a feat or skip this step."
 
+[node name="MagicInitiatePanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer"]
+visible = false
+layout_mode = 2
+
+[node name="MagicInitiateMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="MagicInitiateContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel/MagicInitiateMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="MagicInitiateTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel/MagicInitiateMargin/MagicInitiateContent"]
+layout_mode = 2
+text = "Magic Initiate Spell List"
+
+[node name="MagicInitiateDescriptionLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel/MagicInitiateMargin/MagicInitiateContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Choose the spell list for Magic Initiate before moving on."
+
+[node name="MagicInitiateFeatSpellList" type="OptionButton" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel/MagicInitiateMargin/MagicInitiateContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="FeatsSelectionScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -399,15 +427,11 @@ theme_override_constants/separation = 12
 
 [node name="FeatSpellsTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection"]
 layout_mode = 2
-text = "Feat Spell Options"
+text = "Bonus Spell Selection"
 
 [node name="FeatSpellsDescriptionLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection"]
 layout_mode = 2
 text = "Selected feat grants additional spell choices."
-
-[node name="MagicInitiateSpellList" type="OptionButton" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection"]
-layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="FeatCantripsPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection"]
 layout_mode = 2
@@ -527,9 +551,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
-[node name="NextButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+[node name="NavigationButtons" type="HBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
 layout_mode = 2
-size_flags_horizontal = 10
+alignment = 2
+theme_override_constants/separation = 10
+
+[node name="PreviousButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons"]
+layout_mode = 2
+text = "Previous"
+
+[node name="NextButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons"]
+layout_mode = 2
 disabled = true
 text = "Next"
 
@@ -552,100 +584,163 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="MainPreviewSection" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
+[node name="MainPreviewSection" type="PanelContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 3.0
-theme_override_constants/separation = 10
+size_flags_stretch_ratio = 2.0
 
-[node name="PreviewLabels" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection"]
+[node name="MainPreviewMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="MainPreviewScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="PreviewLabels" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="CharacterNamePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]Character Name:[/b] -"
+
+[node name="RacePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]Race:[/b] -"
+
+[node name="ClassPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]Class:[/b] -"
+
+[node name="BackgroundPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]Background:[/b] -"
+
+[node name="HPPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]HP:[/b] -"
+
+[node name="SpellcastingPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]Spellcasting:[/b] -"
+
+[node name="STRPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]STR:[/b] -"
+
+[node name="DEXPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]DEX:[/b] -"
+
+[node name="CONPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]CON:[/b] -"
+
+[node name="INTPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]INT:[/b] -"
+
+[node name="WISPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]WIS:[/b] -"
+
+[node name="CHAPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]CHA:[/b] -"
+
+[node name="SpellsSection" type="PanelContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.0
+
+[node name="SpellsMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/SpellsSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="SpellsContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/SpellsSection/SpellsMargin"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 6
 
-[node name="CharacterNamePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
+[node name="SpellsTitle" type="Label" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/SpellsSection/SpellsMargin/SpellsContent"]
 layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]Character Name:[/b] -"
+text = "Known Spells"
 
-[node name="RacePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
+[node name="SpellsScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/SpellsSection/SpellsMargin/SpellsContent"]
 layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]Race:[/b] -"
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="ClassPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
+[node name="SpellsPreviewList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/SpellsSection/SpellsMargin/SpellsContent/SpellsScroll"]
 layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]Class:[/b] -"
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
 
-[node name="BackgroundPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
+[node name="KnownSpellsPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/SpellsSection/SpellsMargin/SpellsContent/SpellsScroll/SpellsPreviewList"]
 layout_mode = 2
+size_flags_horizontal = 3
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
-text = "[b]Background:[/b] -"
-
-[node name="HPPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
-layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]HP:[/b] -"
-
-[node name="STRPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
-layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]STR:[/b] -"
-
-[node name="DEXPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
-layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]DEX:[/b] -"
-
-[node name="CONPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
-layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]CON:[/b] -"
-
-[node name="INTPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
-layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]INT:[/b] -"
-
-[node name="WISPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
-layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]WIS:[/b] -"
-
-[node name="CHAPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
-layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]CHA:[/b] -"
-
-[node name="KnownSpellsPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
-layout_mode = 2
-fit_content = true
-scroll_active = false
-bbcode_enabled = true
-text = "[b]Known Spells:[/b] -"
+autowrap_mode = 3
+text = "-"
 
 [node name="InventoryGoldSection" type="PanelContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
 layout_mode = 2
