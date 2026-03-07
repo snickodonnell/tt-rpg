@@ -38,6 +38,8 @@ const ABILITY_LABELS := {
 }
 
 @onready var current_step_content_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/CurrentStepContentLabel
+@onready var left_sidebar: PanelContainer = $RootMargin/ThreePanelLayout/LeftSidebar
+@onready var right_preview_panel: PanelContainer = $RootMargin/ThreePanelLayout/RightPreviewPanel
 @onready var race_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer
 @onready var class_background_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer
 @onready var skills_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer
@@ -45,6 +47,7 @@ const ABILITY_LABELS := {
 @onready var feats_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer
 @onready var spells_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer
 @onready var equipment_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer
+@onready var summary_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer
 @onready var class_selection_scroll: ScrollContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/ClassSelectionScroll
 @onready var background_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection
 @onready var race_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer/RaceSelectionScroll/RaceList
@@ -92,6 +95,9 @@ const ABILITY_LABELS := {
 @onready var step_buttons_container: VBoxContainer = $RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons
 @onready var previous_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons/PreviousButton
 @onready var next_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons/NextButton
+@onready var create_character_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons/CreateCharacterButton
+@onready var summary_preview: RichTextLabel = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/SummaryScroll/SummaryScrollContent/SummaryPreview
+@onready var character_name_input: LineEdit = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/CharacterNameRow/CharacterNameInput
 @onready var character_name_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/CharacterNamePreview
 @onready var race_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/RacePreview
 @onready var class_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/ClassPreview
@@ -171,6 +177,7 @@ func _ready() -> void:
 	_refresh_feat_ui()
 	_refresh_spells_ui()
 	_refresh_equipment_ui()
+	_refresh_summary_ui()
 	_update_next_button_state()
 	_refresh_preview()
 	_announce_step_change()
@@ -261,7 +268,10 @@ func go_to_step(index: int) -> void:
 	_refresh_feat_ui()
 	_refresh_spells_ui()
 	_refresh_equipment_ui()
+	_refresh_summary_ui()
 	_update_next_button_state()
+	if current_step == 8 and _get_character_name(CharacterCreationManager.current_character) == "-":
+		character_name_input.grab_focus()
 	_announce_step_change()
 	step_changed.emit(step_names[current_step])
 
@@ -277,6 +287,8 @@ func _bind_step_buttons() -> void:
 func _bind_main_area_actions() -> void:
 	previous_button.pressed.connect(go_to_previous_step)
 	next_button.pressed.connect(go_to_next_step)
+	create_character_button.pressed.connect(_on_create_character_pressed)
+	character_name_input.text_changed.connect(_on_character_name_changed)
 	variant_human_bonus_one.item_selected.connect(_on_variant_human_bonus_selected.bind(0))
 	variant_human_bonus_two.item_selected.connect(_on_variant_human_bonus_selected.bind(1))
 	magic_initiate_feat_spell_list_option.item_selected.connect(_on_magic_initiate_spell_list_selected)
@@ -881,6 +893,9 @@ func _update_step_buttons() -> void:
 
 
 func _update_main_content() -> void:
+	var summary_mode := current_step == 8
+	left_sidebar.visible = not summary_mode
+	right_preview_panel.visible = not summary_mode
 	race_step_container.visible = current_step == 0
 	class_background_step_container.visible = current_step == 1 or current_step == 2
 	skills_step_container.visible = current_step == 3
@@ -888,10 +903,12 @@ func _update_main_content() -> void:
 	feats_step_container.visible = current_step == 5
 	spells_step_container.visible = current_step == 6
 	equipment_step_container.visible = current_step == 7
+	summary_step_container.visible = current_step == 8
 	class_selection_scroll.visible = current_step == 1
 	background_section.visible = current_step == 2
-	previous_button.visible = current_step > 0 and current_step <= 7
+	previous_button.visible = current_step > 0 and current_step <= 8
 	next_button.visible = current_step >= 0 and current_step <= 7
+	create_character_button.visible = current_step == 8
 
 	match current_step:
 		0:
@@ -910,6 +927,8 @@ func _update_main_content() -> void:
 			current_step_content_label.text = _get_spell_phase_title()
 		7:
 			current_step_content_label.text = "Equipment Selection"
+		8:
+			current_step_content_label.text = "Summary & Finalization"
 		_:
 			current_step_content_label.text = "Current Step Content"
 
@@ -987,6 +1006,8 @@ func _update_next_button_state() -> void:
 			next_button.disabled = not _can_advance_from_equipment_step()
 		_:
 			next_button.disabled = true
+
+	create_character_button.disabled = not _can_finalize_character()
 
 
 func _refresh_skills_ui() -> void:
@@ -1256,6 +1277,14 @@ func _refresh_equipment_ui() -> void:
 	_update_equipment_status()
 
 
+func _refresh_summary_ui() -> void:
+	var character := CharacterCreationManager.current_character
+	var character_name := character.character_name if character != null else ""
+	if character_name_input.text != character_name:
+		character_name_input.text = character_name
+	summary_preview.text = _format_summary_preview(character)
+
+
 func _refresh_preview() -> void:
 	var character := CharacterCreationManager.current_character
 	var race := selected_race
@@ -1283,6 +1312,7 @@ func _refresh_preview() -> void:
 
 	known_spells_preview.text = _format_known_spells_preview(character)
 	_refresh_inventory_gold_preview(character)
+	_refresh_summary_ui()
 
 
 func _announce_step_change() -> void:
@@ -1508,6 +1538,33 @@ func _on_item_search_text_changed(_new_text: String) -> void:
 	_rebuild_individual_items_list()
 
 
+func _on_character_name_changed(new_text: String) -> void:
+	_ensure_current_character()
+	CharacterCreationManager.current_character.character_name = new_text
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_create_character_pressed() -> void:
+	if not _can_finalize_character():
+		push_warning("Character creation is incomplete. Finish all required selections before creating the character.")
+		return
+
+	_ensure_current_character()
+	_sync_skills_to_character()
+	_sync_spells_to_character()
+	_sync_equipment_to_character()
+	_revalidate_selected_feat()
+	_recalculate_character_hp()
+	_refresh_summary_ui()
+
+	var save_result: Dictionary = CharacterCreationManager.save_current_character()
+	if bool(save_result.get("success", false)):
+		print("Character created and saved successfully!")
+	else:
+		push_error("Failed to save character. Error code: %s" % str(save_result.get("error", ERR_CANT_CREATE)))
+
+
 func _ensure_current_character() -> void:
 	if CharacterCreationManager.current_character == null:
 		CharacterCreationManager.current_character = CharacterSheetResource.new()
@@ -1595,6 +1652,23 @@ func _can_advance_from_spells_step() -> bool:
 
 func _can_advance_from_equipment_step() -> bool:
 	return selected_pack != null or not selected_individual_item_ids.is_empty()
+
+
+func _can_finalize_character() -> bool:
+	return selected_race != null \
+		and selected_class != null \
+		and selected_background != null \
+		and _has_valid_character_name() \
+		and _can_advance_from_skills_step() \
+		and _calculate_point_buy_total() == 27 \
+		and _can_advance_from_feats_step() \
+		and _can_advance_from_spells_step() \
+		and _can_advance_from_equipment_step()
+
+
+func _has_valid_character_name() -> bool:
+	var character := CharacterCreationManager.current_character
+	return character != null and not character.character_name.strip_edges().is_empty()
 
 
 func _is_selected_race(race: RaceResource) -> bool:
@@ -1806,6 +1880,111 @@ func _format_known_spells_preview(character: CharacterSheetResource) -> String:
 	if not level_one_names.is_empty():
 		parts.append("Level 1: %s" % ", ".join(level_one_names))
 	return " | ".join(parts) if not parts.is_empty() else "-"
+
+
+func _format_summary_preview(character: CharacterSheetResource) -> String:
+	if character == null:
+		return "[b]No character data available.[/b]"
+
+	var race := character.race
+	var sections: Array[String] = []
+
+	var identity_lines := [
+		"Name: %s" % _get_character_name(character),
+		"Race: %s" % (race.display_name if race != null else "-"),
+		"Class: %s" % (character.class_resource.display_name if character.class_resource != null else "-"),
+		"Background: %s" % (character.background.display_name if character.background != null else "-"),
+		"Subclass: %s" % (character.subclass.display_name if character.subclass != null else "-"),
+	]
+	if race != null:
+		identity_lines.append("Speed: %d ft" % race.speed)
+		identity_lines.append("Darkvision: %s" % ("Yes" if race.darkvision else "No"))
+	sections.append("[b]Character[/b]\n%s" % "\n".join(identity_lines))
+
+	var stat_lines := [
+		"HP: %s" % _format_hp_preview(character, race),
+		"Proficiency Bonus: %s" % _format_signed_value(AbilitySystem.get_proficiency_bonus(max(character.current_level, 1))),
+		"Spellcasting: %s" % _format_spellcasting_preview(character, race),
+	]
+	if character.class_resource != null:
+		stat_lines.append("Saving Throws: %s" % _format_saving_throw_proficiencies(character.class_resource))
+	sections.append("[b]Core Stats[/b]\n%s" % "\n".join(stat_lines))
+
+	sections.append("[b]Ability Scores[/b]\n%s" % "\n".join(_format_summary_ability_lines(character, race)))
+	sections.append("[b]Skills[/b]\n%s" % "\n".join(_format_summary_skill_lines(character, race)))
+	sections.append("[b]Feats[/b]\n%s" % "\n".join(_format_summary_feat_lines(character)))
+	sections.append("[b]Spells[/b]\n%s" % "\n".join(_format_summary_spell_lines(character)))
+	sections.append("[b]Equipment & Gold[/b]\n%s" % "\n".join(_format_summary_equipment_lines(character)))
+	return "\n\n".join(sections)
+
+
+func _format_summary_ability_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
+	var lines: Array[String] = []
+	for ability_key in ABILITY_ORDER:
+		var base_score := int(character.base_ability_scores.get(ability_key, 8))
+		var total_bonus := _get_total_ability_bonus(character, race, ability_key)
+		var final_score := _get_final_ability_score(character, race, ability_key)
+		lines.append("%s: %d (Base %d, Bonuses %s)" % [ABILITY_LABELS[ability_key], final_score, base_score, _format_signed_value(total_bonus)])
+	return lines
+
+
+func _format_summary_skill_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
+	if character.skill_proficiencies.is_empty():
+		return ["- None"]
+
+	var lines: Array[String] = []
+	for skill_id in _get_sorted_skill_ids_from_array(character.skill_proficiencies):
+		var source_labels := _get_skill_source_labels(character.skill_proficiency_sources.get(skill_id, []))
+		var source_suffix := ""
+		if not source_labels.is_empty():
+			source_suffix = " (%s)" % ", ".join(source_labels)
+		lines.append("- %s (%s)%s" % [_get_skill_display_name(skill_id), _format_signed_value(_get_skill_roll_modifier(character, race, skill_id)), source_suffix])
+	return lines
+
+
+func _format_summary_feat_lines(character: CharacterSheetResource) -> Array[String]:
+	if character.feats.is_empty():
+		return ["- None"]
+
+	var lines: Array[String] = []
+	for feat in character.feats:
+		if feat != null:
+			lines.append("- %s" % feat.display_name)
+	return lines if not lines.is_empty() else ["- None"]
+
+
+func _format_summary_spell_lines(character: CharacterSheetResource) -> Array[String]:
+	var cantrip_names := _get_known_spell_names_for_level(character, 0)
+	var level_one_names := _get_known_spell_names_for_level(character, 1)
+	var lines: Array[String] = []
+	lines.append("Cantrips: %s" % (", ".join(cantrip_names) if not cantrip_names.is_empty() else "-"))
+	lines.append("Level 1: %s" % (", ".join(level_one_names) if not level_one_names.is_empty() else "-"))
+	return lines
+
+
+func _get_known_spell_names_for_level(character: CharacterSheetResource, spell_level: int) -> Array[String]:
+	var spell_names: Array[String] = []
+	if character == null:
+		return spell_names
+
+	for spell in character.known_spells:
+		if spell != null and spell.spell_level == spell_level:
+			spell_names.append(spell.display_name)
+	spell_names.sort()
+	return spell_names
+
+
+func _format_summary_equipment_lines(character: CharacterSheetResource) -> Array[String]:
+	var lines: Array[String] = ["Starting Gold: %s" % _format_gold_amount(_get_starting_gold_amount())]
+	var inventory_entries := _get_inventory_display_entries(character)
+	if inventory_entries.is_empty():
+		lines.append("Inventory: -")
+		return lines
+
+	lines.append("Inventory:")
+	for entry in inventory_entries:
+		lines.append("- %s" % entry)
+	return lines
 
 
 func _format_skills_preview(character: CharacterSheetResource) -> String:
@@ -2537,20 +2716,66 @@ func _refresh_inventory_gold_preview(character: CharacterSheetResource) -> void:
 	for child in inventory_items_container.get_children():
 		child.queue_free()
 
-	if character == null or character.inventory.is_empty():
+	var inventory_entries := _get_inventory_display_entries(character)
+	if inventory_entries.is_empty():
 		var empty_label := Label.new()
 		empty_label.text = "None"
 		inventory_items_container.add_child(empty_label)
 	else:
-		for item in character.inventory:
-			if item == null:
-				continue
+		for entry in inventory_entries:
 			var item_label := Label.new()
 			item_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			item_label.text = "- %s" % item.display_name
+			item_label.text = "- %s" % entry
 			inventory_items_container.add_child(item_label)
 
 	inventory_gold_amount_label.text = "Gold: %s" % _format_gold_amount(_get_starting_gold_amount())
+
+
+func _get_inventory_display_entries(character: CharacterSheetResource) -> Array[String]:
+	var entries: Array[String] = []
+	if character == null:
+		return entries
+
+	var counts := {}
+	var ordered_ids: Array[String] = []
+	var names := {}
+	for item in character.inventory:
+		if item == null:
+			continue
+		var stack_data := _get_item_stack_display_data(item)
+		var stack_key := str(stack_data["key"])
+		if not counts.has(stack_key):
+			counts[stack_key] = 0
+			ordered_ids.append(stack_key)
+			names[stack_key] = str(stack_data["name"])
+		counts[stack_key] = int(counts[stack_key]) + int(stack_data["quantity"])
+
+	for stack_key in ordered_ids:
+		var count := int(counts.get(stack_key, 0))
+		var display_name := str(names.get(stack_key, stack_key))
+		if count > 1:
+			entries.append("%s x%d" % [display_name, count])
+		else:
+			entries.append(display_name)
+	return entries
+
+
+func _get_item_stack_display_data(item: ItemResource) -> Dictionary:
+	var display_name := item.display_name if item != null else ""
+	var quantity := 1
+	var stack_name := display_name
+	var quantity_match := RegEx.new()
+	quantity_match.compile("^(.*)\\((\\d+)\\)\\s*$")
+	var result := quantity_match.search(display_name)
+	if result != null:
+		stack_name = result.get_string(1).strip_edges()
+		quantity = max(int(result.get_string(2)), 1)
+
+	return {
+		"key": "%s::%s" % [item.resource_id if item != null else "item", stack_name],
+		"name": stack_name,
+		"quantity": quantity,
+	}
 
 
 func _get_starting_gold_amount() -> float:

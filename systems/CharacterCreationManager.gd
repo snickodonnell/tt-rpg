@@ -56,10 +56,7 @@ func print_character_sheet():
 		if feat:
 			feat_names.append(feat.display_name)
 	print("Feats: ", feat_names if not feat_names.is_empty() else ["None"])
-	var equipment_names: Array[String] = []
-	for item in current_character.inventory:
-		if item:
-			equipment_names.append(item.display_name)
+	var equipment_names := _get_inventory_display_entries(current_character.inventory)
 	print("Equipment: ", equipment_names if not equipment_names.is_empty() else ["None"])
 	print("======================")
 
@@ -90,3 +87,85 @@ func get_ability_modifier(ability_key: String) -> int:
 	if current_character and current_character.base_ability_scores.has(ability_key):
 		return AbilitySystem.get_modifier(current_character.base_ability_scores[ability_key])
 	return 0
+
+
+func save_current_character() -> Dictionary:
+	if current_character == null:
+		return {"success": false, "path": "", "error": ERR_INVALID_DATA}
+
+	var save_dir := "user://characters"
+	var dir_error := DirAccess.make_dir_recursive_absolute(save_dir)
+	if dir_error != OK and dir_error != ERR_ALREADY_EXISTS:
+		return {"success": false, "path": "", "error": dir_error}
+
+	var save_path := "%s/%s.tres" % [save_dir, _build_character_save_file_name(current_character)]
+	var save_error := ResourceSaver.save(current_character, save_path)
+	return {
+		"success": save_error == OK,
+		"path": save_path,
+		"error": save_error,
+	}
+
+
+func _build_character_save_file_name(character: CharacterSheetResource) -> String:
+	var base_name := _sanitize_file_component(character.character_name if character != null else "")
+	var timestamp := str(Time.get_unix_time_from_system())
+	return "%s_%s" % [base_name, timestamp]
+
+
+func _sanitize_file_component(value: String) -> String:
+	var sanitized := ""
+	for character in value.to_lower():
+		var code := character.unicode_at(0)
+		var is_letter := code >= 97 and code <= 122
+		var is_number := code >= 48 and code <= 57
+		if is_letter or is_number:
+			sanitized += character
+		elif character == " " or character == "-" or character == "_":
+			if sanitized.is_empty() or sanitized.ends_with("_"):
+				continue
+			sanitized += "_"
+
+	sanitized = sanitized.strip_edges()
+	sanitized = sanitized.trim_suffix("_")
+	if sanitized.is_empty():
+		return "character"
+	return sanitized
+
+
+func _get_inventory_display_entries(inventory: Array[ItemResource]) -> Array[String]:
+	var entries: Array[String] = []
+	var counts := {}
+	var ordered_keys: Array[String] = []
+	var names := {}
+	var quantity_regex := RegEx.new()
+	quantity_regex.compile("^(.*)\\((\\d+)\\)\\s*$")
+
+	for item in inventory:
+		if item == null:
+			continue
+
+		var display_name := item.display_name
+		var stack_name := display_name
+		var quantity := 1
+		var quantity_match := quantity_regex.search(display_name)
+		if quantity_match != null:
+			stack_name = quantity_match.get_string(1).strip_edges()
+			quantity = max(int(quantity_match.get_string(2)), 1)
+
+		var stack_key := "%s::%s" % [item.resource_id, stack_name]
+		if not counts.has(stack_key):
+			counts[stack_key] = 0
+			ordered_keys.append(stack_key)
+			names[stack_key] = stack_name
+		counts[stack_key] = int(counts[stack_key]) + quantity
+
+	for stack_key in ordered_keys:
+		var total_quantity := int(counts.get(stack_key, 0))
+		var stack_name := str(names.get(stack_key, stack_key))
+		if total_quantity > 1:
+			entries.append("%s x%d" % [stack_name, total_quantity])
+		else:
+			entries.append(stack_name)
+
+	return entries

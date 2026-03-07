@@ -619,6 +619,64 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
+[node name="SummaryStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="SummaryPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SummaryMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="SummaryContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="CharacterNameRow" type="HBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CharacterNameLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/CharacterNameRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 0)
+text = "Character Name"
+
+[node name="CharacterNameInput" type="LineEdit" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/CharacterNameRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter a character name"
+
+[node name="SummaryDescription" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Review the completed character below before creating and saving it."
+
+[node name="SummaryScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SummaryScrollContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/SummaryScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SummaryPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/SummaryScroll/SummaryScrollContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = ""
+
 [node name="NavigationButtons" type="HBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
 layout_mode = 2
 alignment = 2
@@ -632,6 +690,13 @@ text = "Previous"
 layout_mode = 2
 disabled = true
 text = "Next"
+
+[node name="CreateCharacterButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons"]
+visible = false
+custom_minimum_size = Vector2(220, 56)
+layout_mode = 2
+disabled = true
+text = "Create Character"
 
 [node name="RightPreviewPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout"]
 custom_minimum_size = Vector2(280, 0)
