@@ -15,6 +15,7 @@ const RACE_DATA_PATH := "res://data/races"
 const CLASS_DATA_PATH := "res://data/classes"
 const BACKGROUND_DATA_PATH := "res://data/backgrounds"
 const FEAT_DATA_PATH := "res://data/feats"
+const ITEM_DATA_PATH := "res://data/items"
 const SKILL_DATA_PATH := "res://data/skills"
 const UI_VARIANT_HUMAN_MODIFIER_SOURCE_PREFIX := "ui_variant_human_bonus_"
 const UI_FEAT_MODIFIER_SOURCE_PREFIX := "ui_feat_modifier_"
@@ -33,6 +34,7 @@ const ABILITY_LABELS := {
 @onready var class_background_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer
 @onready var abilities_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer
 @onready var feats_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer
+@onready var equipment_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer
 @onready var class_selection_scroll: ScrollContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/ClassSelectionScroll
 @onready var background_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection
 @onready var race_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer/RaceSelectionScroll/RaceList
@@ -48,19 +50,26 @@ const ABILITY_LABELS := {
 @onready var variant_human_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/VariantHumanPanel/VariantHumanMargin/VariantHumanContent/VariantHumanStatusLabel
 @onready var feat_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatStatusLabel
 @onready var feat_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatsSelectionScroll/FeatList
+@onready var use_default_gold_checkbox: CheckBox = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/UseDefaultGoldCheckBox
+@onready var equipment_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentStatusLabel
+@onready var pack_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/StartingPacksTab/PacksScroll/PackList
+@onready var item_search_line_edit: LineEdit = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/IndividualItemsTab/ItemSearchLineEdit
+@onready var individual_items_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/IndividualItemsTab/IndividualItemsScroll/IndividualItemsList
 @onready var step_buttons_container: VBoxContainer = $RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons
 @onready var next_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NextButton
-@onready var character_name_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/CharacterNamePreview
-@onready var race_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/RacePreview
-@onready var class_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/ClassPreview
-@onready var background_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/BackgroundPreview
-@onready var hp_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/HPPreview
-@onready var str_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/STRPreview
-@onready var dex_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/DEXPreview
-@onready var con_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/CONPreview
-@onready var int_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/INTPreview
-@onready var wis_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/WISPreview
-@onready var cha_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels/CHAPreview
+@onready var character_name_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/CharacterNamePreview
+@onready var race_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/RacePreview
+@onready var class_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/ClassPreview
+@onready var background_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/BackgroundPreview
+@onready var hp_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/HPPreview
+@onready var str_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/STRPreview
+@onready var dex_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/DEXPreview
+@onready var con_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/CONPreview
+@onready var int_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/INTPreview
+@onready var wis_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/WISPreview
+@onready var cha_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels/CHAPreview
+@onready var inventory_items_container: VBoxContainer = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent/InventoryGoldScroll/InventoryGoldList/InventoryItemsContainer
+@onready var inventory_gold_amount_label: Label = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent/InventoryGoldScroll/InventoryGoldList/InventoryGoldAmountLabel
 
 var step_names := DEFAULT_STEP_NAMES.duplicate()
 var current_step := 0
@@ -68,10 +77,13 @@ var available_races := []
 var available_classes := []
 var available_backgrounds := []
 var available_feats := []
+var available_pack_items := []
+var available_individual_items := []
 var race_buttons := []
 var class_buttons := []
 var background_buttons := []
 var feat_buttons := []
+var pack_buttons := []
 var selected_race: RaceResource = null
 var selected_class: ClassResource = null
 var selected_background: BackgroundResource = null
@@ -79,6 +91,10 @@ var selected_feat: FeatResource = null
 var selected_feat_valid := false
 var selected_feat_validation_message := ""
 var variant_human_bonus_choices := ["", ""]
+var selected_pack: ItemResource = null
+var selected_individual_item_ids := {}
+var selected_item_resources := {}
+var use_default_starting_gold := false
 var skill_name_cache := {}
 var ability_controls := {}
 
@@ -91,7 +107,9 @@ func _ready() -> void:
 	_load_available_classes()
 	_load_available_backgrounds()
 	_load_available_feats()
+	_load_available_equipment()
 	_sync_selected_state_from_manager()
+	_refresh_allowed_equipment_options()
 	_build_ability_score_controls()
 	_setup_variant_human_ability_selectors()
 	_update_step_buttons()
@@ -99,6 +117,7 @@ func _ready() -> void:
 	_update_selection_buttons()
 	_refresh_ability_scores_ui()
 	_refresh_feat_ui()
+	_refresh_equipment_ui()
 	_update_next_button_state()
 	_refresh_preview()
 	_announce_step_change()
@@ -112,6 +131,53 @@ func go_to_previous_step() -> void:
 	go_to_step(current_step - 1)
 
 
+func apply_debug_test_build() -> void:
+	_ensure_current_character()
+
+	var dragonborn := _find_race_by_id("race_dragonborn")
+	var fighter := _find_class_by_id("class_fighter")
+	var soldier := _find_background_by_id("background_soldier")
+	if dragonborn == null or fighter == null or soldier == null:
+		push_warning("Character creation debug preset could not be applied because a required resource was missing.")
+		return
+
+	var character := CharacterCreationManager.current_character
+	selected_race = dragonborn
+	selected_class = fighter
+	selected_background = soldier
+	selected_feat = null
+	variant_human_bonus_choices = ["", ""]
+	selected_pack = null
+	selected_individual_item_ids.clear()
+	use_default_starting_gold = false
+
+	character.race = selected_race
+	character.class_resource = selected_class
+	character.background = selected_background
+	character.current_level = 1
+	_ensure_base_ability_scores(character)
+	character.base_ability_scores["str"] = 15
+	character.base_ability_scores["dex"] = 15
+	character.base_ability_scores["con"] = 15
+	character.base_ability_scores["int"] = 8
+	character.base_ability_scores["wis"] = 8
+	character.base_ability_scores["cha"] = 8
+
+	_apply_variant_human_bonus_modifiers()
+	_refresh_allowed_equipment_options()
+	_sync_equipment_to_character()
+	_revalidate_selected_feat()
+	_recalculate_character_hp()
+	_update_selection_buttons()
+	_refresh_feat_ui()
+	_refresh_equipment_ui()
+	_refresh_ability_scores_ui()
+	_update_next_button_state()
+	_refresh_preview()
+	go_to_step(3)
+	print("Applied debug character preset: Dragonborn / Fighter / Soldier")
+
+
 func go_to_step(index: int) -> void:
 	if index < 0 or index >= step_names.size():
 		return
@@ -121,6 +187,7 @@ func go_to_step(index: int) -> void:
 	_update_main_content()
 	_refresh_ability_scores_ui()
 	_refresh_feat_ui()
+	_refresh_equipment_ui()
 	_update_next_button_state()
 	_announce_step_change()
 	step_changed.emit(step_names[current_step])
@@ -138,6 +205,8 @@ func _bind_main_area_actions() -> void:
 	next_button.pressed.connect(go_to_next_step)
 	variant_human_bonus_one.item_selected.connect(_on_variant_human_bonus_selected.bind(0))
 	variant_human_bonus_two.item_selected.connect(_on_variant_human_bonus_selected.bind(1))
+	use_default_gold_checkbox.toggled.connect(_on_use_default_gold_toggled)
+	item_search_line_edit.text_changed.connect(_on_item_search_text_changed)
 
 
 func _load_available_races() -> void:
@@ -234,6 +303,83 @@ func _load_available_feats() -> void:
 		var feat_button := _build_feat_button(feat, available_feats.size() - 1)
 		feat_buttons.append(feat_button)
 		feat_list_container.add_child(feat_button)
+
+
+func _load_available_equipment() -> void:
+	available_pack_items.clear()
+	available_individual_items.clear()
+	pack_buttons.clear()
+	selected_item_resources.clear()
+
+	var item_files := DirAccess.get_files_at(ITEM_DATA_PATH)
+	item_files.sort()
+
+	for file_name in item_files:
+		if not file_name.begins_with("item_") or not file_name.ends_with(".tres"):
+			continue
+
+		var item := load("%s/%s" % [ITEM_DATA_PATH, file_name]) as ItemResource
+		if item == null:
+			continue
+
+		selected_item_resources[item.resource_id] = item
+
+	_refresh_allowed_equipment_options()
+
+
+func _refresh_allowed_equipment_options() -> void:
+	available_pack_items.clear()
+	available_individual_items.clear()
+	pack_buttons.clear()
+
+	for child in pack_list_container.get_children():
+		child.queue_free()
+	for child in individual_items_list_container.get_children():
+		child.queue_free()
+
+	var allowed_ids := _get_allowed_equipment_option_ids()
+	for item_id in allowed_ids:
+		var item := selected_item_resources.get(item_id) as ItemResource
+		if item == null:
+			continue
+		if item.is_container:
+			available_pack_items.append(item)
+			var pack_button := _build_pack_button(item, available_pack_items.size() - 1)
+			pack_buttons.append(pack_button)
+			pack_list_container.add_child(pack_button)
+		else:
+			available_individual_items.append(item)
+
+	if selected_pack != null and not allowed_ids.has(selected_pack.resource_id):
+		selected_pack = null
+
+	var invalid_selected_ids: Array[String] = []
+	for resource_id in selected_individual_item_ids.keys():
+		if not allowed_ids.has(resource_id):
+			invalid_selected_ids.append(resource_id)
+	for resource_id in invalid_selected_ids:
+		selected_individual_item_ids.erase(resource_id)
+
+	_rebuild_individual_items_list()
+
+
+func _get_allowed_equipment_option_ids() -> Array[String]:
+	var allowed_ids: Array[String] = []
+	var seen := {}
+	var sources: Array = []
+	if selected_class != null:
+		sources.append(selected_class.starting_equipment_options)
+	if selected_background != null:
+		sources.append(selected_background.starting_equipment_options)
+
+	for source in sources:
+		for item_id in source:
+			if seen.has(item_id):
+				continue
+			seen[item_id] = true
+			allowed_ids.append(item_id)
+
+	return allowed_ids
 
 
 func _build_race_button(race: RaceResource, index: int) -> Button:
@@ -364,6 +510,112 @@ func _build_feat_button(feat: FeatResource, index: int) -> Button:
 	return button
 
 
+func _build_pack_button(item: ItemResource, index: int) -> Button:
+	var button := _create_card_button(128)
+	button.pressed.connect(_on_pack_selected.bind(index))
+
+	var content_row := _create_card_row(button)
+	var preview_rect := ColorRect.new()
+	preview_rect.custom_minimum_size = Vector2(48, 48)
+	preview_rect.color = _get_resource_color(item.resource_id)
+	content_row.add_child(preview_rect)
+
+	var info_column := _create_info_column(content_row)
+	var title_label := Label.new()
+	title_label.text = item.display_name
+	title_label.add_theme_font_size_override("font_size", 18)
+	info_column.add_child(title_label)
+
+	var description_label := Label.new()
+	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description_label.text = item.description
+	info_column.add_child(description_label)
+
+	var contents_label := Label.new()
+	contents_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	contents_label.text = "Includes %d items | %s gp" % [item.default_contents.size(), str(item.cost_gp)]
+	info_column.add_child(contents_label)
+
+	return button
+
+
+func _rebuild_individual_items_list() -> void:
+	for child in individual_items_list_container.get_children():
+		child.queue_free()
+
+	var search_text := item_search_line_edit.text.strip_edges().to_lower()
+	var category_buckets := {
+		"Weapons": [],
+		"Armor": [],
+		"Tools": [],
+		"Other": [],
+	}
+
+	for item in available_individual_items:
+		if item == null:
+			continue
+		if not _item_matches_search(item, search_text):
+			continue
+
+		match item.category:
+			ItemResource.Category.WEAPON:
+				category_buckets["Weapons"].append(item)
+			ItemResource.Category.ARMOR:
+				category_buckets["Armor"].append(item)
+			ItemResource.Category.TOOL:
+				category_buckets["Tools"].append(item)
+			_:
+				category_buckets["Other"].append(item)
+
+	for category_name in ["Weapons", "Armor", "Tools", "Other"]:
+		var items: Array = category_buckets[category_name]
+		if items.is_empty():
+			continue
+
+		var header := Label.new()
+		header.text = category_name
+		header.add_theme_font_size_override("font_size", 18)
+		individual_items_list_container.add_child(header)
+
+		var section := VBoxContainer.new()
+		section.add_theme_constant_override("separation", 10)
+		individual_items_list_container.add_child(section)
+
+		for item in items:
+			section.add_child(_build_individual_item_button(item))
+
+
+func _build_individual_item_button(item: ItemResource) -> Button:
+	var button := _create_card_button(104)
+	button.toggle_mode = true
+	button.button_pressed = selected_individual_item_ids.has(item.resource_id)
+	button.pressed.connect(_on_individual_item_toggled.bind(item.resource_id))
+
+	var content_row := _create_card_row(button)
+	var preview_rect := ColorRect.new()
+	preview_rect.custom_minimum_size = Vector2(40, 40)
+	preview_rect.color = _get_resource_color(item.resource_id)
+	content_row.add_child(preview_rect)
+
+	var info_column := _create_info_column(content_row)
+	var title_label := Label.new()
+	title_label.text = item.display_name
+	title_label.add_theme_font_size_override("font_size", 17)
+	info_column.add_child(title_label)
+
+	var description_label := Label.new()
+	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description_label.text = item.description
+	info_column.add_child(description_label)
+
+	var meta_label := Label.new()
+	meta_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	meta_label.text = _format_item_meta(item)
+	info_column.add_child(meta_label)
+
+	return button
+
+
 func _create_card_button(min_height: int) -> Button:
 	var button := Button.new()
 	button.toggle_mode = true
@@ -490,9 +742,10 @@ func _update_main_content() -> void:
 	class_background_step_container.visible = current_step == 1 or current_step == 2
 	abilities_step_container.visible = current_step == 3
 	feats_step_container.visible = current_step == 4
+	equipment_step_container.visible = current_step == 5
 	class_selection_scroll.visible = current_step == 1
 	background_section.visible = current_step == 2
-	next_button.visible = current_step == 0 or current_step == 1 or current_step == 2 or current_step == 3 or current_step == 4
+	next_button.visible = current_step >= 0 and current_step <= 5
 
 	match current_step:
 		0:
@@ -505,6 +758,8 @@ func _update_main_content() -> void:
 			current_step_content_label.text = "Ability Scores"
 		4:
 			current_step_content_label.text = "Feats Selection"
+		5:
+			current_step_content_label.text = "Equipment Selection"
 		_:
 			current_step_content_label.text = "Current Step Content"
 
@@ -514,6 +769,7 @@ func _update_selection_buttons() -> void:
 	_update_class_buttons()
 	_update_background_buttons()
 	_update_feat_buttons()
+	_update_pack_buttons()
 
 
 func _update_race_buttons() -> void:
@@ -552,6 +808,15 @@ func _update_feat_buttons() -> void:
 		button.button_pressed = _is_selected_feat(feat)
 
 
+func _update_pack_buttons() -> void:
+	for index in range(pack_buttons.size()):
+		var button := pack_buttons[index] as Button
+		if button == null:
+			continue
+		var pack := available_pack_items[index] as ItemResource
+		button.button_pressed = _is_selected_pack(pack)
+
+
 func _update_next_button_state() -> void:
 	match current_step:
 		0:
@@ -564,6 +829,8 @@ func _update_next_button_state() -> void:
 			next_button.disabled = _calculate_point_buy_total() != 27
 		4:
 			next_button.disabled = not _can_advance_from_feats_step()
+		5:
+			next_button.disabled = not _can_advance_from_equipment_step()
 		_:
 			next_button.disabled = true
 
@@ -622,6 +889,13 @@ func _refresh_feat_ui() -> void:
 	_update_feat_status()
 
 
+func _refresh_equipment_ui() -> void:
+	use_default_gold_checkbox.visible = false
+	use_default_gold_checkbox.button_pressed = false
+	_rebuild_individual_items_list()
+	_update_equipment_status()
+
+
 func _refresh_preview() -> void:
 	var character := CharacterCreationManager.current_character
 	var race := selected_race
@@ -644,6 +918,8 @@ func _refresh_preview() -> void:
 	for ability_key in ABILITY_ORDER:
 		var preview_label := ability_previews[ability_key] as RichTextLabel
 		preview_label.text = "[b]%s:[/b] %s" % [ABILITY_LABELS[ability_key], _format_ability_preview(character, race, ability_key)]
+
+	_refresh_inventory_gold_preview(character)
 
 
 func _announce_step_change() -> void:
@@ -681,10 +957,13 @@ func _on_class_selected(index: int) -> void:
 	selected_class = available_classes[index] as ClassResource
 	_ensure_current_character()
 	CharacterCreationManager.current_character.class_resource = selected_class
+	_refresh_allowed_equipment_options()
+	_sync_equipment_to_character()
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
 	_update_selection_buttons()
 	_refresh_feat_ui()
+	_refresh_equipment_ui()
 	_refresh_ability_scores_ui()
 	_update_next_button_state()
 	_refresh_preview()
@@ -697,8 +976,11 @@ func _on_background_selected(index: int) -> void:
 	selected_background = available_backgrounds[index] as BackgroundResource
 	_ensure_current_character()
 	CharacterCreationManager.current_character.background = selected_background
+	_refresh_allowed_equipment_options()
+	_sync_equipment_to_character()
 	_update_selection_buttons()
 	_refresh_feat_ui()
+	_refresh_equipment_ui()
 	_refresh_ability_scores_ui()
 	_update_next_button_state()
 	_refresh_preview()
@@ -755,6 +1037,43 @@ func _on_variant_human_bonus_selected(index: int, slot: int) -> void:
 	_refresh_preview()
 
 
+func _on_pack_selected(index: int) -> void:
+	if index < 0 or index >= available_pack_items.size():
+		return
+
+	var pack := available_pack_items[index] as ItemResource
+	if selected_pack != null and selected_pack.resource_id == pack.resource_id:
+		selected_pack = null
+	else:
+		selected_pack = pack
+
+	_sync_equipment_to_character()
+	_update_selection_buttons()
+	_refresh_equipment_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_individual_item_toggled(resource_id: String) -> void:
+	if selected_individual_item_ids.has(resource_id):
+		selected_individual_item_ids.erase(resource_id)
+	else:
+		selected_individual_item_ids[resource_id] = true
+
+	_sync_equipment_to_character()
+	_refresh_equipment_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_use_default_gold_toggled(_pressed: bool) -> void:
+	use_default_starting_gold = false
+
+
+func _on_item_search_text_changed(_new_text: String) -> void:
+	_rebuild_individual_items_list()
+
+
 func _ensure_current_character() -> void:
 	if CharacterCreationManager.current_character == null:
 		CharacterCreationManager.current_character = CharacterSheetResource.new()
@@ -781,6 +1100,7 @@ func _sync_selected_state_from_manager() -> void:
 	if not CharacterCreationManager.current_character.feats.is_empty():
 		selected_feat = CharacterCreationManager.current_character.feats[0]
 	_sync_variant_human_choices_from_character()
+	_sync_equipment_state_from_character()
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
 
@@ -823,6 +1143,10 @@ func _can_advance_from_feats_step() -> bool:
 	return selected_feat_valid
 
 
+func _can_advance_from_equipment_step() -> bool:
+	return selected_pack != null or not selected_individual_item_ids.is_empty()
+
+
 func _is_selected_race(race: RaceResource) -> bool:
 	return selected_race != null and race.resource_id == selected_race.resource_id
 
@@ -837,6 +1161,31 @@ func _is_selected_background(background: BackgroundResource) -> bool:
 
 func _is_selected_feat(feat: FeatResource) -> bool:
 	return selected_feat != null and feat.resource_id == selected_feat.resource_id
+
+
+func _is_selected_pack(pack: ItemResource) -> bool:
+	return selected_pack != null and pack.resource_id == selected_pack.resource_id
+
+
+func _find_race_by_id(resource_id: String) -> RaceResource:
+	for race in available_races:
+		if race != null and race.resource_id == resource_id:
+			return race
+	return null
+
+
+func _find_class_by_id(resource_id: String) -> ClassResource:
+	for class_resource in available_classes:
+		if class_resource != null and class_resource.resource_id == resource_id:
+			return class_resource
+	return null
+
+
+func _find_background_by_id(resource_id: String) -> BackgroundResource:
+	for background in available_backgrounds:
+		if background != null and background.resource_id == resource_id:
+			return background
+	return null
 
 
 func _format_race_summary(race: RaceResource) -> String:
@@ -996,6 +1345,141 @@ func _get_skill_display_name(skill_id: String) -> String:
 
 	skill_name_cache[skill_id] = display_name
 	return display_name
+
+
+func _item_matches_search(item: ItemResource, search_text: String) -> bool:
+	if search_text.is_empty():
+		return true
+
+	var haystack := "%s %s" % [item.display_name.to_lower(), item.description.to_lower()]
+	return haystack.contains(search_text)
+
+
+func _format_item_meta(item: ItemResource) -> String:
+	match item.category:
+		ItemResource.Category.WEAPON:
+			return "%s %s | %s gp" % [item.damage_die, item.damage_type, str(item.cost_gp)]
+		ItemResource.Category.ARMOR:
+			return "AC %d | %s gp" % [item.armor_class, str(item.cost_gp)]
+		ItemResource.Category.TOOL:
+			return "Tool | %s gp" % str(item.cost_gp)
+		_:
+			return "%s gp" % str(item.cost_gp)
+
+
+func _sync_equipment_state_from_character() -> void:
+	selected_pack = null
+	selected_individual_item_ids.clear()
+	use_default_starting_gold = false
+
+	var character := CharacterCreationManager.current_character
+	if character == null:
+		return
+
+	for item in character.inventory:
+		if item == null:
+			continue
+		if item.is_container and selected_pack == null:
+			selected_pack = item
+		else:
+			if selected_pack != null and selected_pack.default_contents.has(item.resource_id):
+				continue
+			selected_individual_item_ids[item.resource_id] = true
+
+
+func _sync_equipment_to_character() -> void:
+	var character := CharacterCreationManager.current_character
+	if character == null:
+		return
+
+	character.inventory.clear()
+
+	if selected_pack != null:
+		character.inventory.append(selected_pack)
+		for item_id in selected_pack.default_contents:
+			var loaded_item := load("%s/%s.tres" % [ITEM_DATA_PATH, item_id]) as ItemResource
+			if loaded_item != null:
+				character.inventory.append(loaded_item)
+
+	for resource_id in selected_individual_item_ids.keys():
+		var selected_item: ItemResource = selected_item_resources.get(resource_id) as ItemResource
+		if selected_item != null:
+			character.inventory.append(selected_item)
+
+
+func _update_equipment_status() -> void:
+	if selected_pack == null and selected_individual_item_ids.is_empty():
+		equipment_status_label.text = "Select one allowed pack or one or more allowed items."
+		_set_label_color(equipment_status_label, Color(0.85, 0.65, 0.2))
+		return
+
+	var parts: Array[String] = []
+	if selected_pack != null:
+		parts.append(selected_pack.display_name)
+	if not selected_individual_item_ids.is_empty():
+		parts.append("%d individual item(s)" % selected_individual_item_ids.size())
+	equipment_status_label.text = "Selected equipment: %s" % ", ".join(parts)
+	_set_label_color(equipment_status_label, Color(0.2, 0.7, 0.3))
+
+
+func _refresh_inventory_gold_preview(character: CharacterSheetResource) -> void:
+	for child in inventory_items_container.get_children():
+		child.queue_free()
+
+	if character == null or character.inventory.is_empty():
+		var empty_label := Label.new()
+		empty_label.text = "None"
+		inventory_items_container.add_child(empty_label)
+	else:
+		for item in character.inventory:
+			if item == null:
+				continue
+			var item_label := Label.new()
+			item_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			item_label.text = "- %s" % item.display_name
+			inventory_items_container.add_child(item_label)
+
+	inventory_gold_amount_label.text = "Gold: %s" % _format_gold_amount(_get_starting_gold_amount())
+
+
+func _get_starting_gold_amount() -> float:
+	var total := 0.0
+	if selected_class != null:
+		total += _parse_gold_expression(selected_class.starting_gold_dice)
+	if selected_background != null:
+		total += _parse_gold_expression(selected_background.starting_gold_dice)
+	return total
+
+
+func _parse_gold_expression(expression: String) -> float:
+	var cleaned := expression.strip_edges()
+	if cleaned.is_empty():
+		return 0.0
+
+	var dice_regex := RegEx.new()
+	dice_regex.compile("(?i)(\\d+)d(\\d+)(?:\\s*[×x]\\s*(\\d+(?:\\.\\d+)?))?")
+	var dice_match := dice_regex.search(cleaned)
+	if dice_match:
+		var dice_count := float(dice_match.get_string(1))
+		var dice_sides := float(dice_match.get_string(2))
+		var multiplier := 1.0
+		if dice_match.get_string(3) != "":
+			multiplier = float(dice_match.get_string(3))
+		return dice_count * ((dice_sides + 1.0) / 2.0) * multiplier
+
+	var number_regex := RegEx.new()
+	number_regex.compile("(\\d+(?:\\.\\d+)?)")
+	var number_match := number_regex.search(cleaned)
+	if number_match:
+		return float(number_match.get_string(1))
+
+	return 0.0
+
+
+func _format_gold_amount(amount: float) -> String:
+	if is_equal_approx(amount, round(amount)):
+		return "%d gp" % int(round(amount))
+	return "%.1f gp" % amount
 
 
 func _calculate_point_buy_total() -> int:

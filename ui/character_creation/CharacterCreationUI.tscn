@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://ui/character_creation/CharacterCreationManagerUI.gd" id="1_character_creation_manager_ui"]
+[ext_resource type="Script" path="res://ui/character_creation/CharacterCreationDebugHotkeys.gd" id="2_character_creation_debug_hotkeys"]
 
 [node name="CharacterCreationUI" type="Control"]
 layout_mode = 3
@@ -10,6 +11,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_character_creation_manager_ui")
+
+[node name="CharacterCreationDebugHotkeys" type="Node" parent="."]
+script = ExtResource("2_character_creation_debug_hotkeys")
 
 [node name="RootMargin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -293,6 +297,56 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
+[node name="EquipmentStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="UseDefaultGoldCheckBox" type="CheckBox" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer"]
+layout_mode = 2
+text = "Use default starting gold instead of selecting equipment"
+
+[node name="EquipmentStatusLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer"]
+layout_mode = 2
+text = "Select a pack, individual items, or choose default gold."
+
+[node name="EquipmentTabs" type="TabContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StartingPacksTab" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PacksScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/StartingPacksTab"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="PackList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/StartingPacksTab/PacksScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="IndividualItemsTab" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ItemSearchLineEdit" type="LineEdit" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/IndividualItemsTab"]
+layout_mode = 2
+placeholder_text = "Search weapons, armor, or tools"
+
+[node name="IndividualItemsScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/IndividualItemsTab"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="IndividualItemsList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/IndividualItemsTab/IndividualItemsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
 [node name="NextButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
 layout_mode = 2
 size_flags_horizontal = 10
@@ -315,89 +369,136 @@ theme_override_constants/margin_bottom = 12
 
 [node name="PreviewContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="PreviewTitle" type="Label" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
+[node name="MainPreviewSection" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
 layout_mode = 2
-text = "Live Preview"
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 10
 
-[node name="PreviewLabels" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
+[node name="PreviewLabels" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 6
 
-[node name="CharacterNamePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="CharacterNamePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]Character Name:[/b] -"
 
-[node name="RacePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="RacePreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]Race:[/b] -"
 
-[node name="ClassPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="ClassPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]Class:[/b] -"
 
-[node name="BackgroundPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="BackgroundPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]Background:[/b] -"
 
-[node name="HPPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="HPPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]HP:[/b] -"
 
-[node name="STRPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="STRPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]STR:[/b] -"
 
-[node name="DEXPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="DEXPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]DEX:[/b] -"
 
-[node name="CONPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="CONPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]CON:[/b] -"
 
-[node name="INTPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="INTPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]INT:[/b] -"
 
-[node name="WISPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="WISPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]WIS:[/b] -"
 
-[node name="CHAPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/PreviewLabels"]
+[node name="CHAPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/PreviewLabels"]
 layout_mode = 2
 fit_content = true
 scroll_active = false
 bbcode_enabled = true
 text = "[b]CHA:[/b] -"
+
+[node name="InventoryGoldSection" type="PanelContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.0
+
+[node name="InventoryGoldMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="InventoryGoldContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="InventoryGoldTitle" type="Label" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent"]
+layout_mode = 2
+text = "Inventory & Gold"
+
+[node name="InventoryGoldScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="InventoryGoldList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent/InventoryGoldScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="InventoryItemsHeader" type="Label" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent/InventoryGoldScroll/InventoryGoldList"]
+layout_mode = 2
+text = "Items"
+
+[node name="InventoryGoldAmountLabel" type="Label" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent/InventoryGoldScroll/InventoryGoldList"]
+layout_mode = 2
+text = "Gold: 0 gp"
+
+[node name="InventoryItemsContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/InventoryGoldSection/InventoryGoldMargin/InventoryGoldContent/InventoryGoldScroll/InventoryGoldList"]
+layout_mode = 2
+theme_override_constants/separation = 2
