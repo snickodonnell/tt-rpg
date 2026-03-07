@@ -196,6 +196,103 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
+[node name="AbilitiesStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="PointBuySummaryPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer"]
+layout_mode = 2
+
+[node name="PointBuySummaryMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/PointBuySummaryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="PointBuySummaryContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/PointBuySummaryPanel/PointBuySummaryMargin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PointsSpentLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/PointBuySummaryPanel/PointBuySummaryMargin/PointBuySummaryContent"]
+layout_mode = 2
+text = "Points Spent: 0"
+
+[node name="PointsRemainingLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/PointBuySummaryPanel/PointBuySummaryMargin/PointBuySummaryContent"]
+layout_mode = 2
+text = "Points Remaining: 27"
+
+[node name="PointBuyStatusLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/PointBuySummaryPanel/PointBuySummaryMargin/PointBuySummaryContent"]
+layout_mode = 2
+text = "Spend exactly 27 points."
+
+[node name="AbilitiesScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="AbilityRows" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/AbilitiesScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="FeatsStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="VariantHumanPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer"]
+visible = false
+layout_mode = 2
+
+[node name="VariantHumanMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/VariantHumanPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VariantHumanContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/VariantHumanPanel/VariantHumanMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VariantHumanTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/VariantHumanPanel/VariantHumanMargin/VariantHumanContent"]
+layout_mode = 2
+text = "Variant Human Ability Bonuses"
+
+[node name="VariantHumanSelectors" type="HBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/VariantHumanPanel/VariantHumanMargin/VariantHumanContent"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="VariantHumanBonusOne" type="OptionButton" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/VariantHumanPanel/VariantHumanMargin/VariantHumanContent/VariantHumanSelectors"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VariantHumanBonusTwo" type="OptionButton" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/VariantHumanPanel/VariantHumanMargin/VariantHumanContent/VariantHumanSelectors"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VariantHumanStatusLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/VariantHumanPanel/VariantHumanMargin/VariantHumanContent"]
+layout_mode = 2
+text = "Choose two different abilities for your +1 bonuses."
+
+[node name="FeatStatusLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer"]
+layout_mode = 2
+text = "Choose a feat or skip this step."
+
+[node name="FeatsSelectionScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="FeatList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatsSelectionScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
 [node name="NextButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
 layout_mode = 2
 size_flags_horizontal = 10
