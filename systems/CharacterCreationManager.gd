@@ -63,7 +63,7 @@ func print_character_sheet():
 	print("Equipment: ", equipment_names if not equipment_names.is_empty() else ["None"])
 	print("======================")
 
-func apply_spells(caster_class: ClassResource):
+func apply_spells(_caster_class: ClassResource):
 	# Placeholder - will populate spell lists for casters
 	pass  # We'll expand this when we do the spell selection step
 

@@ -5,7 +5,7 @@ class_name SpellResource
 @export var spell_level: int = 0                    # 0 = cantrip
 @export var school: String = "Evocation"
 @export var casting_time: String = "1 action"
-@export var range: String = "30 feet"
+@export var spell_range: String = "30 feet"
 @export var components: String = "V, S, M"
 @export var duration: String = "Instantaneous"
 @export var spell_lists: Array[String] = []         # e.g. ["class_wizard", "class_sorcerer"]

@@ -76,6 +76,12 @@ size_flags_horizontal = 3
 toggle_mode = true
 text = "Background"
 
+[node name="SkillsButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Skills"
+
 [node name="AbilitiesButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -205,6 +211,68 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 12
+
+[node name="SkillsStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="AutomaticSkillsPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer"]
+layout_mode = 2
+
+[node name="AutomaticSkillsMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="AutomaticSkillsContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AutomaticSkillsTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin/AutomaticSkillsContent"]
+layout_mode = 2
+text = "Automatic Proficiencies"
+
+[node name="AutomaticSkillsList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin/AutomaticSkillsContent"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ChooseSkillsPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ChooseSkillsMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ChooseSkillsContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="ChooseSkillsTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent"]
+layout_mode = 2
+text = "Choose Skills"
+
+[node name="SkillsStatusLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent"]
+layout_mode = 2
+text = "No additional class skill choices required."
+
+[node name="ChooseSkillsScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ChooseSkillsList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent/ChooseSkillsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
 
 [node name="AbilitiesStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
 visible = false
@@ -653,6 +721,14 @@ scroll_active = false
 bbcode_enabled = true
 autowrap_mode = 3
 text = "[b]Spellcasting:[/b] -"
+
+[node name="SkillsPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
+layout_mode = 2
+fit_content = true
+scroll_active = false
+bbcode_enabled = true
+autowrap_mode = 3
+text = "[b]Skills:[/b] -"
 
 [node name="STRPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
 layout_mode = 2

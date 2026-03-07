@@ -6,6 +6,7 @@ const DEFAULT_STEP_NAMES := [
 	"Race",
 	"Class",
 	"Background",
+	"Skills",
 	"Abilities",
 	"Feats",
 	"Spells",
@@ -39,6 +40,7 @@ const ABILITY_LABELS := {
 @onready var current_step_content_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/CurrentStepContentLabel
 @onready var race_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer
 @onready var class_background_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer
+@onready var skills_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer
 @onready var abilities_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer
 @onready var feats_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer
 @onready var spells_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer
@@ -48,6 +50,10 @@ const ABILITY_LABELS := {
 @onready var race_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer/RaceSelectionScroll/RaceList
 @onready var class_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/ClassSelectionScroll/ClassList
 @onready var background_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection/BackgroundSelectionScroll/BackgroundList
+@onready var automatic_skills_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin/AutomaticSkillsContent/AutomaticSkillsList
+@onready var choose_skills_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel
+@onready var skills_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent/SkillsStatusLabel
+@onready var choose_skills_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent/ChooseSkillsScroll/ChooseSkillsList
 @onready var ability_rows_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/AbilitiesScroll/AbilityRows
 @onready var points_spent_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/PointBuySummaryPanel/PointBuySummaryMargin/PointBuySummaryContent/PointsSpentLabel
 @onready var points_remaining_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/PointBuySummaryPanel/PointBuySummaryMargin/PointBuySummaryContent/PointsRemainingLabel
@@ -92,6 +98,7 @@ const ABILITY_LABELS := {
 @onready var background_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/BackgroundPreview
 @onready var hp_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/HPPreview
 @onready var spellcasting_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/SpellcastingPreview
+@onready var skills_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/SkillsPreview
 @onready var str_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/STRPreview
 @onready var dex_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/DEXPreview
 @onready var con_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/CONPreview
@@ -108,6 +115,7 @@ var available_races := []
 var available_classes := []
 var available_backgrounds := []
 var available_feats := []
+var available_skills := []
 var available_spells := []
 var available_pack_items := []
 var available_individual_items := []
@@ -126,6 +134,8 @@ var variant_human_bonus_choices := ["", ""]
 var selected_pack: ItemResource = null
 var selected_individual_item_ids := {}
 var selected_item_resources := {}
+var selected_class_skill_ids := {}
+var skill_resource_cache := {}
 var selected_class_cantrip_ids := {}
 var selected_class_level_one_spell_ids := {}
 var selected_feat_cantrip_ids := {}
@@ -146,6 +156,7 @@ func _ready() -> void:
 	_load_available_classes()
 	_load_available_backgrounds()
 	_load_available_feats()
+	_load_available_skills()
 	_load_available_spells()
 	_load_available_equipment()
 	_sync_selected_state_from_manager()
@@ -155,6 +166,7 @@ func _ready() -> void:
 	_update_step_buttons()
 	_update_main_content()
 	_update_selection_buttons()
+	_refresh_skills_ui()
 	_refresh_ability_scores_ui()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
@@ -165,13 +177,13 @@ func _ready() -> void:
 
 
 func go_to_next_step() -> void:
-	if current_step == 5 and _advance_spell_phase():
+	if current_step == 6 and _advance_spell_phase():
 		return
 	go_to_step(current_step + 1)
 
 
 func go_to_previous_step() -> void:
-	if current_step == 5:
+	if current_step == 6:
 		if _revert_current_spell_phase_and_retreat():
 			return
 	go_to_step(current_step - 1)
@@ -201,6 +213,9 @@ func apply_debug_test_build() -> void:
 	magic_initiate_spell_list = ""
 	selected_pack = null
 	selected_individual_item_ids.clear()
+	selected_class_skill_ids.clear()
+	selected_class_skill_ids["skill_arcana"] = true
+	selected_class_skill_ids["skill_persuasion"] = true
 	use_default_starting_gold = false
 
 	character.race = selected_race
@@ -221,13 +236,14 @@ func apply_debug_test_build() -> void:
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
 	_update_selection_buttons()
+	_refresh_skills_ui()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
 	_refresh_equipment_ui()
 	_refresh_ability_scores_ui()
 	_update_next_button_state()
 	_refresh_preview()
-	go_to_step(3)
+	go_to_step(4)
 	print("Applied debug character preset: Dragonborn / Sorcerer / Charlatan / War Caster")
 
 
@@ -236,10 +252,11 @@ func go_to_step(index: int) -> void:
 		return
 
 	current_step = index
-	if current_step == 5:
+	if current_step == 6:
 		_normalize_spell_phase()
 	_update_step_buttons()
 	_update_main_content()
+	_refresh_skills_ui()
 	_refresh_ability_scores_ui()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
@@ -337,6 +354,25 @@ func _load_available_backgrounds() -> void:
 		var background_button := _build_background_button(background, available_backgrounds.size() - 1)
 		background_buttons.append(background_button)
 		background_list_container.add_child(background_button)
+
+
+func _load_available_skills() -> void:
+	available_skills.clear()
+	skill_resource_cache.clear()
+
+	var skill_files := DirAccess.get_files_at(SKILL_DATA_PATH)
+	skill_files.sort()
+
+	for file_name in skill_files:
+		if not file_name.begins_with("skill_") or not file_name.ends_with(".tres"):
+			continue
+
+		var skill := load("%s/%s" % [SKILL_DATA_PATH, file_name]) as SkillResource
+		if skill == null:
+			continue
+
+		available_skills.append(skill)
+		skill_resource_cache[skill.resource_id] = skill
 
 
 func _load_available_feats() -> void:
@@ -847,14 +883,15 @@ func _update_step_buttons() -> void:
 func _update_main_content() -> void:
 	race_step_container.visible = current_step == 0
 	class_background_step_container.visible = current_step == 1 or current_step == 2
-	abilities_step_container.visible = current_step == 3
-	feats_step_container.visible = current_step == 4
-	spells_step_container.visible = current_step == 5
-	equipment_step_container.visible = current_step == 6
+	skills_step_container.visible = current_step == 3
+	abilities_step_container.visible = current_step == 4
+	feats_step_container.visible = current_step == 5
+	spells_step_container.visible = current_step == 6
+	equipment_step_container.visible = current_step == 7
 	class_selection_scroll.visible = current_step == 1
 	background_section.visible = current_step == 2
-	previous_button.visible = current_step > 0 and current_step <= 6
-	next_button.visible = current_step >= 0 and current_step <= 6
+	previous_button.visible = current_step > 0 and current_step <= 7
+	next_button.visible = current_step >= 0 and current_step <= 7
 
 	match current_step:
 		0:
@@ -864,12 +901,14 @@ func _update_main_content() -> void:
 		2:
 			current_step_content_label.text = "Background Selection"
 		3:
-			current_step_content_label.text = "Ability Scores"
+			current_step_content_label.text = "Skills Selection"
 		4:
-			current_step_content_label.text = "Feats Selection"
+			current_step_content_label.text = "Ability Scores"
 		5:
-			current_step_content_label.text = _get_spell_phase_title()
+			current_step_content_label.text = "Feats Selection"
 		6:
+			current_step_content_label.text = _get_spell_phase_title()
+		7:
 			current_step_content_label.text = "Equipment Selection"
 		_:
 			current_step_content_label.text = "Current Step Content"
@@ -937,15 +976,118 @@ func _update_next_button_state() -> void:
 		2:
 			next_button.disabled = not _can_advance_from_background_step()
 		3:
-			next_button.disabled = _calculate_point_buy_total() != 27
+			next_button.disabled = not _can_advance_from_skills_step()
 		4:
-			next_button.disabled = not _can_advance_from_feats_step()
+			next_button.disabled = _calculate_point_buy_total() != 27
 		5:
-			next_button.disabled = not _can_advance_from_spells_step()
+			next_button.disabled = not _can_advance_from_feats_step()
 		6:
+			next_button.disabled = not _can_advance_from_spells_step()
+		7:
 			next_button.disabled = not _can_advance_from_equipment_step()
 		_:
 			next_button.disabled = true
+
+
+func _refresh_skills_ui() -> void:
+	_sanitize_skill_selection_state()
+	_rebuild_automatic_skills_list()
+	_rebuild_choose_skills_list()
+	_update_skills_status()
+	_sync_skills_to_character()
+
+
+func _sanitize_skill_selection_state() -> void:
+	_filter_selected_ids(selected_class_skill_ids, _collect_string_id_set(_get_available_class_skill_choice_ids()))
+	_trim_selected_string_ids(selected_class_skill_ids, _get_required_class_skill_choice_count())
+
+
+func _rebuild_automatic_skills_list() -> void:
+	_clear_container_children(automatic_skills_list_container)
+
+	var source_map := _get_automatic_skill_source_map()
+	var skill_ids := _get_sorted_skill_ids_from_source_map(source_map)
+	if skill_ids.is_empty():
+		_add_empty_state_label(automatic_skills_list_container, "No automatic skill proficiencies granted yet.")
+		return
+
+	for skill_id in skill_ids:
+		var skill_label := Label.new()
+		skill_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		skill_label.text = "%s (%s)" % [_get_skill_display_name(skill_id), ", ".join(_get_skill_source_labels(source_map.get(skill_id, [])))]
+		automatic_skills_list_container.add_child(skill_label)
+
+
+func _rebuild_choose_skills_list() -> void:
+	_clear_container_children(choose_skills_list_container)
+
+	var required_count := _get_required_class_skill_choice_count()
+	var available_choice_ids := _get_available_class_skill_choice_ids()
+	choose_skills_panel.visible = selected_class != null and required_count > 0
+	if not choose_skills_panel.visible:
+		return
+
+	if available_choice_ids.is_empty():
+		_add_empty_state_label(choose_skills_list_container, "No remaining skills are available to choose from.")
+		return
+
+	for skill_id in available_choice_ids:
+		var skill := skill_resource_cache.get(skill_id) as SkillResource
+		if skill == null:
+			continue
+		choose_skills_list_container.add_child(_build_skill_choice_button(skill))
+
+
+func _build_skill_choice_button(skill: SkillResource) -> Button:
+	var button := _create_card_button(108)
+	button.toggle_mode = true
+	button.button_pressed = selected_class_skill_ids.has(skill.resource_id)
+	button.pressed.connect(_on_class_skill_toggled.bind(skill.resource_id))
+
+	var content_row := _create_card_row(button)
+	var preview_rect := ColorRect.new()
+	preview_rect.custom_minimum_size = Vector2(40, 40)
+	preview_rect.color = _get_resource_color(skill.resource_id)
+	content_row.add_child(preview_rect)
+
+	var info_column := _create_info_column(content_row)
+	var title_label := Label.new()
+	title_label.text = skill.display_name
+	title_label.add_theme_font_size_override("font_size", 17)
+	info_column.add_child(title_label)
+
+	var ability_label := Label.new()
+	ability_label.text = "Ability: %s" % ABILITY_LABELS.get(skill.ability_key, skill.ability_key.to_upper())
+	info_column.add_child(ability_label)
+
+	if not skill.description.strip_edges().is_empty():
+		var description_label := Label.new()
+		description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		description_label.text = skill.description
+		info_column.add_child(description_label)
+
+	return button
+
+
+func _update_skills_status() -> void:
+	if selected_class == null or selected_background == null:
+		skills_status_label.text = "Select a class and background before choosing skills."
+		_set_label_color(skills_status_label, Color(0.85, 0.65, 0.2))
+		return
+
+	var required_count := _get_required_class_skill_choice_count()
+	if required_count <= 0:
+		skills_status_label.text = "No class skill choices are required for this character."
+		_set_label_color(skills_status_label, Color(0.7, 0.7, 0.7))
+		return
+
+	var selected_count := selected_class_skill_ids.size()
+	if selected_count == required_count:
+		skills_status_label.text = "Class skill choices complete: %d / %d selected." % [selected_count, required_count]
+		_set_label_color(skills_status_label, Color(0.2, 0.7, 0.3))
+	else:
+		skills_status_label.text = "Select %d class skill(s): %d / %d chosen." % [required_count, selected_count, required_count]
+		_set_label_color(skills_status_label, Color(0.85, 0.65, 0.2))
 
 
 func _refresh_ability_scores_ui() -> void:
@@ -1124,6 +1266,7 @@ func _refresh_preview() -> void:
 	background_preview.text = "[b]Background:[/b] %s" % _format_background_preview(character)
 	hp_preview.text = "[b]HP:[/b] %s" % _format_hp_preview(character, race)
 	spellcasting_preview.text = "[b]Spellcasting:[/b] %s" % _format_spellcasting_preview(character, race)
+	skills_preview.text = "[b]Skills:[/b]%s" % _format_skills_preview(character)
 
 	var ability_previews := {
 		"str": str_preview,
@@ -1164,6 +1307,7 @@ func _on_race_selected(index: int) -> void:
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
 	_update_selection_buttons()
+	_refresh_skills_ui()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
 	_refresh_ability_scores_ui()
@@ -1183,6 +1327,7 @@ func _on_class_selected(index: int) -> void:
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
 	_update_selection_buttons()
+	_refresh_skills_ui()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
 	_refresh_equipment_ui()
@@ -1201,6 +1346,7 @@ func _on_background_selected(index: int) -> void:
 	_refresh_allowed_equipment_options()
 	_sync_equipment_to_character()
 	_update_selection_buttons()
+	_refresh_skills_ui()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
 	_refresh_equipment_ui()
@@ -1222,6 +1368,7 @@ func _on_feat_selected(index: int) -> void:
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
 	_update_selection_buttons()
+	_refresh_skills_ui()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
 	_refresh_ability_scores_ui()
@@ -1235,6 +1382,7 @@ func _on_ability_score_changed(value: float, ability_key: String) -> void:
 	character.base_ability_scores[ability_key] = int(value)
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
+	_refresh_skills_ui()
 	_refresh_ability_scores_ui()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
@@ -1256,6 +1404,7 @@ func _on_variant_human_bonus_selected(index: int, slot: int) -> void:
 	_apply_variant_human_bonus_modifiers()
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
+	_refresh_skills_ui()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
 	_refresh_ability_scores_ui()
@@ -1270,6 +1419,21 @@ func _on_magic_initiate_spell_list_selected(index: int) -> void:
 	selected_feat_level_one_spell_ids.clear()
 	_refresh_feat_ui()
 	_refresh_spells_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_class_skill_toggled(resource_id: String) -> void:
+	var required_count := _get_required_class_skill_choice_count()
+	if required_count <= 0:
+		return
+
+	if selected_class_skill_ids.has(resource_id):
+		selected_class_skill_ids.erase(resource_id)
+	elif selected_class_skill_ids.size() < required_count:
+		selected_class_skill_ids[resource_id] = true
+
+	_refresh_skills_ui()
 	_update_next_button_state()
 	_refresh_preview()
 
@@ -1367,9 +1531,11 @@ func _sync_selected_state_from_manager() -> void:
 	selected_race = CharacterCreationManager.current_character.race
 	selected_class = CharacterCreationManager.current_character.class_resource
 	selected_background = CharacterCreationManager.current_character.background
+	selected_feat = null
 	if not CharacterCreationManager.current_character.feats.is_empty():
 		selected_feat = CharacterCreationManager.current_character.feats[0]
 	_sync_variant_human_choices_from_character()
+	_sync_skill_state_from_character()
 	_sync_spell_state_from_character()
 	_sync_equipment_state_from_character()
 	_revalidate_selected_feat()
@@ -1402,6 +1568,12 @@ func _revalidate_selected_feat() -> void:
 
 func _can_advance_from_background_step() -> bool:
 	return selected_class != null and selected_background != null
+
+
+func _can_advance_from_skills_step() -> bool:
+	if selected_class == null or selected_background == null:
+		return false
+	return selected_class_skill_ids.size() == _get_required_class_skill_choice_count()
 
 
 func _can_advance_from_feats_step() -> bool:
@@ -1636,6 +1808,23 @@ func _format_known_spells_preview(character: CharacterSheetResource) -> String:
 	return " | ".join(parts) if not parts.is_empty() else "-"
 
 
+func _format_skills_preview(character: CharacterSheetResource) -> String:
+	if character == null or character.skill_proficiencies.is_empty():
+		return " -"
+
+	var proficiency_bonus := AbilitySystem.get_proficiency_bonus(max(character.current_level, 1))
+	var parts: Array[String] = []
+	parts.append("Proficiency Bonus: %s" % _format_signed_value(proficiency_bonus))
+	for skill_id in _get_sorted_skill_ids_from_array(character.skill_proficiencies):
+		var roll_modifier := _get_skill_roll_modifier(character, selected_race, skill_id)
+		var source_labels := _get_skill_source_labels(character.skill_proficiency_sources.get(skill_id, []))
+		if source_labels.is_empty():
+			parts.append("- %s (%s)" % [_get_skill_display_name(skill_id), _format_signed_value(roll_modifier)])
+		else:
+			parts.append("- %s (%s, %s)" % [_get_skill_display_name(skill_id), _format_signed_value(roll_modifier), ", ".join(source_labels)])
+	return "\n%s" % "\n".join(parts)
+
+
 func _format_saving_throw_proficiencies(class_resource: ClassResource) -> String:
 	var labels: Array[String] = []
 	for ability_key in class_resource.saving_throw_proficiencies:
@@ -1662,6 +1851,222 @@ func _get_skill_display_name(skill_id: String) -> String:
 
 	skill_name_cache[skill_id] = display_name
 	return display_name
+
+
+func _get_skill_roll_modifier(character: CharacterSheetResource, race: RaceResource, skill_id: String) -> int:
+	if character == null:
+		return 0
+
+	var ability_key := _get_skill_ability_key(skill_id)
+	var ability_score := _get_final_ability_score(character, race, ability_key)
+	return AbilitySystem.get_modifier(ability_score) + AbilitySystem.get_proficiency_bonus(max(character.current_level, 1))
+
+
+func _get_skill_ability_key(skill_id: String) -> String:
+	var skill := skill_resource_cache.get(skill_id) as SkillResource
+	if skill == null:
+		var resource_path := "%s/%s.tres" % [SKILL_DATA_PATH, skill_id]
+		skill = load(resource_path) as SkillResource
+		if skill != null:
+			skill_resource_cache[skill_id] = skill
+	if skill != null and not skill.ability_key.is_empty():
+		return skill.ability_key
+	return "str"
+
+
+func _get_required_class_skill_choice_count() -> int:
+	if selected_class == null:
+		return 0
+	return max(selected_class.skill_proficiency_count, 0)
+
+
+func _get_available_class_skill_choice_ids() -> Array[String]:
+	var available_ids: Array[String] = []
+	var automatic_skill_sources := _get_automatic_skill_source_map()
+	for skill in available_skills:
+		if skill == null:
+			continue
+		if automatic_skill_sources.has(skill.resource_id):
+			continue
+		available_ids.append(skill.resource_id)
+	return _get_sorted_skill_ids_from_array(available_ids)
+
+
+func _get_automatic_skill_source_map() -> Dictionary:
+	var source_map := {}
+	_append_background_skill_sources(source_map)
+	_append_modifier_skill_sources(source_map, selected_race.modifiers if selected_race != null else [], "Race")
+	_append_modifier_skill_sources(source_map, selected_class.modifiers if selected_class != null else [], "Class")
+	for feat in _get_active_feats():
+		_append_modifier_skill_sources(source_map, feat.modifiers, "Feat")
+
+	if _has_selected_feat_id("feat_skilled"):
+		var skilled_ids := _get_skilled_feat_auto_skill_ids(source_map)
+		for skill_id in skilled_ids:
+			_append_skill_source(source_map, skill_id, "Feat")
+
+	return source_map
+
+
+func _append_background_skill_sources(source_map: Dictionary) -> void:
+	if selected_background == null:
+		return
+
+	for skill_id in selected_background.skill_proficiencies:
+		_append_skill_source(source_map, skill_id, "Background")
+	_append_modifier_skill_sources(source_map, selected_background.modifiers, "Background")
+
+
+func _append_modifier_skill_sources(source_map: Dictionary, modifiers: Array, source_label: String) -> void:
+	for modifier in modifiers:
+		if modifier == null:
+			continue
+		if modifier.value <= 0:
+			continue
+		if modifier.target_key.is_empty() or not modifier.target_key.begins_with("skill_"):
+			continue
+		_append_skill_source(source_map, modifier.target_key, source_label)
+
+
+func _append_skill_source(source_map: Dictionary, skill_id: String, source_label: String) -> void:
+	if skill_id.is_empty():
+		return
+
+	var labels := _get_skill_source_labels(source_map.get(skill_id, []))
+	if labels.has(source_label):
+		source_map[skill_id] = labels
+		return
+	labels.append(source_label)
+	source_map[skill_id] = labels
+
+
+func _get_skilled_feat_auto_skill_ids(existing_source_map: Dictionary) -> Array[String]:
+	var skill_ids: Array[String] = []
+	for candidate_id in _get_sorted_skill_ids_from_array(_get_all_skill_ids()):
+		if existing_source_map.has(candidate_id):
+			continue
+		skill_ids.append(candidate_id)
+		if skill_ids.size() >= 3:
+			break
+	return skill_ids
+
+
+func _get_final_skill_source_map() -> Dictionary:
+	var source_map := _get_automatic_skill_source_map()
+	for skill_id in _get_sorted_skill_ids_from_dictionary(selected_class_skill_ids):
+		_append_skill_source(source_map, skill_id, "Class")
+	return source_map
+
+
+func _sync_skill_state_from_character() -> void:
+	selected_class_skill_ids.clear()
+	var character := CharacterCreationManager.current_character
+	if character == null:
+		return
+
+	var selection_state: Dictionary = character.skill_selection_state
+	var stored_choices: Variant = selection_state.get("class_choices", [])
+	if stored_choices is Array:
+		for value in stored_choices:
+			if value is String:
+				selected_class_skill_ids[value] = true
+
+
+func _sync_skills_to_character() -> void:
+	var character := CharacterCreationManager.current_character
+	if character == null:
+		return
+
+	var source_map := _get_final_skill_source_map()
+	var skill_ids := _get_sorted_skill_ids_from_source_map(source_map)
+	character.skill_proficiencies = skill_ids
+	character.skill_proficiency_sources.clear()
+	for skill_id in skill_ids:
+		character.skill_proficiency_sources[skill_id] = _get_skill_source_labels(source_map.get(skill_id, []))
+	character.skill_selection_state = {
+		"class_choices": _get_sorted_skill_ids_from_dictionary(selected_class_skill_ids),
+	}
+
+
+func _get_active_feats() -> Array:
+	var feats: Array = []
+	if selected_feat != null and selected_feat_valid:
+		feats.append(selected_feat)
+	return feats
+
+
+func _has_selected_feat_id(resource_id: String) -> bool:
+	for feat in _get_active_feats():
+		if feat != null and feat.resource_id == resource_id:
+			return true
+	return false
+
+
+func _collect_string_id_set(values: Array[String]) -> Dictionary:
+	var ids := {}
+	for value in values:
+		ids[value] = true
+	return ids
+
+
+func _trim_selected_string_ids(selected_ids: Dictionary, limit: int) -> void:
+	if limit < 0:
+		return
+	var resource_ids := _get_sorted_skill_ids_from_dictionary(selected_ids)
+	for index in range(limit, resource_ids.size()):
+		selected_ids.erase(resource_ids[index])
+
+
+func _get_all_skill_ids() -> Array[String]:
+	var skill_ids: Array[String] = []
+	for skill in available_skills:
+		if skill != null:
+			skill_ids.append(skill.resource_id)
+	return skill_ids
+
+
+func _get_sorted_skill_ids_from_source_map(source_map: Dictionary) -> Array[String]:
+	var skill_ids: Array[String] = []
+	for skill_id in source_map.keys():
+		if skill_id is String:
+			skill_ids.append(skill_id)
+	return _get_sorted_skill_ids_from_array(skill_ids)
+
+
+func _get_sorted_skill_ids_from_dictionary(source: Dictionary) -> Array[String]:
+	var skill_ids: Array[String] = []
+	for skill_id in source.keys():
+		if skill_id is String:
+			skill_ids.append(skill_id)
+	return _get_sorted_skill_ids_from_array(skill_ids)
+
+
+func _get_sorted_skill_ids_from_array(skill_ids: Array) -> Array[String]:
+	var sorted_skill_ids: Array[String] = []
+	for skill_id in skill_ids:
+		if skill_id is String and not skill_id.is_empty():
+			sorted_skill_ids.append(skill_id)
+	sorted_skill_ids.sort_custom(_sort_skill_ids_by_display_name)
+	return sorted_skill_ids
+
+
+func _sort_skill_ids_by_display_name(left: String, right: String) -> bool:
+	var left_name := _get_skill_display_name(left).to_lower()
+	var right_name := _get_skill_display_name(right).to_lower()
+	if left_name == right_name:
+		return left < right
+	return left_name < right_name
+
+
+func _get_skill_source_labels(value: Variant) -> Array[String]:
+	var labels: Array[String] = []
+	if value is Array:
+		for entry in value:
+			if entry is String and not entry.is_empty() and not labels.has(entry):
+				labels.append(entry)
+	elif value is String and not value.is_empty():
+		labels.append(value)
+	return labels
 
 
 func _item_matches_search(item: ItemResource, search_text: String) -> bool:
@@ -1782,7 +2187,7 @@ func _revert_current_spell_phase_and_retreat() -> bool:
 		_refresh_preview()
 		return true
 
-	go_to_step(4)
+	go_to_step(5)
 	return true
 
 
