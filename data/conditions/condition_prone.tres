@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ConditionResource" format=3 uid="uid://condition_prone"]
+
+[ext_resource type="Script" uid="uid://conditionrescript" path="res://data/conditions/ConditionResource.gd" id="1_cond"]
+
+[resource]
+script = ExtResource("1_cond")
+resource_id = "condition_prone"
+display_name = "Prone"
+effect_text = "A prone creature’s only movement option is to crawl."
+metadata/_custom_type_script = "uid://conditionrescript"

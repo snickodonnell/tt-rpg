@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ConditionResource" format=3 uid="uid://condition_poisoned"]
+
+[ext_resource type="Script" uid="uid://conditionrescript" path="res://data/conditions/ConditionResource.gd" id="1_cond"]
+
+[resource]
+script = ExtResource("1_cond")
+resource_id = "condition_poisoned"
+display_name = "Poisoned"
+effect_text = "A poisoned creature has disadvantage on attack rolls and ability checks."
+metadata/_custom_type_script = "uid://conditionrescript"

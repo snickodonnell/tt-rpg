@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ConditionResource" format=3 uid="uid://condition_invisible"]
+
+[ext_resource type="Script" uid="uid://conditionrescript" path="res://data/conditions/ConditionResource.gd" id="1_cond"]
+
+[resource]
+script = ExtResource("1_cond")
+resource_id = "condition_invisible"
+display_name = "Invisible"
+effect_text = "An invisible creature is impossible to see without the aid of magic or a special sense."
+metadata/_custom_type_script = "uid://conditionrescript"

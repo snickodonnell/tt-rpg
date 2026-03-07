@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ConditionResource" format=3 uid="uid://condition_incapacitated"]
+
+[ext_resource type="Script" uid="uid://conditionrescript" path="res://data/conditions/ConditionResource.gd" id="1_cond"]
+
+[resource]
+script = ExtResource("1_cond")
+resource_id = "condition_incapacitated"
+display_name = "Incapacitated"
+effect_text = "An incapacitated creature can’t take actions or reactions."
+metadata/_custom_type_script = "uid://conditionrescript"
