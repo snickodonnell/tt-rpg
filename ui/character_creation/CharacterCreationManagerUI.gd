@@ -20,6 +20,15 @@ const FEAT_DATA_PATH := "res://data/feats"
 const SPELL_DATA_PATH := "res://data/spells"
 const ITEM_DATA_PATH := "res://data/items"
 const SKILL_DATA_PATH := "res://data/skills"
+const PORTRAIT_ROOT_PATH := "res://assets/portraits"
+const SUPPORTED_PORTRAIT_EXTENSIONS := ["png", "webp", "jpg", "jpeg"]
+const PORTRAIT_EXTENSION_PRIORITY := {
+	"png": 0,
+	"webp": 1,
+	"jpg": 2,
+	"jpeg": 3,
+	"": 99,
+}
 const UI_VARIANT_HUMAN_MODIFIER_SOURCE_PREFIX := "ui_variant_human_bonus_"
 const UI_FEAT_MODIFIER_SOURCE_PREFIX := "ui_feat_modifier_"
 const FEAT_MAGIC_INITIATE_ID := "feat_magic_initiate"
@@ -28,6 +37,16 @@ const SPELL_PHASE_CLASS_LEVEL_ONE := "class_level_one"
 const SPELL_PHASE_BONUS_CANTRIPS := "bonus_cantrips"
 const SPELL_PHASE_BONUS_LEVEL_ONE := "bonus_level_one"
 const ABILITY_ORDER := ["str", "dex", "con", "int", "wis", "cha"]
+const MAIN_SELECTION_CARD_MIN_WIDTH := 320
+const MAIN_SELECTION_CARD_MIN_HEIGHT := 184
+const SPELL_SELECTION_CARD_MIN_WIDTH := 292
+const SPELL_SELECTION_CARD_MIN_HEIGHT := 170
+const GRID_SPACING_MAIN := 12
+const GRID_SPACING_SPELL := 10
+const GRID_MAX_COLUMNS_MAIN := 3
+const GRID_MAX_COLUMNS_SPELL := 2
+const MAIN_SELECTION_PREVIEW_SIZE := Vector2(96, 96)
+const SPELL_SELECTION_PREVIEW_SIZE := Vector2(64, 64)
 const ABILITY_LABELS := {
 	"str": "STR",
 	"dex": "DEX",
@@ -50,9 +69,9 @@ const ABILITY_LABELS := {
 @onready var summary_step_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer
 @onready var class_selection_scroll: ScrollContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/ClassSelectionScroll
 @onready var background_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection
-@onready var race_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer/RaceSelectionScroll/RaceList
-@onready var class_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/ClassSelectionScroll/ClassList
-@onready var background_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection/BackgroundSelectionScroll/BackgroundList
+@onready var race_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer/RaceSelectionScroll/RaceList
+@onready var class_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/ClassSelectionScroll/ClassList
+@onready var background_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection/BackgroundSelectionScroll/BackgroundList
 @onready var automatic_skills_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin/AutomaticSkillsContent/AutomaticSkillsList
 @onready var choose_skills_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel
 @onready var skills_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent/SkillsStatusLabel
@@ -69,24 +88,24 @@ const ABILITY_LABELS := {
 @onready var magic_initiate_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel
 @onready var magic_initiate_description_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel/MagicInitiateMargin/MagicInitiateContent/MagicInitiateDescriptionLabel
 @onready var magic_initiate_feat_spell_list_option: OptionButton = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel/MagicInitiateMargin/MagicInitiateContent/MagicInitiateFeatSpellList
-@onready var feat_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatsSelectionScroll/FeatList
+@onready var feat_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatsSelectionScroll/FeatList
 @onready var spell_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellStatusLabel
 @onready var no_spells_required_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/NoSpellsRequiredLabel
 @onready var class_spells_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection
 @onready var class_cantrips_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/CantripsPanel
 @onready var class_cantrips_counter_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/CantripsPanel/CantripsMargin/CantripsContent/CantripsCounterLabel
-@onready var class_cantrips_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/CantripsPanel/CantripsMargin/CantripsContent/CantripsScroll/CantripsList
+@onready var class_cantrips_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/CantripsPanel/CantripsMargin/CantripsContent/CantripsScroll/CantripsList
 @onready var class_level_one_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/LevelOneSpellsPanel
 @onready var class_level_one_counter_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/LevelOneSpellsPanel/LevelOneSpellsMargin/LevelOneSpellsContent/LevelOneSpellsCounterLabel
-@onready var class_level_one_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/LevelOneSpellsPanel/LevelOneSpellsMargin/LevelOneSpellsContent/LevelOneSpellsScroll/LevelOneSpellsList
+@onready var class_level_one_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/LevelOneSpellsPanel/LevelOneSpellsMargin/LevelOneSpellsContent/LevelOneSpellsScroll/LevelOneSpellsList
 @onready var feat_spells_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection
 @onready var feat_spells_description_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatSpellsDescriptionLabel
 @onready var feat_cantrips_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatCantripsPanel
 @onready var feat_cantrips_counter_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatCantripsPanel/FeatCantripsMargin/FeatCantripsContent/FeatCantripsCounterLabel
-@onready var feat_cantrips_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatCantripsPanel/FeatCantripsMargin/FeatCantripsContent/FeatCantripsScroll/FeatCantripsList
+@onready var feat_cantrips_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatCantripsPanel/FeatCantripsMargin/FeatCantripsContent/FeatCantripsScroll/FeatCantripsList
 @onready var feat_level_one_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatLevelOneSpellsPanel
 @onready var feat_level_one_counter_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatLevelOneSpellsPanel/FeatLevelOneSpellsMargin/FeatLevelOneSpellsContent/FeatLevelOneSpellsCounterLabel
-@onready var feat_level_one_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatLevelOneSpellsPanel/FeatLevelOneSpellsMargin/FeatLevelOneSpellsContent/FeatLevelOneSpellsScroll/FeatLevelOneSpellsList
+@onready var feat_level_one_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatLevelOneSpellsPanel/FeatLevelOneSpellsMargin/FeatLevelOneSpellsContent/FeatLevelOneSpellsScroll/FeatLevelOneSpellsList
 @onready var use_default_gold_checkbox: CheckBox = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/UseDefaultGoldCheckBox
 @onready var equipment_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentStatusLabel
 @onready var pack_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/StartingPacksTab/PacksScroll/PackList
@@ -152,9 +171,12 @@ var current_spell_phase := ""
 var use_default_starting_gold := false
 var skill_name_cache := {}
 var ability_controls := {}
+var selection_preview_texture_cache := {}
+var portrait_file_cache := {}
 
 
 func _ready() -> void:
+	resized.connect(_schedule_selection_grid_layout_refresh)
 	_bind_step_buttons()
 	_bind_main_area_actions()
 	_ensure_current_character()
@@ -181,6 +203,7 @@ func _ready() -> void:
 	_update_next_button_state()
 	_refresh_preview()
 	_announce_step_change()
+	_schedule_selection_grid_layout_refresh()
 
 
 func go_to_next_step() -> void:
@@ -508,188 +531,125 @@ func _get_allowed_equipment_option_ids() -> Array[String]:
 
 
 func _build_race_button(race: RaceResource, index: int) -> Button:
-	var button := _create_card_button(120)
+	var button := _create_card_button(MAIN_SELECTION_CARD_MIN_HEIGHT, MAIN_SELECTION_CARD_MIN_WIDTH)
 	button.pressed.connect(_on_race_selected.bind(index))
+	button.tooltip_text = _join_tooltip_lines([
+		race.display_name,
+		race.description,
+		_format_race_summary(race),
+	])
 
 	var content_row := _create_card_row(button)
-
-	var preview_rect := ColorRect.new()
-	preview_rect.custom_minimum_size = Vector2(52, 52)
-	preview_rect.color = _get_resource_color(race.resource_id)
-	content_row.add_child(preview_rect)
+	content_row.add_child(_create_selection_preview(race.resource_id, MAIN_SELECTION_PREVIEW_SIZE, "races", race.display_name))
 
 	var info_column := _create_info_column(content_row)
-
-	var title_label := Label.new()
-	title_label.text = race.display_name
-	title_label.add_theme_font_size_override("font_size", 18)
-	info_column.add_child(title_label)
-
-	var description_label := Label.new()
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.text = race.description
-	info_column.add_child(description_label)
-
-	var bonuses_label := Label.new()
-	bonuses_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	bonuses_label.text = _format_race_summary(race)
-	info_column.add_child(bonuses_label)
+	info_column.add_child(_create_card_text_label(race.display_name, 18, 2))
+	info_column.add_child(_create_card_text_label(race.description, 0, 3))
+	info_column.add_child(_create_card_text_label(_format_race_summary(race), 0, 2))
 
 	return button
 
 
 func _build_class_button(class_resource: ClassResource, index: int) -> Button:
-	var button := _create_card_button(148)
+	var button := _create_card_button(MAIN_SELECTION_CARD_MIN_HEIGHT, MAIN_SELECTION_CARD_MIN_WIDTH)
 	button.pressed.connect(_on_class_selected.bind(index))
+	button.tooltip_text = _join_tooltip_lines([
+		class_resource.display_name,
+		"Hit Die: %s" % class_resource.hit_die,
+		class_resource.description,
+		_format_class_card_summary(class_resource),
+	])
 
 	var content_row := _create_card_row(button)
-
-	var preview_rect := ColorRect.new()
-	preview_rect.custom_minimum_size = Vector2(52, 52)
-	preview_rect.color = _get_resource_color(class_resource.resource_id)
-	content_row.add_child(preview_rect)
+	content_row.add_child(_create_selection_preview(class_resource.resource_id, MAIN_SELECTION_PREVIEW_SIZE, "classes", class_resource.display_name))
 
 	var info_column := _create_info_column(content_row)
-
-	var title_label := Label.new()
-	title_label.text = class_resource.display_name
-	title_label.add_theme_font_size_override("font_size", 18)
-	info_column.add_child(title_label)
-
-	var hit_die_label := Label.new()
-	hit_die_label.text = "Hit Die: %s" % class_resource.hit_die
-	info_column.add_child(hit_die_label)
-
-	var description_label := Label.new()
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.text = class_resource.description
-	info_column.add_child(description_label)
-
-	var features_label := Label.new()
-	features_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	features_label.text = _format_class_card_summary(class_resource)
-	info_column.add_child(features_label)
+	info_column.add_child(_create_card_text_label(class_resource.display_name, 18, 2))
+	info_column.add_child(_create_card_text_label("Hit Die: %s" % class_resource.hit_die, 0, 1))
+	info_column.add_child(_create_card_text_label(class_resource.description, 0, 3))
+	info_column.add_child(_create_card_text_label(_format_class_card_summary(class_resource), 0, 2))
 
 	return button
 
 
 func _build_background_button(background: BackgroundResource, index: int) -> Button:
-	var button := _create_card_button(110)
+	var button := _create_card_button(MAIN_SELECTION_CARD_MIN_HEIGHT, MAIN_SELECTION_CARD_MIN_WIDTH)
 	button.pressed.connect(_on_background_selected.bind(index))
+	button.tooltip_text = _join_tooltip_lines([
+		background.display_name,
+		background.description,
+	])
 
 	var content_row := _create_card_row(button)
-
-	var preview_rect := ColorRect.new()
-	preview_rect.custom_minimum_size = Vector2(44, 44)
-	preview_rect.color = _get_resource_color(background.resource_id)
-	content_row.add_child(preview_rect)
+	content_row.add_child(_create_selection_preview(background.resource_id, MAIN_SELECTION_PREVIEW_SIZE, "backgrounds", background.display_name))
 
 	var info_column := _create_info_column(content_row)
-
-	var title_label := Label.new()
-	title_label.text = background.display_name
-	title_label.add_theme_font_size_override("font_size", 17)
-	info_column.add_child(title_label)
-
-	var description_label := Label.new()
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.text = background.description
-	info_column.add_child(description_label)
+	info_column.add_child(_create_card_text_label(background.display_name, 17, 2))
+	info_column.add_child(_create_card_text_label(background.description, 0, 4))
 
 	return button
 
 
 func _build_feat_button(feat: FeatResource, index: int) -> Button:
-	var button := _create_card_button(146)
+	var button := _create_card_button(MAIN_SELECTION_CARD_MIN_HEIGHT, MAIN_SELECTION_CARD_MIN_WIDTH)
 	button.pressed.connect(_on_feat_selected.bind(index))
+	button.tooltip_text = _join_tooltip_lines([
+		feat.display_name,
+		"Prerequisites: %s" % _format_feat_prerequisites(feat),
+		feat.description,
+		"Ability Score Increases: %s" % _format_feat_ability_score_increases(feat),
+	])
 
 	var content_row := _create_card_row(button)
-
-	var preview_rect := ColorRect.new()
-	preview_rect.custom_minimum_size = Vector2(48, 48)
-	preview_rect.color = _get_resource_color(feat.resource_id)
-	content_row.add_child(preview_rect)
+	content_row.add_child(_create_selection_preview(feat.resource_id, MAIN_SELECTION_PREVIEW_SIZE, "feats", feat.display_name))
 
 	var info_column := _create_info_column(content_row)
-
-	var title_label := Label.new()
-	title_label.text = feat.display_name
-	title_label.add_theme_font_size_override("font_size", 18)
-	info_column.add_child(title_label)
-
-	var prerequisite_label := Label.new()
-	prerequisite_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	prerequisite_label.text = "Prerequisites: %s" % _format_feat_prerequisites(feat)
-	info_column.add_child(prerequisite_label)
-
-	var description_label := Label.new()
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.text = feat.description
-	info_column.add_child(description_label)
-
-	var ability_label := Label.new()
-	ability_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	ability_label.text = "Ability Score Increases: %s" % _format_feat_ability_score_increases(feat)
-	info_column.add_child(ability_label)
+	info_column.add_child(_create_card_text_label(feat.display_name, 18, 2))
+	info_column.add_child(_create_card_text_label("Prerequisites: %s" % _format_feat_prerequisites(feat), 0, 2))
+	info_column.add_child(_create_card_text_label(feat.description, 0, 3))
+	info_column.add_child(_create_card_text_label("Ability Score Increases: %s" % _format_feat_ability_score_increases(feat), 0, 2))
 
 	return button
 
 
 func _build_spell_button(spell: SpellResource, selected: bool, callback: Callable) -> Button:
-	var button := _create_card_button(130)
+	var button := _create_card_button(SPELL_SELECTION_CARD_MIN_HEIGHT, SPELL_SELECTION_CARD_MIN_WIDTH)
 	button.toggle_mode = true
 	button.button_pressed = selected
 	button.pressed.connect(callback)
+	button.tooltip_text = _join_tooltip_lines([
+		spell.display_name,
+		"%s | %s | %s" % [_format_spell_level_label(spell.spell_level), spell.school, spell.casting_time],
+		spell.spell_text,
+	])
 
 	var content_row := _create_card_row(button)
-	var preview_rect := ColorRect.new()
-	preview_rect.custom_minimum_size = Vector2(44, 44)
-	preview_rect.color = _get_resource_color(spell.resource_id)
-	content_row.add_child(preview_rect)
+	content_row.add_child(_create_selection_preview(spell.resource_id, SPELL_SELECTION_PREVIEW_SIZE, "spells", spell.display_name))
 
 	var info_column := _create_info_column(content_row)
-	var title_label := Label.new()
-	title_label.text = spell.display_name
-	title_label.add_theme_font_size_override("font_size", 18)
-	info_column.add_child(title_label)
-
-	var meta_label := Label.new()
-	meta_label.text = "%s | %s | %s" % [_format_spell_level_label(spell.spell_level), spell.school, spell.casting_time]
-	info_column.add_child(meta_label)
-
-	var description_label := Label.new()
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.text = spell.spell_text
-	info_column.add_child(description_label)
+	info_column.add_child(_create_card_text_label(spell.display_name, 18, 2))
+	info_column.add_child(_create_card_text_label("%s | %s | %s" % [_format_spell_level_label(spell.spell_level), spell.school, spell.casting_time], 0, 2))
+	info_column.add_child(_create_card_text_label(spell.spell_text, 0, 4))
 
 	return button
 
 
 func _build_pack_button(item: ItemResource, index: int) -> Button:
-	var button := _create_card_button(128)
+	var button := _create_card_button(MAIN_SELECTION_CARD_MIN_HEIGHT)
 	button.pressed.connect(_on_pack_selected.bind(index))
+	button.tooltip_text = _join_tooltip_lines([
+		item.display_name,
+		item.description,
+		"Includes %d items | %s gp" % [item.default_contents.size(), str(item.cost_gp)],
+	])
 
 	var content_row := _create_card_row(button)
-	var preview_rect := ColorRect.new()
-	preview_rect.custom_minimum_size = Vector2(48, 48)
-	preview_rect.color = _get_resource_color(item.resource_id)
-	content_row.add_child(preview_rect)
+	content_row.add_child(_create_selection_preview(item.resource_id, MAIN_SELECTION_PREVIEW_SIZE, "items", item.display_name))
 
 	var info_column := _create_info_column(content_row)
-	var title_label := Label.new()
-	title_label.text = item.display_name
-	title_label.add_theme_font_size_override("font_size", 18)
-	info_column.add_child(title_label)
-
-	var description_label := Label.new()
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.text = item.description
-	info_column.add_child(description_label)
-
-	var contents_label := Label.new()
-	contents_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	contents_label.text = "Includes %d items | %s gp" % [item.default_contents.size(), str(item.cost_gp)]
-	info_column.add_child(contents_label)
+	info_column.add_child(_create_card_text_label(item.display_name, 18, 2))
+	info_column.add_child(_create_card_text_label(item.description, 0, 3))
+	info_column.add_child(_create_card_text_label("Includes %d items | %s gp" % [item.default_contents.size(), str(item.cost_gp)], 0, 2))
 
 	return button
 
@@ -741,40 +701,31 @@ func _rebuild_individual_items_list() -> void:
 
 
 func _build_individual_item_button(item: ItemResource) -> Button:
-	var button := _create_card_button(104)
+	var button := _create_card_button(MAIN_SELECTION_CARD_MIN_HEIGHT)
 	button.toggle_mode = true
 	button.button_pressed = selected_individual_item_ids.has(item.resource_id)
 	button.pressed.connect(_on_individual_item_toggled.bind(item.resource_id))
+	button.tooltip_text = _join_tooltip_lines([
+		item.display_name,
+		item.description,
+		_format_item_meta(item),
+	])
 
 	var content_row := _create_card_row(button)
-	var preview_rect := ColorRect.new()
-	preview_rect.custom_minimum_size = Vector2(40, 40)
-	preview_rect.color = _get_resource_color(item.resource_id)
-	content_row.add_child(preview_rect)
+	content_row.add_child(_create_selection_preview(item.resource_id, MAIN_SELECTION_PREVIEW_SIZE, "items", item.display_name))
 
 	var info_column := _create_info_column(content_row)
-	var title_label := Label.new()
-	title_label.text = item.display_name
-	title_label.add_theme_font_size_override("font_size", 17)
-	info_column.add_child(title_label)
-
-	var description_label := Label.new()
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	description_label.text = item.description
-	info_column.add_child(description_label)
-
-	var meta_label := Label.new()
-	meta_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	meta_label.text = _format_item_meta(item)
-	info_column.add_child(meta_label)
+	info_column.add_child(_create_card_text_label(item.display_name, 17, 2))
+	info_column.add_child(_create_card_text_label(item.description, 0, 3))
+	info_column.add_child(_create_card_text_label(_format_item_meta(item), 0, 2))
 
 	return button
 
 
-func _create_card_button(min_height: int) -> Button:
+func _create_card_button(min_height: int, min_width: int = 0) -> Button:
 	var button := Button.new()
 	button.toggle_mode = true
-	button.custom_minimum_size = Vector2(0, min_height)
+	button.custom_minimum_size = Vector2(min_width, min_height)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.text = ""
@@ -785,6 +736,7 @@ func _create_card_button(min_height: int) -> Button:
 func _create_card_row(button: Button) -> HBoxContainer:
 	var content_margin := MarginContainer.new()
 	content_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content_margin.add_theme_constant_override("margin_left", 12)
 	content_margin.add_theme_constant_override("margin_top", 12)
 	content_margin.add_theme_constant_override("margin_right", 12)
@@ -793,17 +745,239 @@ func _create_card_row(button: Button) -> HBoxContainer:
 
 	var content_row := HBoxContainer.new()
 	content_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content_row.add_theme_constant_override("separation", 12)
 	content_margin.add_child(content_row)
 	return content_row
 
 
+func _create_selection_preview(resource_id: String, preview_size: Vector2, portrait_group: String = "", display_name: String = "") -> Control:
+	var preview_frame := PanelContainer.new()
+	preview_frame.custom_minimum_size = preview_size + Vector2(16, 16)
+	preview_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var frame_style := StyleBoxFlat.new()
+	frame_style.bg_color = Color(0.14, 0.16, 0.2, 0.95)
+	frame_style.border_color = Color(0.32, 0.36, 0.43, 1.0)
+	frame_style.border_width_left = 1
+	frame_style.border_width_top = 1
+	frame_style.border_width_right = 1
+	frame_style.border_width_bottom = 1
+	frame_style.corner_radius_top_left = 10
+	frame_style.corner_radius_top_right = 10
+	frame_style.corner_radius_bottom_right = 10
+	frame_style.corner_radius_bottom_left = 10
+	preview_frame.add_theme_stylebox_override("panel", frame_style)
+
+	var preview_margin := MarginContainer.new()
+	preview_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview_margin.add_theme_constant_override("margin_left", 8)
+	preview_margin.add_theme_constant_override("margin_top", 8)
+	preview_margin.add_theme_constant_override("margin_right", 8)
+	preview_margin.add_theme_constant_override("margin_bottom", 8)
+	preview_frame.add_child(preview_margin)
+
+	var preview_center := CenterContainer.new()
+	preview_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview_center.custom_minimum_size = preview_size
+	preview_margin.add_child(preview_center)
+
+	var preview_texture_rect := TextureRect.new()
+	preview_texture_rect.custom_minimum_size = preview_size
+	preview_texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	preview_texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	preview_texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	preview_texture_rect.texture = _get_selection_preview_texture(resource_id, preview_size, portrait_group, display_name)
+	preview_center.add_child(preview_texture_rect)
+	return preview_frame
+
+
+func _get_selection_preview_texture(resource_id: String, preview_size: Vector2, portrait_group: String = "", display_name: String = "") -> Texture2D:
+	var portrait_cache_key := "portrait::%s::%s::%s" % [portrait_group, resource_id, display_name]
+	if selection_preview_texture_cache.has(portrait_cache_key):
+		return selection_preview_texture_cache[portrait_cache_key] as Texture2D
+
+	var portrait_texture := _load_portrait_texture(portrait_group, resource_id, display_name)
+	if portrait_texture != null:
+		selection_preview_texture_cache[portrait_cache_key] = portrait_texture
+		return portrait_texture
+
+	var cache_key := "fallback::%s_%dx%d" % [resource_id, int(preview_size.x), int(preview_size.y)]
+	if selection_preview_texture_cache.has(cache_key):
+		return selection_preview_texture_cache[cache_key] as Texture2D
+
+	var image := Image.create(int(preview_size.x), int(preview_size.y), false, Image.FORMAT_RGBA8)
+	image.fill(_get_resource_color(resource_id))
+	var texture := ImageTexture.create_from_image(image)
+	selection_preview_texture_cache[cache_key] = texture
+	return texture
+
+
+func _load_portrait_texture(portrait_group: String, resource_id: String, display_name: String) -> Texture2D:
+	if portrait_group.is_empty():
+		return null
+
+	var portrait_lookup := _get_portrait_lookup(portrait_group)
+	if portrait_lookup.is_empty():
+		return null
+
+	for candidate_name in _get_portrait_name_candidates(resource_id, display_name):
+		var portrait_path := str(portrait_lookup.get(candidate_name, ""))
+		if portrait_path.is_empty():
+			continue
+		var texture := _load_texture_from_image_path(portrait_path)
+		if texture == null:
+			texture = load(portrait_path) as Texture2D
+		if texture != null:
+			return texture
+
+	return null
+
+
+func _load_texture_from_image_path(resource_path: String) -> Texture2D:
+	var absolute_path := ProjectSettings.globalize_path(resource_path)
+	if not FileAccess.file_exists(absolute_path):
+		return null
+
+	var file_bytes := FileAccess.get_file_as_bytes(absolute_path)
+	if file_bytes.is_empty():
+		return null
+
+	var image := Image.new()
+	var load_error := _load_image_from_buffer(image, file_bytes)
+	if load_error != OK or image.is_empty():
+		return null
+
+	return ImageTexture.create_from_image(image)
+
+
+func _load_image_from_buffer(image: Image, file_bytes: PackedByteArray) -> Error:
+	if _buffer_has_signature(file_bytes, PackedByteArray([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])):
+		return image.load_png_from_buffer(file_bytes)
+	if _buffer_has_signature(file_bytes, PackedByteArray([0xFF, 0xD8, 0xFF])):
+		return image.load_jpg_from_buffer(file_bytes)
+	if _buffer_has_signature(file_bytes, PackedByteArray([0x52, 0x49, 0x46, 0x46])) and _buffer_has_signature_at(file_bytes, PackedByteArray([0x57, 0x45, 0x42, 0x50]), 8):
+		return image.load_webp_from_buffer(file_bytes)
+	return ERR_FILE_UNRECOGNIZED
+
+
+func _buffer_has_signature(buffer: PackedByteArray, signature: PackedByteArray) -> bool:
+	return _buffer_has_signature_at(buffer, signature, 0)
+
+
+func _buffer_has_signature_at(buffer: PackedByteArray, signature: PackedByteArray, offset: int) -> bool:
+	if buffer.size() < offset + signature.size():
+		return false
+	for index in range(signature.size()):
+		if buffer[offset + index] != signature[index]:
+			return false
+	return true
+
+
+func _get_portrait_lookup(portrait_group: String) -> Dictionary:
+	if portrait_file_cache.has(portrait_group):
+		return portrait_file_cache[portrait_group] as Dictionary
+
+	var portrait_dir := "%s/%s" % [PORTRAIT_ROOT_PATH, portrait_group]
+	var lookup := {}
+	var priorities := {}
+	if DirAccess.dir_exists_absolute(portrait_dir):
+		for file_name in DirAccess.get_files_at(portrait_dir):
+			var extension := file_name.get_extension().to_lower()
+			if not extension.is_empty() and not SUPPORTED_PORTRAIT_EXTENSIONS.has(extension):
+				continue
+			var base_name := file_name.get_basename().to_lower()
+			if extension.is_empty():
+				base_name = file_name.to_lower()
+			var priority := int(PORTRAIT_EXTENSION_PRIORITY.get(extension, 100))
+			var existing_priority := int(priorities.get(base_name, 999))
+			if priority >= existing_priority:
+				continue
+			lookup[base_name] = "%s/%s" % [portrait_dir, file_name]
+			priorities[base_name] = priority
+
+	portrait_file_cache[portrait_group] = lookup
+	return lookup
+
+
+func _get_portrait_name_candidates(resource_id: String, display_name: String) -> Array[String]:
+	var candidates: Array[String] = []
+	var seen := {}
+
+	var add_candidate := func(candidate: String) -> void:
+		var cleaned := candidate.strip_edges().to_lower()
+		if cleaned.is_empty() or seen.has(cleaned):
+			return
+		seen[cleaned] = true
+		candidates.append(cleaned)
+
+	add_candidate.call(resource_id)
+	add_candidate.call(_normalize_portrait_name(display_name))
+
+	var id_parts := resource_id.to_lower().split("_", false)
+	var normalized_display_name := _normalize_portrait_name(display_name)
+	if id_parts.size() >= 3:
+		var prefix := id_parts[0]
+		var suffix_parts := id_parts.slice(1)
+		add_candidate.call("%s_%s" % [prefix, "_".join(suffix_parts)])
+		if suffix_parts.size() == 2:
+			add_candidate.call("%s_%s_%s" % [prefix, suffix_parts[1], suffix_parts[0]])
+		if suffix_parts.size() > 2:
+			var head := suffix_parts[0]
+			var tail := suffix_parts.slice(1)
+			add_candidate.call("%s_%s_%s" % [prefix, "_".join(tail), head])
+
+	if not normalized_display_name.is_empty() and not id_parts.is_empty():
+		add_candidate.call("%s_%s" % [id_parts[0], normalized_display_name])
+
+	var display_parts := normalized_display_name.split("_", false)
+	if display_parts.size() >= 2:
+		add_candidate.call("%s_%s" % [id_parts[0] if not id_parts.is_empty() else "portrait", "_".join(display_parts)])
+		if display_parts.size() == 2 and not id_parts.is_empty():
+			add_candidate.call("%s_%s_%s" % [id_parts[0], display_parts[1], display_parts[0]])
+
+	return candidates
+
+
+func _normalize_portrait_name(value: String) -> String:
+	var normalized := value.to_lower().strip_edges()
+	normalized = normalized.replace("-", "_")
+	normalized = normalized.replace(" ", "_")
+	while normalized.contains("__"):
+		normalized = normalized.replace("__", "_")
+	return normalized.strip_edges()
+
+
 func _create_info_column(parent: Node) -> VBoxContainer:
 	var info_column := VBoxContainer.new()
 	info_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info_column.add_theme_constant_override("separation", 6)
 	parent.add_child(info_column)
 	return info_column
+
+
+func _create_card_text_label(text: String, font_size: int = 0, max_lines: int = 0) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if font_size > 0:
+		label.add_theme_font_size_override("font_size", font_size)
+	if max_lines > 0:
+		label.max_lines_visible = max_lines
+		label.tooltip_text = text
+	return label
+
+
+func _join_tooltip_lines(lines: Array[String]) -> String:
+	var filtered: Array[String] = []
+	for line in lines:
+		var cleaned := line.strip_edges()
+		if cleaned.is_empty():
+			continue
+		filtered.append(cleaned)
+	return "\n".join(filtered)
 
 
 func _build_ability_score_controls() -> void:
@@ -932,6 +1106,8 @@ func _update_main_content() -> void:
 		_:
 			current_step_content_label.text = "Current Step Content"
 
+	_schedule_selection_grid_layout_refresh()
+
 
 func _update_selection_buttons() -> void:
 	_update_race_buttons()
@@ -939,6 +1115,50 @@ func _update_selection_buttons() -> void:
 	_update_background_buttons()
 	_update_feat_buttons()
 	_update_pack_buttons()
+
+
+func _schedule_selection_grid_layout_refresh() -> void:
+	call_deferred("_update_selection_grid_layout")
+	call_deferred("_update_selection_grid_layout_next_frame")
+
+
+func _update_selection_grid_layout() -> void:
+	_update_grid_columns(race_list_container, MAIN_SELECTION_CARD_MIN_WIDTH, GRID_SPACING_MAIN, GRID_MAX_COLUMNS_MAIN)
+	_update_grid_columns(class_list_container, MAIN_SELECTION_CARD_MIN_WIDTH, GRID_SPACING_MAIN, GRID_MAX_COLUMNS_MAIN)
+	_update_grid_columns(background_list_container, MAIN_SELECTION_CARD_MIN_WIDTH, GRID_SPACING_MAIN, GRID_MAX_COLUMNS_MAIN)
+	_update_grid_columns(feat_list_container, MAIN_SELECTION_CARD_MIN_WIDTH, GRID_SPACING_MAIN, GRID_MAX_COLUMNS_MAIN)
+	_update_grid_columns(class_cantrips_list_container, SPELL_SELECTION_CARD_MIN_WIDTH, GRID_SPACING_SPELL, GRID_MAX_COLUMNS_SPELL)
+	_update_grid_columns(class_level_one_list_container, SPELL_SELECTION_CARD_MIN_WIDTH, GRID_SPACING_SPELL, GRID_MAX_COLUMNS_SPELL)
+	_update_grid_columns(feat_cantrips_list_container, SPELL_SELECTION_CARD_MIN_WIDTH, GRID_SPACING_SPELL, GRID_MAX_COLUMNS_SPELL)
+	_update_grid_columns(feat_level_one_list_container, SPELL_SELECTION_CARD_MIN_WIDTH, GRID_SPACING_SPELL, GRID_MAX_COLUMNS_SPELL)
+
+
+func _update_selection_grid_layout_next_frame() -> void:
+	await get_tree().process_frame
+	_update_selection_grid_layout()
+
+
+func _update_grid_columns(grid: GridContainer, target_card_width: int, spacing: int, max_columns: int) -> void:
+	if grid == null:
+		return
+
+	var available_width := _get_grid_available_width(grid)
+	if available_width <= 0.0:
+		grid.columns = 1
+		return
+
+	var calculated_columns := int(floor((available_width + spacing) / float(target_card_width + spacing)))
+	grid.columns = clampi(calculated_columns, 1, max_columns)
+
+
+func _get_grid_available_width(grid: GridContainer) -> float:
+	var current: Node = grid.get_parent()
+	while current != null:
+		var control := current as Control
+		if control != null and control.visible and control.size.x > 0.0:
+			return control.size.x
+		current = current.get_parent()
+	return 0.0
 
 
 func _update_race_buttons() -> void:
@@ -1060,32 +1280,25 @@ func _rebuild_choose_skills_list() -> void:
 
 
 func _build_skill_choice_button(skill: SkillResource) -> Button:
-	var button := _create_card_button(108)
+	var button := _create_card_button(MAIN_SELECTION_CARD_MIN_HEIGHT)
 	button.toggle_mode = true
 	button.button_pressed = selected_class_skill_ids.has(skill.resource_id)
 	button.pressed.connect(_on_class_skill_toggled.bind(skill.resource_id))
+	button.tooltip_text = _join_tooltip_lines([
+		skill.display_name,
+		"Ability: %s" % ABILITY_LABELS.get(skill.ability_key, skill.ability_key.to_upper()),
+		skill.description,
+	])
 
 	var content_row := _create_card_row(button)
-	var preview_rect := ColorRect.new()
-	preview_rect.custom_minimum_size = Vector2(40, 40)
-	preview_rect.color = _get_resource_color(skill.resource_id)
-	content_row.add_child(preview_rect)
+	content_row.add_child(_create_selection_preview(skill.resource_id, MAIN_SELECTION_PREVIEW_SIZE))
 
 	var info_column := _create_info_column(content_row)
-	var title_label := Label.new()
-	title_label.text = skill.display_name
-	title_label.add_theme_font_size_override("font_size", 17)
-	info_column.add_child(title_label)
-
-	var ability_label := Label.new()
-	ability_label.text = "Ability: %s" % ABILITY_LABELS.get(skill.ability_key, skill.ability_key.to_upper())
-	info_column.add_child(ability_label)
+	info_column.add_child(_create_card_text_label(skill.display_name, 17, 2))
+	info_column.add_child(_create_card_text_label("Ability: %s" % ABILITY_LABELS.get(skill.ability_key, skill.ability_key.to_upper()), 0, 1))
 
 	if not skill.description.strip_edges().is_empty():
-		var description_label := Label.new()
-		description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		description_label.text = skill.description
-		info_column.add_child(description_label)
+		info_column.add_child(_create_card_text_label(skill.description, 0, 2))
 
 	return button
 
@@ -1263,9 +1476,13 @@ func _clear_container_children(container: Node) -> void:
 		child.queue_free()
 
 
-func _add_empty_state_label(container: VBoxContainer, text: String) -> void:
+func _add_empty_state_label(container: Node, text: String) -> void:
+	if container is GridContainer:
+		(container as GridContainer).columns = 1
+
 	var label := Label.new()
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.custom_minimum_size = Vector2(320, 0)
 	label.text = text
 	container.add_child(label)
 
