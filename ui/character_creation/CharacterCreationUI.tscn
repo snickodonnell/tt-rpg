@@ -585,11 +585,11 @@ theme_override_constants/separation = 16
 
 [node name="UseDefaultGoldCheckBox" type="CheckBox" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer"]
 layout_mode = 2
-text = "Use default starting gold instead of selecting equipment"
+text = "Use class starting gold instead of class starter equipment"
 
 [node name="EquipmentStatusLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer"]
 layout_mode = 2
-text = "Select a pack, individual items, or choose default gold."
+text = "Complete your starter equipment choices or switch to class starting gold."
 
 [node name="EquipmentTabs" type="TabContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer"]
 layout_mode = 2

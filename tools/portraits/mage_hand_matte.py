@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-SUPPORTED_SOURCE_SUFFIXES = {".jpg", ".jpeg"}
+SUPPORTED_SOURCE_SUFFIXES = {".jpg", ".jpeg", ".jiff", ".jfif"}
 
 
 @dataclass
@@ -24,7 +24,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Cast Mage Hand Matte on one portrait or a folder of portraits. "
-            "Converts source JPG/JPEG files into transparent PNGs using rembg."
+            "Converts source JPG/JPEG/JIFF/JFIF files into transparent PNGs using rembg."
         )
     )
     parser.add_argument("input_path", help="Source file or folder to process.")
@@ -48,7 +48,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--delete-source",
         action="store_true",
-        help="Delete the source JPG/JPEG and matching .import file after a successful conversion.",
+        help="Delete the source JPEG-family file and matching .import file after a successful conversion.",
     )
     parser.add_argument(
         "--model",
@@ -81,7 +81,7 @@ def main() -> int:
 
     source_files = collect_source_files(input_path, recursive=args.recursive)
     if not source_files:
-        print("No JPG/JPEG portraits found to process.", file=sys.stderr)
+        print("No supported JPEG-family portraits found to process.", file=sys.stderr)
         return 1
 
     if output_root is not None:

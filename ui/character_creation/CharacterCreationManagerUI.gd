@@ -21,12 +21,14 @@ const SPELL_DATA_PATH := "res://data/spells"
 const ITEM_DATA_PATH := "res://data/items"
 const SKILL_DATA_PATH := "res://data/skills"
 const PORTRAIT_ROOT_PATH := "res://assets/portraits"
-const SUPPORTED_PORTRAIT_EXTENSIONS := ["png", "webp", "jpg", "jpeg"]
+const SUPPORTED_PORTRAIT_EXTENSIONS := ["png", "webp", "jpg", "jpeg", "jiff", "jfif"]
 const PORTRAIT_EXTENSION_PRIORITY := {
 	"png": 0,
 	"webp": 1,
 	"jpg": 2,
 	"jpeg": 3,
+	"jiff": 4,
+	"jfif": 5,
 	"": 99,
 }
 const UI_VARIANT_HUMAN_MODIFIER_SOURCE_PREFIX := "ui_variant_human_bonus_"
@@ -108,6 +110,7 @@ const ABILITY_LABELS := {
 @onready var feat_level_one_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/FeatSpellsSection/FeatLevelOneSpellsPanel/FeatLevelOneSpellsMargin/FeatLevelOneSpellsContent/FeatLevelOneSpellsScroll/FeatLevelOneSpellsList
 @onready var use_default_gold_checkbox: CheckBox = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/UseDefaultGoldCheckBox
 @onready var equipment_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentStatusLabel
+@onready var equipment_tabs: TabContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs
 @onready var pack_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/StartingPacksTab/PacksScroll/PackList
 @onready var item_search_line_edit: LineEdit = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/IndividualItemsTab/ItemSearchLineEdit
 @onready var individual_items_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/EquipmentStepContainer/EquipmentTabs/IndividualItemsTab/IndividualItemsScroll/IndividualItemsList
@@ -169,6 +172,8 @@ var magic_initiate_spell_list := ""
 var spell_resource_cache := {}
 var current_spell_phase := ""
 var use_default_starting_gold := false
+var selected_class_equipment_choice_state := {}
+var selected_background_equipment_choice_state := {}
 var skill_name_cache := {}
 var ability_controls := {}
 var selection_preview_texture_cache := {}
@@ -485,49 +490,921 @@ func _refresh_allowed_equipment_options() -> void:
 	for child in individual_items_list_container.get_children():
 		child.queue_free()
 
-	var allowed_ids := _get_allowed_equipment_option_ids()
-	for item_id in allowed_ids:
-		var item := selected_item_resources.get(item_id) as ItemResource
-		if item == null:
-			continue
-		if item.is_container:
-			available_pack_items.append(item)
-			var pack_button := _build_pack_button(item, available_pack_items.size() - 1)
-			pack_buttons.append(pack_button)
-			pack_list_container.add_child(pack_button)
-		else:
-			available_individual_items.append(item)
-
-	if selected_pack != null and not allowed_ids.has(selected_pack.resource_id):
-		selected_pack = null
-
-	var invalid_selected_ids: Array[String] = []
-	for resource_id in selected_individual_item_ids.keys():
-		if not allowed_ids.has(resource_id):
-			invalid_selected_ids.append(resource_id)
-	for resource_id in invalid_selected_ids:
-		selected_individual_item_ids.erase(resource_id)
-
-	_rebuild_individual_items_list()
+	selected_pack = null
+	selected_individual_item_ids.clear()
+	_sanitize_class_equipment_choice_state()
+	_rebuild_equipment_choice_list()
+	_rebuild_equipment_summary_list()
 
 
 func _get_allowed_equipment_option_ids() -> Array[String]:
 	var allowed_ids: Array[String] = []
 	var seen := {}
-	var sources: Array = []
-	if selected_class != null:
-		sources.append(selected_class.starting_equipment_options)
-	if selected_background != null:
-		sources.append(selected_background.starting_equipment_options)
-
-	for source in sources:
-		for item_id in source:
-			if seen.has(item_id):
-				continue
-			seen[item_id] = true
-			allowed_ids.append(item_id)
-
+	for item_id in _get_background_equipment_item_ids():
+		if seen.has(item_id):
+			continue
+		seen[item_id] = true
+		allowed_ids.append(item_id)
+	for item_id in _get_class_equipment_item_ids():
+		if seen.has(item_id):
+			continue
+		seen[item_id] = true
+		allowed_ids.append(item_id)
 	return allowed_ids
+
+
+func _sanitize_class_equipment_choice_state() -> void:
+	_sanitize_equipment_choice_state(selected_background_equipment_choice_state, _get_background_equipment_choice_groups())
+	_sanitize_equipment_choice_state(selected_class_equipment_choice_state, _get_class_equipment_choice_groups())
+
+
+func _sanitize_equipment_choice_state(choice_state: Dictionary, groups: Array) -> void:
+	var valid_group_ids := {}
+	for group in groups:
+		var group_id := str(group.get("id", ""))
+		if group_id.is_empty():
+			continue
+		valid_group_ids[group_id] = true
+
+	var stale_group_ids: Array[String] = []
+	for group_id in choice_state.keys():
+		var key := str(group_id)
+		if not valid_group_ids.has(key):
+			stale_group_ids.append(key)
+	for group_id in stale_group_ids:
+		choice_state.erase(group_id)
+
+	for group in groups:
+		var group_id := str(group.get("id", ""))
+		if group_id.is_empty():
+			continue
+
+		var state: Dictionary = choice_state.get(group_id, {})
+		var variant_id: String = str(state.get("variant_id", ""))
+		var variant: Dictionary = _find_equipment_group_variant(group, variant_id)
+		var variants: Array = group.get("variants", [])
+		if variant.is_empty() and variants.size() == 1 and variants[0] is Dictionary:
+			variant = variants[0]
+			variant_id = str(variant.get("id", ""))
+		if variant.is_empty():
+			choice_state.erase(group_id)
+			continue
+
+		var selection_count := int(variant.get("selection_count", 0))
+		var selected_item_ids: Array[String] = []
+		for selected_id in state.get("selected_item_ids", []):
+			selected_item_ids.append(str(selected_id))
+		if selection_count <= 0:
+			selected_item_ids.clear()
+		else:
+			selected_item_ids.resize(selection_count)
+			var valid_pool := {}
+			for item_id in variant.get("pool_item_ids", []):
+				valid_pool[str(item_id)] = true
+			for index in range(selected_item_ids.size()):
+				if not valid_pool.has(selected_item_ids[index]):
+					selected_item_ids[index] = ""
+
+		choice_state[group_id] = {
+			"variant_id": variant_id,
+			"selected_item_ids": selected_item_ids,
+		}
+
+
+func _rebuild_equipment_choice_list() -> void:
+	_clear_container_children(pack_list_container)
+	equipment_tabs.set_tab_title(0, "Starter Choices")
+	equipment_tabs.set_tab_title(1, "Equipment Summary")
+	equipment_tabs.current_tab = min(equipment_tabs.current_tab, equipment_tabs.get_tab_count() - 1)
+	item_search_line_edit.visible = false
+
+	if selected_class == null or selected_background == null:
+		_add_empty_state_label(pack_list_container, "Select your class and background to configure starting equipment.")
+		return
+
+	var has_choice_groups := false
+	var background_groups := _get_background_equipment_choice_groups()
+	if not background_groups.is_empty():
+		has_choice_groups = true
+		_add_equipment_section_header(pack_list_container, "Background Equipment")
+		for group in background_groups:
+			pack_list_container.add_child(_build_equipment_choice_group_panel(group, "background", selected_background_equipment_choice_state))
+
+	if use_default_starting_gold:
+		var gold_label := Label.new()
+		gold_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		gold_label.text = "Class starter equipment is skipped. Background equipment still applies."
+		pack_list_container.add_child(gold_label)
+	elif not _get_class_equipment_choice_groups().is_empty():
+		has_choice_groups = true
+		_add_equipment_section_header(pack_list_container, "Class Equipment")
+		for group in _get_class_equipment_choice_groups():
+			pack_list_container.add_child(_build_equipment_choice_group_panel(group, "class", selected_class_equipment_choice_state))
+
+	if has_choice_groups:
+		return
+
+	if use_default_starting_gold:
+		_add_empty_state_label(pack_list_container, "No starter equipment choices are required. Class starting gold and background gear are already applied.")
+		return
+	var choice_groups := _get_class_equipment_choice_groups()
+	if choice_groups.is_empty():
+		_add_empty_state_label(pack_list_container, "This class does not currently require any starter equipment choices.")
+		return
+
+
+func _add_equipment_section_header(container: Control, text: String) -> void:
+	var header := Label.new()
+	header.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	header.add_theme_font_size_override("font_size", 18)
+	header.text = text
+	container.add_child(header)
+
+
+func _build_equipment_choice_group_panel(group: Dictionary, scope: String, choice_state: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
+
+	var content := VBoxContainer.new()
+	content.add_theme_constant_override("separation", 8)
+	margin.add_child(content)
+
+	var title_label := Label.new()
+	title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	title_label.text = str(group.get("title", "Starter Equipment Choice"))
+	content.add_child(title_label)
+
+	var group_id := str(group.get("id", ""))
+	var state: Dictionary = choice_state.get(group_id, {})
+	var selected_variant_id: String = str(state.get("variant_id", ""))
+	var variants: Array = group.get("variants", [])
+	if selected_variant_id.is_empty() and variants.size() == 1 and variants[0] is Dictionary:
+		selected_variant_id = str((variants[0] as Dictionary).get("id", ""))
+
+	if variants.size() > 1:
+		var variant_selector := OptionButton.new()
+		variant_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		variant_selector.add_item("Choose an option")
+		variant_selector.set_item_metadata(0, "")
+		for variant in variants:
+			var option_index := variant_selector.item_count
+			variant_selector.add_item(str(variant.get("label", "Option")))
+			variant_selector.set_item_metadata(option_index, str(variant.get("id", "")))
+			if str(variant.get("id", "")) == selected_variant_id:
+				variant_selector.select(option_index)
+		variant_selector.item_selected.connect(_on_equipment_group_variant_selected.bind(scope, group_id, variant_selector))
+		content.add_child(variant_selector)
+
+	var selected_variant := _find_equipment_group_variant(group, selected_variant_id)
+	if selected_variant.is_empty():
+		return panel
+
+	var variant_items := Array(selected_variant.get("fixed_item_ids", []))
+	if not variant_items.is_empty():
+		var included_label := Label.new()
+		included_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		included_label.text = "Includes: %s" % ", ".join(_get_item_display_names(variant_items))
+		content.add_child(included_label)
+
+	var selection_count := int(selected_variant.get("selection_count", 0))
+	if selection_count <= 0:
+		return panel
+
+	var selected_item_ids: Array[String] = []
+	for selected_id in state.get("selected_item_ids", []):
+		selected_item_ids.append(str(selected_id))
+	selected_item_ids.resize(selection_count)
+
+	for slot_index in range(selection_count):
+		var slot_selector := OptionButton.new()
+		slot_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		slot_selector.add_item("Choose item %d" % (slot_index + 1))
+		slot_selector.set_item_metadata(0, "")
+		for item_id in selected_variant.get("pool_item_ids", []):
+			var option_index := slot_selector.item_count
+			slot_selector.add_item(_get_item_display_name(str(item_id)))
+			slot_selector.set_item_metadata(option_index, str(item_id))
+			if selected_item_ids[slot_index] == str(item_id):
+				slot_selector.select(option_index)
+		slot_selector.item_selected.connect(_on_equipment_group_slot_selected.bind(scope, group_id, slot_index, slot_selector))
+		content.add_child(slot_selector)
+
+	var extra_item_ids := Array(selected_variant.get("extra_item_ids", []))
+	if not extra_item_ids.is_empty():
+		var extras_label := Label.new()
+		extras_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		extras_label.text = "Also includes: %s" % ", ".join(_get_item_display_names(extra_item_ids))
+		content.add_child(extras_label)
+
+	return panel
+
+
+func _rebuild_equipment_summary_list() -> void:
+	_clear_container_children(individual_items_list_container)
+
+	if selected_class == null or selected_background == null:
+		_add_empty_state_label(individual_items_list_container, "Equipment summary will appear after class and background are selected.")
+		return
+
+	var mode_label := Label.new()
+	mode_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	mode_label.text = "Mode: %s" % ("Starting Gold" if use_default_starting_gold else "Starter Equipment")
+	individual_items_list_container.add_child(mode_label)
+
+	var gold_label := Label.new()
+	gold_label.text = "Gold: %s" % _format_gold_amount(_get_starting_gold_amount())
+	individual_items_list_container.add_child(gold_label)
+
+	var item_ids := _get_equipment_item_ids_for_character()
+	if item_ids.is_empty():
+		_add_empty_state_label(individual_items_list_container, "No equipment will be added yet. Choose class equipment options or use the starting gold path.")
+		return
+
+	for entry in _get_item_display_entries_for_ids(item_ids):
+		var item_label := Label.new()
+		item_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		item_label.text = "- %s" % entry
+		individual_items_list_container.add_child(item_label)
+
+
+func _get_equipment_item_ids_for_character() -> Array[String]:
+	var item_ids: Array[String] = []
+	item_ids.append_array(_get_background_equipment_item_ids())
+	if not use_default_starting_gold:
+		item_ids.append_array(_get_class_equipment_item_ids())
+	return item_ids
+
+
+func _get_background_equipment_item_ids() -> Array[String]:
+	if selected_background == null:
+		return []
+	return _get_equipment_item_ids_from_spec(_get_background_equipment_spec(selected_background), selected_background_equipment_choice_state)
+
+
+func _get_class_equipment_item_ids() -> Array[String]:
+	if selected_class == null:
+		return []
+	return _get_equipment_item_ids_from_spec(_get_class_equipment_spec(selected_class), selected_class_equipment_choice_state)
+
+
+func _get_equipment_item_ids_from_spec(spec: Dictionary, choice_state: Dictionary) -> Array[String]:
+	var item_ids: Array[String] = []
+	for item_id in spec.get("fixed_item_ids", []):
+		item_ids.append(str(item_id))
+
+	for group in spec.get("groups", []):
+		var group_id := str(group.get("id", ""))
+		var state: Dictionary = choice_state.get(group_id, {})
+		var variant := _find_equipment_group_variant(group, str(state.get("variant_id", "")))
+		if variant.is_empty():
+			continue
+
+		for item_id in variant.get("fixed_item_ids", []):
+			item_ids.append(str(item_id))
+		for item_id in variant.get("extra_item_ids", []):
+			item_ids.append(str(item_id))
+		for selected_id in state.get("selected_item_ids", []):
+			var cleaned := str(selected_id)
+			if not cleaned.is_empty():
+				item_ids.append(cleaned)
+	return item_ids
+
+
+func _get_background_equipment_choice_groups() -> Array:
+	if selected_background == null:
+		return []
+	return _get_background_equipment_spec(selected_background).get("groups", [])
+
+
+func _get_class_equipment_choice_groups() -> Array:
+	if selected_class == null:
+		return []
+	return _get_class_equipment_spec(selected_class).get("groups", [])
+
+
+func _find_equipment_group_variant(group: Dictionary, variant_id: String) -> Dictionary:
+	if variant_id.is_empty():
+		return {}
+	for variant in group.get("variants", []):
+		if str(variant.get("id", "")) == variant_id:
+			return variant
+	return {}
+
+
+func _build_equipment_variant(variant_id: String, label: String, fixed_item_ids: Array[String] = [], pool_item_ids: Array[String] = [], selection_count: int = 0, extra_item_ids: Array[String] = []) -> Dictionary:
+	return {
+		"id": variant_id,
+		"label": label,
+		"fixed_item_ids": fixed_item_ids.duplicate(),
+		"pool_item_ids": pool_item_ids.duplicate(),
+		"selection_count": selection_count,
+		"extra_item_ids": extra_item_ids.duplicate(),
+	}
+
+
+func _get_background_equipment_spec(background_resource: BackgroundResource) -> Dictionary:
+	if background_resource == null:
+		return {"fixed_item_ids": [], "groups": []}
+
+	var instrument_item_ids: Array[String] = _filter_existing_item_ids(["item_drum", "item_flute", "item_lute", "item_lyre"])
+	var artisan_tool_item_ids: Array[String] = _filter_existing_item_ids([
+		"item_alchemists_supplies",
+		"item_carpenters_tools",
+		"item_cooks_utensils",
+		"item_glassblowers_tools",
+		"item_jewelers_tools",
+		"item_leatherworkers_tools",
+		"item_masons_tools",
+		"item_painters_supplies",
+		"item_potters_tools",
+		"item_smiths_tools",
+		"item_tinkers_tools",
+		"item_weavers_tools",
+		"item_woodcarvers_tools",
+	])
+
+	match background_resource.resource_id:
+		"background_entertainer":
+			return {
+				"fixed_item_ids": ["item_disguise_kit", "item_clothes_fine"],
+				"groups": [
+					{
+						"id": "background_entertainer_instrument",
+						"title": "Choose your musical instrument",
+						"variants": [
+							_build_equipment_variant("musical_instrument", "Musical instrument", [], instrument_item_ids, 1),
+						],
+					},
+				],
+			}
+		"background_folk_hero":
+			return {
+				"fixed_item_ids": ["item_backpack", "item_mess_kit", "item_clothes_common", "item_pouch"],
+				"groups": [
+					{
+						"id": "background_folk_hero_tools",
+						"title": "Choose your artisan's tools",
+						"variants": [
+							_build_equipment_variant("artisan_tools", "Artisan's tools", [], artisan_tool_item_ids, 1),
+						],
+					},
+				],
+			}
+		"background_guild_artisan":
+			return {
+				"fixed_item_ids": ["item_clothes_traveler", "item_pouch"],
+				"groups": [
+					{
+						"id": "background_guild_artisan_tools",
+						"title": "Choose your artisan's tools",
+						"variants": [
+							_build_equipment_variant("artisan_tools", "Artisan's tools", [], artisan_tool_item_ids, 1),
+						],
+					},
+				],
+			}
+		_:
+			var item_ids: Array[String] = []
+			for item_id in background_resource.starting_equipment_options:
+				item_ids.append(str(item_id))
+			return {
+				"fixed_item_ids": item_ids,
+				"groups": [],
+			}
+
+
+func _get_class_equipment_spec(class_resource: ClassResource) -> Dictionary:
+	if class_resource == null:
+		return {"fixed_item_ids": [], "groups": []}
+
+	var simple_weapon_ids := _get_weapon_item_ids([ItemResource.WeaponType.SIMPLE_MELEE, ItemResource.WeaponType.SIMPLE_RANGED])
+	var simple_melee_weapon_ids := _get_weapon_item_ids([ItemResource.WeaponType.SIMPLE_MELEE])
+	var martial_weapon_ids := _get_weapon_item_ids([ItemResource.WeaponType.MARTIAL_MELEE, ItemResource.WeaponType.MARTIAL_RANGED])
+	var martial_melee_weapon_ids := _get_weapon_item_ids([ItemResource.WeaponType.MARTIAL_MELEE])
+	var instrument_item_ids: Array[String] = _filter_existing_item_ids(["item_drum", "item_flute", "item_lute", "item_lyre"])
+	var arcane_focus_item_ids: Array[String] = _filter_existing_item_ids(["item_arcane_focus_crystal", "item_arcane_focus_orb"])
+
+	match class_resource.resource_id:
+		"class_barbarian":
+			return {
+				"fixed_item_ids": ["item_explorer_pack", "item_javelin", "item_javelin", "item_javelin", "item_javelin"],
+				"groups": [
+					{
+						"id": "barbarian_primary_weapon",
+						"title": "Choose your primary weapon",
+						"variants": [
+							_build_equipment_variant("greataxe", "Greataxe", ["item_greataxe"]),
+							_build_equipment_variant("martial_melee_weapon", "Any martial melee weapon", [], martial_melee_weapon_ids, 1),
+						],
+					},
+					{
+						"id": "barbarian_secondary_weapon",
+						"title": "Choose your secondary weapon",
+						"variants": [
+							_build_equipment_variant("two_handaxes", "Two handaxes", ["item_handaxe", "item_handaxe"]),
+							_build_equipment_variant("simple_weapon", "Any simple weapon", [], simple_weapon_ids, 1),
+						],
+					},
+				],
+			}
+		"class_bard":
+			return {
+				"fixed_item_ids": ["item_leather_armor", "item_dagger"],
+				"groups": [
+					{
+						"id": "bard_weapon",
+						"title": "Choose your weapon",
+						"variants": [
+							_build_equipment_variant("rapier", "Rapier", ["item_rapier"]),
+							_build_equipment_variant("longsword", "Longsword", ["item_longsword"]),
+							_build_equipment_variant("simple_weapon", "Any simple weapon", [], simple_weapon_ids, 1),
+						],
+					},
+					{
+						"id": "bard_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("diplomat_pack", "Diplomat's Pack", ["item_diplomat_pack"]),
+							_build_equipment_variant("entertainer_pack", "Entertainer's Pack", ["item_entertainer_pack"]),
+						],
+					},
+					{
+						"id": "bard_instrument",
+						"title": "Choose your musical instrument",
+						"variants": [
+							_build_equipment_variant("musical_instrument", "Musical instrument", [], instrument_item_ids, 1),
+						],
+					},
+				],
+			}
+		"class_cleric":
+			return {
+				"fixed_item_ids": ["item_shield", "item_holy_symbol_amulet"],
+				"groups": [
+					{
+						"id": "cleric_weapon",
+						"title": "Choose your weapon",
+						"variants": [
+							_build_equipment_variant("mace", "Mace", ["item_mace"]),
+							_build_equipment_variant("warhammer", "Warhammer", ["item_warhammer"]),
+						],
+					},
+					{
+						"id": "cleric_armor",
+						"title": "Choose your armor",
+						"variants": [
+							_build_equipment_variant("scale_mail", "Scale Mail", ["item_scale_mail"]),
+							_build_equipment_variant("leather_armor", "Leather Armor", ["item_leather_armor"]),
+							_build_equipment_variant("chain_mail", "Chain Mail", ["item_chain_mail"]),
+						],
+					},
+					{
+						"id": "cleric_secondary_weapon",
+						"title": "Choose your secondary weapon",
+						"variants": [
+							_build_equipment_variant("crossbow", "Light Crossbow and 20 bolts", ["item_crossbow_light", "item_crossbow_bolts"]),
+							_build_equipment_variant("simple_weapon", "Any simple weapon", [], simple_weapon_ids, 1),
+						],
+					},
+					{
+						"id": "cleric_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("priest_pack", "Priest's Pack", ["item_priest_pack"]),
+							_build_equipment_variant("explorer_pack", "Explorer's Pack", ["item_explorer_pack"]),
+						],
+					},
+				],
+			}
+		"class_druid":
+			return {
+				"fixed_item_ids": ["item_leather_armor", "item_explorer_pack", "item_druidic_focus_sprig"],
+				"groups": [
+					{
+						"id": "druid_primary_item",
+						"title": "Choose your primary item",
+						"variants": [
+							_build_equipment_variant("shield", "Wooden Shield", ["item_shield"]),
+							_build_equipment_variant("simple_weapon", "Any simple weapon", [], simple_weapon_ids, 1),
+						],
+					},
+					{
+						"id": "druid_secondary_weapon",
+						"title": "Choose your secondary weapon",
+						"variants": [
+							_build_equipment_variant("scimitar", "Scimitar", ["item_scimitar"]),
+							_build_equipment_variant("simple_melee_weapon", "Any simple melee weapon", [], simple_melee_weapon_ids, 1),
+						],
+					},
+				],
+			}
+		"class_fighter":
+			return {
+				"fixed_item_ids": [],
+				"groups": [
+					{
+						"id": "fighter_armor",
+						"title": "Choose your armor package",
+						"variants": [
+							_build_equipment_variant("chain_mail", "Chain Mail", ["item_chain_mail"]),
+							_build_equipment_variant("leather_and_longbow", "Leather armor, longbow, and 20 arrows", ["item_leather_armor", "item_longbow", "item_arrows"]),
+						],
+					},
+					{
+						"id": "fighter_primary_arms",
+						"title": "Choose your primary arms",
+						"variants": [
+							_build_equipment_variant("martial_weapon_shield", "Martial weapon and shield", [], martial_weapon_ids, 1, ["item_shield"]),
+							_build_equipment_variant("two_martial_weapons", "Two martial weapons", [], martial_weapon_ids, 2),
+						],
+					},
+					{
+						"id": "fighter_secondary_weapon",
+						"title": "Choose your secondary weapon",
+						"variants": [
+							_build_equipment_variant("crossbow", "Light Crossbow and 20 bolts", ["item_crossbow_light", "item_crossbow_bolts"]),
+							_build_equipment_variant("two_handaxes", "Two handaxes", ["item_handaxe", "item_handaxe"]),
+						],
+					},
+					{
+						"id": "fighter_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("dungeoneer_pack", "Dungeoneer's Pack", ["item_dungeoneer_pack"]),
+							_build_equipment_variant("explorer_pack", "Explorer's Pack", ["item_explorer_pack"]),
+						],
+					},
+				],
+			}
+		"class_monk":
+			return {
+				"fixed_item_ids": ["item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart", "item_dart"],
+				"groups": [
+					{
+						"id": "monk_weapon",
+						"title": "Choose your weapon",
+						"variants": [
+							_build_equipment_variant("shortsword", "Shortsword", ["item_shortsword"]),
+							_build_equipment_variant("simple_weapon", "Any simple weapon", [], simple_weapon_ids, 1),
+						],
+					},
+					{
+						"id": "monk_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("dungeoneer_pack", "Dungeoneer's Pack", ["item_dungeoneer_pack"]),
+							_build_equipment_variant("explorer_pack", "Explorer's Pack", ["item_explorer_pack"]),
+						],
+					},
+				],
+			}
+		"class_paladin":
+			return {
+				"fixed_item_ids": ["item_chain_mail", "item_holy_symbol_amulet"],
+				"groups": [
+					{
+						"id": "paladin_primary_arms",
+						"title": "Choose your primary arms",
+						"variants": [
+							_build_equipment_variant("martial_weapon_shield", "Martial weapon and shield", [], martial_weapon_ids, 1, ["item_shield"]),
+							_build_equipment_variant("two_martial_weapons", "Two martial weapons", [], martial_weapon_ids, 2),
+						],
+					},
+					{
+						"id": "paladin_secondary_weapon",
+						"title": "Choose your secondary weapon",
+						"variants": [
+							_build_equipment_variant("five_javelins", "Five javelins", ["item_javelin", "item_javelin", "item_javelin", "item_javelin", "item_javelin"]),
+							_build_equipment_variant("simple_melee_weapon", "Any simple melee weapon", [], simple_melee_weapon_ids, 1),
+						],
+					},
+					{
+						"id": "paladin_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("priest_pack", "Priest's Pack", ["item_priest_pack"]),
+							_build_equipment_variant("explorer_pack", "Explorer's Pack", ["item_explorer_pack"]),
+						],
+					},
+				],
+			}
+		"class_ranger":
+			return {
+				"fixed_item_ids": ["item_longbow", "item_arrows"],
+				"groups": [
+					{
+						"id": "ranger_armor",
+						"title": "Choose your armor",
+						"variants": [
+							_build_equipment_variant("scale_mail", "Scale Mail", ["item_scale_mail"]),
+							_build_equipment_variant("leather_armor", "Leather Armor", ["item_leather_armor"]),
+						],
+					},
+					{
+						"id": "ranger_weapons",
+						"title": "Choose your melee weapons",
+						"variants": [
+							_build_equipment_variant("two_shortswords", "Two shortswords", ["item_shortsword", "item_shortsword"]),
+							_build_equipment_variant("two_simple_melee_weapons", "Two simple melee weapons", [], simple_melee_weapon_ids, 2),
+						],
+					},
+					{
+						"id": "ranger_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("dungeoneer_pack", "Dungeoneer's Pack", ["item_dungeoneer_pack"]),
+							_build_equipment_variant("explorer_pack", "Explorer's Pack", ["item_explorer_pack"]),
+						],
+					},
+				],
+			}
+		"class_rogue":
+			return {
+				"fixed_item_ids": ["item_leather_armor", "item_dagger", "item_dagger", "item_thieves_tools"],
+				"groups": [
+					{
+						"id": "rogue_weapon",
+						"title": "Choose your weapon",
+						"variants": [
+							_build_equipment_variant("rapier", "Rapier", ["item_rapier"]),
+							_build_equipment_variant("shortsword", "Shortsword", ["item_shortsword"]),
+						],
+					},
+					{
+						"id": "rogue_secondary_weapon",
+						"title": "Choose your ranged option",
+						"variants": [
+							_build_equipment_variant("shortbow", "Shortbow and 20 arrows", ["item_shortbow", "item_arrows"]),
+							_build_equipment_variant("shortsword", "Shortsword", ["item_shortsword"]),
+						],
+					},
+					{
+						"id": "rogue_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("burglar_pack", "Burglar's Pack", ["item_burglar_pack"]),
+							_build_equipment_variant("dungeoneer_pack", "Dungeoneer's Pack", ["item_dungeoneer_pack"]),
+							_build_equipment_variant("explorer_pack", "Explorer's Pack", ["item_explorer_pack"]),
+						],
+					},
+				],
+			}
+		"class_sorcerer":
+			return {
+				"fixed_item_ids": ["item_dagger", "item_dagger"],
+				"groups": [
+					{
+						"id": "sorcerer_weapon",
+						"title": "Choose your weapon",
+						"variants": [
+							_build_equipment_variant("crossbow", "Light Crossbow and 20 bolts", ["item_crossbow_light", "item_crossbow_bolts"]),
+							_build_equipment_variant("simple_weapon", "Any simple weapon", [], simple_weapon_ids, 1),
+						],
+					},
+					{
+						"id": "sorcerer_focus",
+						"title": "Choose your spellcasting gear",
+						"variants": [
+							_build_equipment_variant("component_pouch", "Component Pouch", ["item_component_pouch"]),
+							_build_equipment_variant("arcane_focus", "Arcane focus", [], arcane_focus_item_ids, 1),
+						],
+					},
+					{
+						"id": "sorcerer_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("dungeoneer_pack", "Dungeoneer's Pack", ["item_dungeoneer_pack"]),
+							_build_equipment_variant("explorer_pack", "Explorer's Pack", ["item_explorer_pack"]),
+						],
+					},
+				],
+			}
+		"class_warlock":
+			return {
+				"fixed_item_ids": ["item_leather_armor", "item_dagger", "item_dagger"],
+				"groups": [
+					{
+						"id": "warlock_weapon",
+						"title": "Choose your weapon",
+						"variants": [
+							_build_equipment_variant("crossbow", "Light Crossbow and 20 bolts", ["item_crossbow_light", "item_crossbow_bolts"]),
+							_build_equipment_variant("simple_weapon", "Any simple weapon", [], simple_weapon_ids, 1),
+						],
+					},
+					{
+						"id": "warlock_focus",
+						"title": "Choose your spellcasting gear",
+						"variants": [
+							_build_equipment_variant("component_pouch", "Component Pouch", ["item_component_pouch"]),
+							_build_equipment_variant("arcane_focus", "Arcane focus", [], arcane_focus_item_ids, 1),
+						],
+					},
+					{
+						"id": "warlock_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("scholar_pack", "Scholar's Pack", ["item_scholar_pack"]),
+							_build_equipment_variant("dungeoneer_pack", "Dungeoneer's Pack", ["item_dungeoneer_pack"]),
+						],
+					},
+				],
+			}
+		"class_wizard":
+			return {
+				"fixed_item_ids": ["item_spellbook"],
+				"groups": [
+					{
+						"id": "wizard_weapon",
+						"title": "Choose your weapon",
+						"variants": [
+							_build_equipment_variant("quarterstaff", "Quarterstaff", ["item_quarterstaff"]),
+							_build_equipment_variant("dagger", "Dagger", ["item_dagger"]),
+						],
+					},
+					{
+						"id": "wizard_focus",
+						"title": "Choose your spellcasting gear",
+						"variants": [
+							_build_equipment_variant("component_pouch", "Component Pouch", ["item_component_pouch"]),
+							_build_equipment_variant("arcane_focus", "Arcane focus", [], arcane_focus_item_ids, 1),
+						],
+					},
+					{
+						"id": "wizard_pack",
+						"title": "Choose your pack",
+						"variants": [
+							_build_equipment_variant("scholar_pack", "Scholar's Pack", ["item_scholar_pack"]),
+							_build_equipment_variant("explorer_pack", "Explorer's Pack", ["item_explorer_pack"]),
+						],
+					},
+				],
+			}
+		_:
+			return {"fixed_item_ids": [], "groups": []}
+
+
+func _get_equipment_choice_state(scope: String) -> Dictionary:
+	if scope == "background":
+		return selected_background_equipment_choice_state
+	return selected_class_equipment_choice_state
+
+
+func _set_equipment_group_state(scope: String, group_id: String, state: Dictionary) -> void:
+	if scope == "background":
+		selected_background_equipment_choice_state[group_id] = state
+		return
+	selected_class_equipment_choice_state[group_id] = state
+
+
+func _erase_equipment_group_state(scope: String, group_id: String) -> void:
+	if scope == "background":
+		selected_background_equipment_choice_state.erase(group_id)
+		return
+	selected_class_equipment_choice_state.erase(group_id)
+
+
+func _are_equipment_choice_groups_complete(groups: Array, choice_state: Dictionary) -> bool:
+	for group in groups:
+		var group_id := str(group.get("id", ""))
+		var state: Dictionary = choice_state.get(group_id, {})
+		var variant := _find_equipment_group_variant(group, str(state.get("variant_id", "")))
+		if variant.is_empty():
+			return false
+
+		var selection_count := int(variant.get("selection_count", 0))
+		if selection_count <= 0:
+			continue
+
+		var selected_item_ids: Array[String] = []
+		for item_id in state.get("selected_item_ids", []):
+			selected_item_ids.append(str(item_id))
+		if selected_item_ids.size() < selection_count:
+			return false
+		for item_id in selected_item_ids:
+			if item_id.is_empty():
+				return false
+	return true
+
+
+func _load_equipment_choice_state(saved_state: Variant, target_state: Dictionary) -> void:
+	if not saved_state is Dictionary:
+		return
+
+	for group_id in saved_state.keys():
+		var raw_group_state = saved_state.get(group_id, {})
+		if not raw_group_state is Dictionary:
+			continue
+
+		var group_state: Dictionary = raw_group_state
+		var selected_item_ids: Array[String] = []
+		for item_id in group_state.get("selected_item_ids", []):
+			selected_item_ids.append(str(item_id))
+		target_state[str(group_id)] = {
+			"variant_id": str(group_state.get("variant_id", "")),
+			"selected_item_ids": selected_item_ids,
+		}
+
+
+func _duplicate_equipment_choice_state(choice_state: Dictionary) -> Dictionary:
+	var duplicated := {}
+	for group_id in choice_state.keys():
+		var group_state: Dictionary = choice_state.get(group_id, {})
+		var selected_item_ids: Array[String] = []
+		for item_id in group_state.get("selected_item_ids", []):
+			selected_item_ids.append(str(item_id))
+		duplicated[str(group_id)] = {
+			"variant_id": str(group_state.get("variant_id", "")),
+			"selected_item_ids": selected_item_ids,
+		}
+	return duplicated
+
+
+func _get_weapon_item_ids(weapon_types: Array, exclude_ids: Array[String] = []) -> Array[String]:
+	var item_ids: Array[String] = []
+	var excluded := {}
+	for item_id in exclude_ids:
+		excluded[item_id] = true
+	for item in selected_item_resources.values():
+		var resource := item as ItemResource
+		if resource == null:
+			continue
+		if resource.category != ItemResource.Category.WEAPON:
+			continue
+		if excluded.has(resource.resource_id):
+			continue
+		if weapon_types.has(resource.weapon_type):
+			item_ids.append(resource.resource_id)
+	return _sort_item_ids_by_display_name(item_ids)
+
+
+func _filter_existing_item_ids(item_ids: Array[String]) -> Array[String]:
+	var filtered: Array[String] = []
+	for item_id in item_ids:
+		if selected_item_resources.has(item_id):
+			filtered.append(item_id)
+	return filtered
+
+
+func _sort_item_ids_by_display_name(item_ids: Array[String]) -> Array[String]:
+	var sorted_ids := item_ids.duplicate()
+	sorted_ids.sort_custom(func(a: String, b: String) -> bool:
+		return _get_item_display_name(a) < _get_item_display_name(b)
+	)
+	return sorted_ids
+
+
+func _get_item_display_name(item_id: String) -> String:
+	var item := selected_item_resources.get(item_id) as ItemResource
+	return item.display_name if item != null else item_id
+
+
+func _get_item_display_names(item_ids: Array) -> Array[String]:
+	var names: Array[String] = []
+	for item_id in item_ids:
+		names.append(_get_item_display_name(str(item_id)))
+	return names
+
+
+func _get_item_display_entries_for_ids(item_ids: Array[String]) -> Array[String]:
+	var items: Array[ItemResource] = []
+	for item_id in item_ids:
+		var item := selected_item_resources.get(item_id) as ItemResource
+		if item != null:
+			items.append(item)
+	return _get_inventory_display_entries_from_items(items)
+
+
+func _get_inventory_display_entries_from_items(items: Array[ItemResource]) -> Array[String]:
+	var entries: Array[String] = []
+	var counts := {}
+	var ordered_ids: Array[String] = []
+	var names := {}
+	for item in items:
+		if item == null:
+			continue
+		var stack_data := _get_item_stack_display_data(item)
+		var stack_key := str(stack_data["key"])
+		if not counts.has(stack_key):
+			counts[stack_key] = 0
+			ordered_ids.append(stack_key)
+			names[stack_key] = str(stack_data["name"])
+		counts[stack_key] = int(counts.get(stack_key, 0)) + int(stack_data["quantity"])
+
+	for stack_key in ordered_ids:
+		var count := int(counts.get(stack_key, 0))
+		var display_name := str(names.get(stack_key, stack_key))
+		if count > 1:
+			entries.append("%s x%d" % [display_name, count])
+		else:
+			entries.append(display_name)
+	return entries
 
 
 func _build_race_button(race: RaceResource, index: int) -> Button:
@@ -1488,9 +2365,11 @@ func _add_empty_state_label(container: Node, text: String) -> void:
 
 
 func _refresh_equipment_ui() -> void:
-	use_default_gold_checkbox.visible = false
-	use_default_gold_checkbox.button_pressed = false
-	_rebuild_individual_items_list()
+	use_default_gold_checkbox.visible = selected_class != null and selected_background != null
+	use_default_gold_checkbox.button_pressed = use_default_starting_gold
+	_refresh_allowed_equipment_options()
+	_sync_equipment_to_character()
+	_rebuild_equipment_summary_list()
 	_update_equipment_status()
 
 
@@ -1748,11 +2627,55 @@ func _on_individual_item_toggled(resource_id: String) -> void:
 
 
 func _on_use_default_gold_toggled(_pressed: bool) -> void:
-	use_default_starting_gold = false
+	use_default_starting_gold = use_default_gold_checkbox.button_pressed
+	_sync_equipment_to_character()
+	_refresh_equipment_ui()
+	_update_next_button_state()
+	_refresh_preview()
 
 
 func _on_item_search_text_changed(_new_text: String) -> void:
-	_rebuild_individual_items_list()
+	return
+
+
+func _on_equipment_group_variant_selected(index: int, scope: String, group_id: String, selector: OptionButton) -> void:
+	var metadata = selector.get_item_metadata(index)
+	var variant_id: String = metadata if metadata is String else ""
+	if variant_id.is_empty():
+		_erase_equipment_group_state(scope, group_id)
+	else:
+		_set_equipment_group_state(scope, group_id, {
+			"variant_id": variant_id,
+			"selected_item_ids": [],
+		})
+
+	_sync_equipment_to_character()
+	_refresh_equipment_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_equipment_group_slot_selected(index: int, scope: String, group_id: String, slot_index: int, selector: OptionButton) -> void:
+	var state: Dictionary = _get_equipment_choice_state(scope).get(group_id, {
+		"variant_id": "",
+		"selected_item_ids": [],
+	})
+	var metadata = selector.get_item_metadata(index)
+	var selected_item_id: String = metadata if metadata is String else ""
+	var selected_item_ids: Array[String] = []
+	for item_id in state.get("selected_item_ids", []):
+		selected_item_ids.append(str(item_id))
+	selected_item_ids.resize(max(selected_item_ids.size(), slot_index + 1))
+	selected_item_ids[slot_index] = selected_item_id
+	_set_equipment_group_state(scope, group_id, {
+		"variant_id": str(state.get("variant_id", "")),
+		"selected_item_ids": selected_item_ids,
+	})
+
+	_sync_equipment_to_character()
+	_refresh_equipment_ui()
+	_update_next_button_state()
+	_refresh_preview()
 
 
 func _on_character_name_changed(new_text: String) -> void:
@@ -1868,7 +2791,13 @@ func _can_advance_from_spells_step() -> bool:
 
 
 func _can_advance_from_equipment_step() -> bool:
-	return selected_pack != null or not selected_individual_item_ids.is_empty()
+	if selected_class == null or selected_background == null:
+		return false
+	if not _are_equipment_choice_groups_complete(_get_background_equipment_choice_groups(), selected_background_equipment_choice_state):
+		return false
+	if use_default_starting_gold:
+		return true
+	return _are_equipment_choice_groups_complete(_get_class_equipment_choice_groups(), selected_class_equipment_choice_state)
 
 
 func _can_finalize_character() -> bool:
@@ -2877,21 +3806,19 @@ func _format_spell_level_label(spell_level: int) -> String:
 func _sync_equipment_state_from_character() -> void:
 	selected_pack = null
 	selected_individual_item_ids.clear()
+	selected_class_equipment_choice_state.clear()
+	selected_background_equipment_choice_state.clear()
 	use_default_starting_gold = false
 
 	var character := CharacterCreationManager.current_character
 	if character == null:
 		return
 
-	for item in character.inventory:
-		if item == null:
-			continue
-		if item.is_container and selected_pack == null:
-			selected_pack = item
-		else:
-			if selected_pack != null and selected_pack.default_contents.has(item.resource_id):
-				continue
-			selected_individual_item_ids[item.resource_id] = true
+	var selection_state: Dictionary = character.equipment_selection_state
+	use_default_starting_gold = bool(selection_state.get("use_default_starting_gold", false))
+	_load_equipment_choice_state(selection_state.get("class_choice_state", {}), selected_class_equipment_choice_state)
+	_load_equipment_choice_state(selection_state.get("background_choice_state", {}), selected_background_equipment_choice_state)
+	_sanitize_class_equipment_choice_state()
 
 
 func _sync_equipment_to_character() -> void:
@@ -2900,32 +3827,39 @@ func _sync_equipment_to_character() -> void:
 		return
 
 	character.inventory.clear()
-
-	if selected_pack != null:
-		character.inventory.append(selected_pack)
-		for item_id in selected_pack.default_contents:
-			var loaded_item := load("%s/%s.tres" % [ITEM_DATA_PATH, item_id]) as ItemResource
-			if loaded_item != null:
-				character.inventory.append(loaded_item)
-
-	for resource_id in selected_individual_item_ids.keys():
-		var selected_item: ItemResource = selected_item_resources.get(resource_id) as ItemResource
+	for item_id in _get_equipment_item_ids_for_character():
+		var selected_item := selected_item_resources.get(item_id) as ItemResource
 		if selected_item != null:
 			character.inventory.append(selected_item)
+	character.equipment_selection_state = {
+		"use_default_starting_gold": use_default_starting_gold,
+		"class_choice_state": _duplicate_equipment_choice_state(selected_class_equipment_choice_state),
+		"background_choice_state": _duplicate_equipment_choice_state(selected_background_equipment_choice_state),
+	}
 
 
 func _update_equipment_status() -> void:
-	if selected_pack == null and selected_individual_item_ids.is_empty():
-		equipment_status_label.text = "Select one allowed pack or one or more allowed items."
+	if selected_class == null or selected_background == null:
+		equipment_status_label.text = "Select a class and background before choosing starting equipment."
 		_set_label_color(equipment_status_label, Color(0.85, 0.65, 0.2))
 		return
 
-	var parts: Array[String] = []
-	if selected_pack != null:
-		parts.append(selected_pack.display_name)
-	if not selected_individual_item_ids.is_empty():
-		parts.append("%d individual item(s)" % selected_individual_item_ids.size())
-	equipment_status_label.text = "Selected equipment: %s" % ", ".join(parts)
+	if not _are_equipment_choice_groups_complete(_get_background_equipment_choice_groups(), selected_background_equipment_choice_state):
+		equipment_status_label.text = "Complete each background starter equipment choice."
+		_set_label_color(equipment_status_label, Color(0.85, 0.65, 0.2))
+		return
+
+	if use_default_starting_gold:
+		equipment_status_label.text = "Using class starting gold (%s) plus background gold and background equipment." % _format_gold_amount(_parse_gold_expression(selected_class.starting_gold_dice))
+		_set_label_color(equipment_status_label, Color(0.2, 0.7, 0.3))
+		return
+
+	if not _are_equipment_choice_groups_complete(_get_class_equipment_choice_groups(), selected_class_equipment_choice_state):
+		equipment_status_label.text = "Complete each class starter equipment choice or switch to starting gold."
+		_set_label_color(equipment_status_label, Color(0.85, 0.65, 0.2))
+		return
+
+	equipment_status_label.text = "Starter equipment selections complete."
 	_set_label_color(equipment_status_label, Color(0.2, 0.7, 0.3))
 
 
@@ -2997,7 +3931,7 @@ func _get_item_stack_display_data(item: ItemResource) -> Dictionary:
 
 func _get_starting_gold_amount() -> float:
 	var total := 0.0
-	if selected_class != null:
+	if use_default_starting_gold and selected_class != null:
 		total += _parse_gold_expression(selected_class.starting_gold_dice)
 	if selected_background != null:
 		total += _parse_gold_expression(selected_background.starting_gold_dice)
