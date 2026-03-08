@@ -957,6 +957,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Enter a character name"
 
+[node name="GenderLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/CharacterNameRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(64, 0)
+text = "Gender"
+
+[node name="GenderOption" type="OptionButton" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/CharacterNameRow"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+
 [node name="SummaryDescription" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent"]
 layout_mode = 2
 autowrap_mode = 3

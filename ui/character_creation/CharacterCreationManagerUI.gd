@@ -50,6 +50,11 @@ const GRID_MAX_COLUMNS_MAIN := 3
 const GRID_MAX_COLUMNS_SPELL := 2
 const MAIN_SELECTION_PREVIEW_SIZE := Vector2(96, 96)
 const SPELL_SELECTION_PREVIEW_SIZE := Vector2(64, 64)
+const GENDER_OPTIONS := [
+	{"label": "Unspecified", "value": ""},
+	{"label": "Male", "value": "male"},
+	{"label": "Female", "value": "female"},
+]
 const ABILITY_LABELS := {
 	"str": "STR",
 	"dex": "DEX",
@@ -148,6 +153,7 @@ const ABILITY_LABELS := {
 @onready var create_character_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons/CreateCharacterButton
 @onready var summary_preview: RichTextLabel = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/SummaryScroll/SummaryScrollContent/SummaryPreview
 @onready var character_name_input: LineEdit = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/CharacterNameRow/CharacterNameInput
+@onready var gender_option_button: OptionButton = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/CharacterNameRow/GenderOption
 @onready var character_name_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/CharacterNamePreview
 @onready var race_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/RacePreview
 @onready var class_preview: RichTextLabel = $RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels/ClassPreview
@@ -213,6 +219,7 @@ var portrait_file_cache := {}
 func _ready() -> void:
 	resized.connect(_schedule_selection_grid_layout_refresh)
 	_bind_step_buttons()
+	_populate_gender_selector()
 	_bind_main_area_actions()
 	_configure_dialog_buttons()
 	_ensure_current_character()
@@ -348,6 +355,7 @@ func _bind_main_area_actions() -> void:
 	next_button.pressed.connect(go_to_next_step)
 	create_character_button.pressed.connect(_on_create_character_pressed)
 	character_name_input.text_changed.connect(_on_character_name_changed)
+	gender_option_button.item_selected.connect(_on_gender_selected)
 	variant_human_bonus_one.item_selected.connect(_on_variant_human_bonus_selected.bind(0))
 	variant_human_bonus_two.item_selected.connect(_on_variant_human_bonus_selected.bind(1))
 	magic_initiate_feat_spell_list_option.item_selected.connect(_on_magic_initiate_spell_list_selected)
@@ -2388,9 +2396,16 @@ func _rebuild_current_spell_list() -> void:
 func _build_spell_list_row(spell: SpellResource, selected: bool, source: String) -> Control:
 	var panel := PanelContainer.new()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var duplicate_reason := _get_spell_duplicate_selection_reason(spell.resource_id, source)
+	var blocked_by_duplicate := not selected and not duplicate_reason.is_empty()
 
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.14, 0.16, 0.2, 0.92) if not selected else Color(0.18, 0.24, 0.19, 0.96)
+	if blocked_by_duplicate:
+		style.bg_color = Color(0.12, 0.13, 0.15, 0.92)
+	elif selected:
+		style.bg_color = Color(0.18, 0.24, 0.19, 0.96)
+	else:
+		style.bg_color = Color(0.14, 0.16, 0.2, 0.92)
 	style.border_color = Color(0.3, 0.34, 0.4, 1.0)
 	style.border_width_left = 1
 	style.border_width_top = 1
@@ -2427,13 +2442,17 @@ func _build_spell_list_row(spell: SpellResource, selected: bool, source: String)
 	var select_toggle := CheckBox.new()
 	select_toggle.text = ""
 	select_toggle.button_pressed = selected
+	select_toggle.disabled = blocked_by_duplicate
 	select_toggle.custom_minimum_size = Vector2(22, 22)
-	select_toggle.tooltip_text = "Select or remove %s" % spell.display_name
+	select_toggle.tooltip_text = duplicate_reason if blocked_by_duplicate else "Select or remove %s" % spell.display_name
 	select_toggle.pressed.connect(_on_spell_row_select_pressed.bind(spell.resource_id, spell.spell_level, source))
 	top_row.add_child(select_toggle)
 
 	var title_label := _create_card_text_label(spell.display_name, 17, 1)
 	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if blocked_by_duplicate:
+		title_label.modulate = Color(0.72, 0.72, 0.72, 1.0)
+		title_label.tooltip_text = duplicate_reason
 	top_row.add_child(title_label)
 
 	var details_button := Button.new()
@@ -2459,16 +2478,17 @@ func _on_spell_search_text_changed(_new_text: String) -> void:
 
 
 func _on_spell_row_select_pressed(resource_id: String, spell_level: int, source: String) -> void:
-	if source == "class":
-		if spell_level == 0:
-			_toggle_spell_selection(selected_class_cantrip_ids, resource_id, _get_required_class_cantrip_count())
-		else:
-			_toggle_spell_selection(selected_class_level_one_spell_ids, resource_id, _get_required_class_level_one_spell_count())
-	else:
-		if spell_level == 0:
-			_toggle_spell_selection(selected_feat_cantrip_ids, resource_id, 2)
-		else:
-			_toggle_spell_selection(selected_feat_level_one_spell_ids, resource_id, 1)
+	var selected_ids := _get_spell_selected_ids_for_source_and_level(source, spell_level)
+	var selection_limit := _get_spell_selection_limit_for_source_and_level(source, spell_level)
+	if selected_ids.has(resource_id):
+		_toggle_spell_selection(selected_ids, resource_id, selection_limit)
+		_refresh_spells_ui()
+		_update_next_button_state()
+		_refresh_preview()
+		return
+	if not _get_spell_duplicate_selection_reason(resource_id, source).is_empty():
+		return
+	_toggle_spell_selection(selected_ids, resource_id, selection_limit)
 
 	_refresh_spells_ui()
 	_update_next_button_state()
@@ -2590,6 +2610,18 @@ func _get_spell_selected_ids_for_phase(phase: String) -> Dictionary:
 			return selected_feat_level_one_spell_ids
 		_:
 			return {}
+
+
+func _get_spell_selected_ids_for_source_and_level(source: String, spell_level: int) -> Dictionary:
+	if source == "class":
+		return selected_class_cantrip_ids if spell_level == 0 else selected_class_level_one_spell_ids
+	return selected_feat_cantrip_ids if spell_level == 0 else selected_feat_level_one_spell_ids
+
+
+func _get_spell_selection_limit_for_source_and_level(source: String, spell_level: int) -> int:
+	if source == "class":
+		return _get_required_class_cantrip_count() if spell_level == 0 else _get_required_class_level_one_spell_count()
+	return 2 if spell_level == 0 else 1
 
 
 func _get_spell_selection_limit_for_phase(phase: String) -> int:
@@ -2749,8 +2781,10 @@ func _refresh_equipment_ui() -> void:
 func _refresh_summary_ui() -> void:
 	var character := CharacterCreationManager.current_character
 	var character_name := character.character_name if character != null else ""
+	var character_gender := character.gender if character != null else ""
 	if character_name_input.text != character_name:
 		character_name_input.text = character_name
+	_select_gender_option(character_gender)
 	summary_preview.text = _format_summary_preview(character)
 
 
@@ -3098,6 +3132,33 @@ func _on_character_name_changed(new_text: String) -> void:
 	CharacterCreationManager.current_character.character_name = new_text
 	_update_next_button_state()
 	_refresh_preview()
+
+
+func _on_gender_selected(index: int) -> void:
+	var metadata = gender_option_button.get_item_metadata(index)
+	var gender_value: String = metadata if metadata is String else ""
+	_ensure_current_character()
+	CharacterCreationManager.current_character.gender = gender_value
+	_refresh_preview()
+
+
+func _populate_gender_selector() -> void:
+	gender_option_button.clear()
+	for option in GENDER_OPTIONS:
+		var item_index := gender_option_button.item_count
+		gender_option_button.add_item(str(option.get("label", "")))
+		gender_option_button.set_item_metadata(item_index, str(option.get("value", "")))
+	_select_gender_option(CharacterCreationManager.current_character.gender if CharacterCreationManager.current_character != null else "")
+
+
+func _select_gender_option(gender_value: String) -> void:
+	for index in range(gender_option_button.item_count):
+		var metadata = gender_option_button.get_item_metadata(index)
+		if metadata is String and metadata == gender_value:
+			gender_option_button.select(index)
+			return
+	if gender_option_button.item_count > 0:
+		gender_option_button.select(0)
 
 
 func _on_create_character_pressed() -> void:
@@ -3538,8 +3599,6 @@ func _format_class_preview(character: CharacterSheetResource) -> String:
 	var save_summary := _format_saving_throw_proficiencies(class_resource)
 	if not save_summary.is_empty():
 		preview_parts.append("Saves: %s" % save_summary)
-	if class_resource.skill_proficiency_count > 0:
-		preview_parts.append("Skills: choose %d" % class_resource.skill_proficiency_count)
 	return " | ".join(preview_parts)
 
 
@@ -3633,33 +3692,47 @@ func _format_summary_preview(character: CharacterSheetResource) -> String:
 	var race := character.race
 	var sections: Array[String] = []
 
-	var identity_lines := [
-		"Name: %s" % _get_character_name(character),
-		"Race: %s" % (race.display_name if race != null else "-"),
-		"Class: %s" % (character.class_resource.display_name if character.class_resource != null else "-"),
-		"Background: %s" % (character.background.display_name if character.background != null else "-"),
-		"Subclass: %s" % (character.subclass.display_name if character.subclass != null else "-"),
-	]
-	if race != null:
-		identity_lines.append("Speed: %d ft" % race.speed)
-		identity_lines.append("Darkvision: %s" % ("Yes" if race.darkvision else "No"))
-	sections.append("[b]Character[/b]\n%s" % "\n".join(identity_lines))
-
-	var stat_lines := [
-		"HP: %s" % _format_hp_preview(character, race),
-		"Proficiency Bonus: %s" % _format_signed_value(AbilitySystem.get_proficiency_bonus(max(character.current_level, 1))),
-		"Spellcasting: %s" % _format_spellcasting_preview(character, race),
-	]
-	if character.class_resource != null:
-		stat_lines.append("Saving Throws: %s" % _format_saving_throw_proficiencies(character.class_resource))
-	sections.append("[b]Core Stats[/b]\n%s" % "\n".join(stat_lines))
-
+	sections.append("[b]Identity[/b]\n%s" % "\n".join(_format_summary_identity_lines(character, race)))
+	sections.append("[b]Combat[/b]\n%s" % "\n".join(_format_summary_combat_lines(character, race)))
 	sections.append("[b]Ability Scores[/b]\n%s" % "\n".join(_format_summary_ability_lines(character, race)))
+	sections.append("[b]Saving Throws[/b]\n%s" % "\n".join(_format_summary_save_lines(character, race)))
 	sections.append("[b]Skills[/b]\n%s" % "\n".join(_format_summary_skill_lines(character, race)))
-	sections.append("[b]Feats[/b]\n%s" % "\n".join(_format_summary_feat_lines(character)))
+	sections.append("[b]Proficiencies[/b]\n%s" % "\n".join(_format_summary_proficiency_lines(character, race)))
+	sections.append("[b]Features[/b]\n%s" % "\n".join(_format_summary_feature_lines(character)))
 	sections.append("[b]Spells[/b]\n%s" % "\n".join(_format_summary_spell_lines(character)))
 	sections.append("[b]Equipment & Gold[/b]\n%s" % "\n".join(_format_summary_equipment_lines(character)))
 	return "\n\n".join(sections)
+
+
+func _format_summary_identity_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
+	var lines: Array[String] = [
+		"Name: %s" % _get_character_name(character),
+		"Gender: %s" % _format_gender_display(character),
+		"Race: %s" % (race.display_name if race != null else "-"),
+		"Class: %s" % (character.class_resource.display_name if character.class_resource != null else "-"),
+		"Level: %d" % max(character.current_level, 1),
+		"Background: %s" % (character.background.display_name if character.background != null else "-"),
+		"Subclass: %s" % (character.subclass.display_name if character.subclass != null else "-"),
+		"Size: %s" % (race.size if race != null and not race.size.is_empty() else "-"),
+	]
+	return lines
+
+
+func _format_summary_combat_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
+	var lines: Array[String] = [
+		"Armor Class: %d" % _get_armor_class(character, race),
+		"Initiative: %s" % _format_signed_value(_get_initiative_bonus(character, race)),
+		"Speed: %d ft" % _get_speed(character, race),
+		"HP: %s" % _format_hp_preview(character, race),
+		"Hit Dice: %s" % _get_hit_dice_summary(character),
+		"Proficiency Bonus: %s" % _format_signed_value(_get_proficiency_bonus(character)),
+		"Passive Perception: %d" % _get_passive_perception(character, race),
+		"Darkvision: %s" % ("Yes" if race != null and race.darkvision else "No"),
+	]
+	var spellcasting_lines := _format_summary_spellcasting_lines(character, race)
+	if not spellcasting_lines.is_empty():
+		lines.append_array(spellcasting_lines)
+	return lines
 
 
 func _format_summary_ability_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
@@ -3668,33 +3741,70 @@ func _format_summary_ability_lines(character: CharacterSheetResource, race: Race
 		var base_score := int(character.base_ability_scores.get(ability_key, 8))
 		var total_bonus := _get_total_ability_bonus(character, race, ability_key)
 		var final_score := _get_final_ability_score(character, race, ability_key)
-		lines.append("%s: %d (Base %d, Bonuses %s)" % [ABILITY_LABELS[ability_key], final_score, base_score, _format_signed_value(total_bonus)])
+		lines.append("%s: %d (%s)  Base %d  Bonus %s" % [ABILITY_LABELS[ability_key], final_score, _format_signed_value(AbilitySystem.get_modifier(final_score)), base_score, _format_signed_value(total_bonus)])
+	return lines
+
+
+func _format_summary_save_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
+	var lines: Array[String] = []
+	for ability_key in ABILITY_ORDER:
+		var proficient_prefix := "* " if _has_saving_throw_proficiency(character, ability_key) else "  "
+		lines.append("%s%s %s" % [proficient_prefix, ABILITY_LABELS[ability_key], _format_signed_value(_get_saving_throw_total(character, race, ability_key))])
 	return lines
 
 
 func _format_summary_skill_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
-	if character.skill_proficiencies.is_empty():
+	if available_skills.is_empty():
 		return ["- None"]
 
 	var lines: Array[String] = []
-	for skill_id in _get_sorted_skill_ids_from_array(character.skill_proficiencies):
-		var source_labels := _get_skill_source_labels(character.skill_proficiency_sources.get(skill_id, []))
-		var source_suffix := ""
-		if not source_labels.is_empty():
-			source_suffix = " (%s)" % ", ".join(source_labels)
-		lines.append("- %s (%s)%s" % [_get_skill_display_name(skill_id), _format_signed_value(_get_skill_roll_modifier(character, race, skill_id)), source_suffix])
+	var skill_ids := _get_all_skill_ids_sorted()
+	for skill_id in skill_ids:
+		var proficient_prefix := "* " if _has_skill_proficiency(character, skill_id) else "  "
+		lines.append("%s%s %s" % [proficient_prefix, _get_skill_display_name(skill_id), _format_signed_value(_get_skill_roll_modifier(character, race, skill_id))])
 	return lines
+
+
+func _format_summary_proficiency_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
+	var lines: Array[String] = []
+	if character.class_resource != null:
+		lines.append("Armor: %s" % _format_list_or_dash(character.class_resource.armor_proficiencies))
+		lines.append("Weapons: %s" % _format_list_or_dash(character.class_resource.weapon_proficiencies))
+	var language_names := _get_language_display_names(race.languages if race != null else [])
+	lines.append("Languages: %s" % _format_list_or_dash(language_names))
+	return lines
+
+
+func _format_summary_feature_lines(character: CharacterSheetResource) -> Array[String]:
+	var lines: Array[String] = []
+	if character.background != null and character.background.feature != null:
+		lines.append("Background Feature: %s" % character.background.feature.feature_name)
+	for feat_line in _format_summary_feat_lines(character):
+		lines.append(feat_line)
+	return lines if not lines.is_empty() else ["- None"]
 
 
 func _format_summary_feat_lines(character: CharacterSheetResource) -> Array[String]:
 	if character.feats.is_empty():
-		return ["- None"]
+		return ["Feats: -"]
 
-	var lines: Array[String] = []
+	var names: Array[String] = []
 	for feat in character.feats:
 		if feat != null:
-			lines.append("- %s" % feat.display_name)
-	return lines if not lines.is_empty() else ["- None"]
+			names.append(feat.display_name)
+	return ["Feats: %s" % _format_list_or_dash(names)]
+
+
+func _format_summary_spellcasting_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
+	var spellcasting_ability := _get_effective_spellcasting_ability()
+	if spellcasting_ability.is_empty():
+		return []
+	var lines: Array[String] = [
+		"Spellcasting Ability: %s" % ABILITY_LABELS.get(spellcasting_ability, spellcasting_ability.to_upper()),
+		"Spell Attack Bonus: %s" % _format_signed_value(_get_spell_attack_bonus(character, race)),
+		"Spell Save DC: %d" % _get_spell_save_dc(character, race),
+	]
+	return lines
 
 
 func _format_summary_spell_lines(character: CharacterSheetResource) -> Array[String]:
@@ -3782,7 +3892,12 @@ func _get_skill_roll_modifier(character: CharacterSheetResource, race: RaceResou
 
 	var ability_key := _get_skill_ability_key(skill_id)
 	var ability_score := _get_final_ability_score(character, race, ability_key)
-	return AbilitySystem.get_modifier(ability_score) + AbilitySystem.get_proficiency_bonus(max(character.current_level, 1))
+	var total := AbilitySystem.get_modifier(ability_score)
+	if _has_skill_proficiency(character, skill_id):
+		total += _get_proficiency_bonus(character)
+	total += _get_character_modifier_total(character, StatModifier.Type.SKILL, skill_id)
+	total += _get_character_modifier_total(character, StatModifier.Type.SKILL)
+	return total
 
 
 func _get_skill_ability_key(skill_id: String) -> String:
@@ -4236,6 +4351,8 @@ func _sanitize_spell_selection_state() -> void:
 
 	_filter_selected_ids(selected_feat_cantrip_ids, _collect_spell_id_set(_get_magic_initiate_spells_by_level(0)))
 	_filter_selected_ids(selected_feat_level_one_spell_ids, _collect_spell_id_set(_get_magic_initiate_spells_by_level(1)))
+	_remove_selected_spell_duplicates(selected_feat_cantrip_ids, _collect_selected_spell_ids_for_source("class"))
+	_remove_selected_spell_duplicates(selected_feat_level_one_spell_ids, _collect_selected_spell_ids_for_source("class"))
 	_trim_selected_spell_ids(selected_feat_cantrip_ids, 2)
 	_trim_selected_spell_ids(selected_feat_level_one_spell_ids, 1)
 
@@ -4261,6 +4378,41 @@ func _collect_spell_id_set(spells: Array) -> Dictionary:
 		if spell != null:
 			spell_ids[spell.resource_id] = true
 	return spell_ids
+
+
+func _collect_selected_spell_ids_for_source(source: String) -> Dictionary:
+	var spell_ids := {}
+	if source == "class":
+		for resource_id in selected_class_cantrip_ids.keys():
+			spell_ids[resource_id] = true
+		for resource_id in selected_class_level_one_spell_ids.keys():
+			spell_ids[resource_id] = true
+	else:
+		for resource_id in selected_feat_cantrip_ids.keys():
+			spell_ids[resource_id] = true
+		for resource_id in selected_feat_level_one_spell_ids.keys():
+			spell_ids[resource_id] = true
+	return spell_ids
+
+
+func _remove_selected_spell_duplicates(selected_ids: Dictionary, blocked_ids: Dictionary) -> void:
+	for resource_id in selected_ids.keys():
+		if blocked_ids.has(resource_id):
+			selected_ids.erase(resource_id)
+
+
+func _get_spell_duplicate_selection_reason(resource_id: String, source: String) -> String:
+	if _allows_duplicate_spell_selection(resource_id, source):
+		return ""
+	if source == "feat" and _collect_selected_spell_ids_for_source("class").has(resource_id):
+		return "Already chosen from your class spells."
+	if source == "class" and _collect_selected_spell_ids_for_source("feat").has(resource_id):
+		return "Already chosen from bonus spell selections."
+	return ""
+
+
+func _allows_duplicate_spell_selection(_resource_id: String, _source: String) -> bool:
+	return false
 
 
 func _get_class_spells_by_level(spell_level: int) -> Array:
@@ -4626,6 +4778,160 @@ func _get_character_name(character: CharacterSheetResource) -> String:
 	if character == null or character.character_name.is_empty():
 		return "-"
 	return character.character_name
+
+
+func _format_gender_display(character: CharacterSheetResource) -> String:
+	if character == null or character.gender.strip_edges().is_empty():
+		return "Unspecified"
+	return character.gender.capitalize()
+
+
+func _get_proficiency_bonus(character: CharacterSheetResource) -> int:
+	return AbilitySystem.get_proficiency_bonus(max(character.current_level, 1))
+
+
+func _has_skill_proficiency(character: CharacterSheetResource, skill_id: String) -> bool:
+	return character != null and character.skill_proficiencies.has(skill_id)
+
+
+func _has_saving_throw_proficiency(character: CharacterSheetResource, ability_key: String) -> bool:
+	if character == null:
+		return false
+	if character.class_resource != null and character.class_resource.saving_throw_proficiencies.has(ability_key):
+		return true
+	for modifier in character.modifiers:
+		if modifier == null:
+			continue
+		if modifier.modifier_type != StatModifier.Type.PROFICIENCY:
+			continue
+		if modifier.target_key == ability_key:
+			return true
+	return false
+
+
+func _get_saving_throw_total(character: CharacterSheetResource, race: RaceResource, ability_key: String) -> int:
+	var total := AbilitySystem.get_modifier(_get_final_ability_score(character, race, ability_key))
+	if _has_saving_throw_proficiency(character, ability_key):
+		total += _get_proficiency_bonus(character)
+	total += _get_character_modifier_total(character, StatModifier.Type.SAVE, ability_key)
+	total += _get_character_modifier_total(character, StatModifier.Type.SAVE)
+	return total
+
+
+func _get_initiative_bonus(character: CharacterSheetResource, race: RaceResource) -> int:
+	var dex_modifier := AbilitySystem.get_modifier(_get_final_ability_score(character, race, "dex"))
+	return dex_modifier + _get_character_target_modifier_total(character, "initiative")
+
+
+func _get_speed(character: CharacterSheetResource, race: RaceResource) -> int:
+	var base_speed := race.speed if race != null else 30
+	return base_speed + _get_racial_modifier_total(race, StatModifier.Type.SPEED) + _get_character_modifier_total(character, StatModifier.Type.SPEED)
+
+
+func _get_passive_perception(character: CharacterSheetResource, race: RaceResource) -> int:
+	return 10 + _get_skill_roll_modifier(character, race, "skill_perception")
+
+
+func _get_spell_attack_bonus(character: CharacterSheetResource, race: RaceResource) -> int:
+	var spellcasting_ability := _get_effective_spellcasting_ability()
+	if spellcasting_ability.is_empty():
+		return 0
+	return _get_proficiency_bonus(character) + AbilitySystem.get_modifier(_get_final_ability_score(character, race, spellcasting_ability))
+
+
+func _get_spell_save_dc(character: CharacterSheetResource, race: RaceResource) -> int:
+	var spellcasting_ability := _get_effective_spellcasting_ability()
+	if spellcasting_ability.is_empty():
+		return 0
+	return 8 + _get_proficiency_bonus(character) + AbilitySystem.get_modifier(_get_final_ability_score(character, race, spellcasting_ability))
+
+
+func _get_hit_dice_summary(character: CharacterSheetResource) -> String:
+	if character == null or character.class_resource == null or character.class_resource.hit_die.is_empty():
+		return "-"
+	return "%d%s" % [max(character.current_level, 1), character.class_resource.hit_die]
+
+
+func _get_armor_class(character: CharacterSheetResource, race: RaceResource) -> int:
+	var dex_modifier := AbilitySystem.get_modifier(_get_final_ability_score(character, race, "dex"))
+	var best_body_armor_ac := 10 + dex_modifier
+	var shield_bonus := 0
+	if character != null:
+		for item in character.inventory:
+			if item == null or item.category != ItemResource.Category.ARMOR:
+				continue
+			if item.armor_type == ItemResource.ArmorType.SHIELD:
+				shield_bonus = max(shield_bonus, item.armor_class + _get_item_modifier_total(item, StatModifier.Type.AC))
+				continue
+			var candidate_ac := item.armor_class
+			match item.armor_type:
+				ItemResource.ArmorType.LIGHT:
+					candidate_ac += dex_modifier
+				ItemResource.ArmorType.MEDIUM:
+					candidate_ac += min(dex_modifier, 2)
+				ItemResource.ArmorType.HEAVY:
+					pass
+			candidate_ac += _get_item_modifier_total(item, StatModifier.Type.AC)
+			best_body_armor_ac = max(best_body_armor_ac, candidate_ac)
+	return best_body_armor_ac + shield_bonus + _get_racial_modifier_total(race, StatModifier.Type.AC) + _get_character_modifier_total(character, StatModifier.Type.AC)
+
+
+func _get_item_modifier_total(item: ItemResource, modifier_type: StatModifier.Type, target_key: String = "") -> int:
+	if item == null:
+		return 0
+	var total := 0
+	for modifier in item.modifiers:
+		if modifier == null:
+			continue
+		if modifier.modifier_type != modifier_type:
+			continue
+		if not target_key.is_empty() and modifier.target_key != target_key:
+			continue
+		total += modifier.value
+	return total
+
+
+func _get_character_target_modifier_total(character: CharacterSheetResource, target_key: String) -> int:
+	if character == null:
+		return 0
+	var total := 0
+	for modifier in character.modifiers:
+		if modifier == null:
+			continue
+		if modifier.target_key != target_key:
+			continue
+		if modifier.modifier_type == StatModifier.Type.PROFICIENCY:
+			continue
+		total += modifier.value
+	return total
+
+
+func _get_all_skill_ids_sorted() -> Array[String]:
+	var skill_ids: Array[String] = []
+	for skill in available_skills:
+		if skill == null:
+			continue
+		skill_ids.append(skill.resource_id)
+	return _get_sorted_skill_ids_from_array(skill_ids)
+
+
+func _get_language_display_names(language_ids: Array) -> Array[String]:
+	var names: Array[String] = []
+	for language_id in language_ids:
+		names.append(_get_language_display_name(language_id))
+	return names
+
+
+func _get_language_display_name(language_id: String) -> String:
+	var resource_path := "res://data/languages/language_%s.tres" % language_id
+	var language_resource := load(resource_path) as LanguageResource
+	if language_resource != null and not language_resource.common_name.is_empty():
+		return language_resource.common_name
+	return _title_case_identifier(language_id)
+
+
+func _format_list_or_dash(values: Array[String]) -> String:
+	return ", ".join(values) if not values.is_empty() else "-"
 
 
 func _is_variant_human_selected() -> bool:
