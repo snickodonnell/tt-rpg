@@ -536,11 +536,180 @@ theme_override_constants/separation = 16
 
 [node name="SpellStatusLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
 text = "No spell selection required for this build."
 
 [node name="NoSpellsRequiredLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
 text = "This class does not need spell choices right now."
+
+[node name="SpellPickerPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SpellPickerMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="SpellPickerContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SpellPhaseRail" type="HBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SpellSummaryPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent"]
+layout_mode = 2
+
+[node name="SpellSummaryMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellSummaryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="SpellSummaryContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellSummaryPanel/SpellSummaryMargin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SpellPhaseTitleLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellSummaryPanel/SpellSummaryMargin/SpellSummaryContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Class Cantrips"
+
+[node name="SpellSelectionSummaryLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellSummaryPanel/SpellSummaryMargin/SpellSummaryContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Selected 0 / 0"
+
+[node name="SelectedSpellChipsScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellSummaryPanel/SpellSummaryMargin/SpellSummaryContent"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 30)
+horizontal_scroll_mode = 1
+vertical_scroll_mode = 0
+
+[node name="SelectedSpellChips" type="HBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellSummaryPanel/SpellSummaryMargin/SpellSummaryContent/SelectedSpellChipsScroll"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SpellPickerSplit" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SpellListColumn" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="SpellSearchLineEdit" type="LineEdit" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellListColumn"]
+layout_mode = 2
+placeholder_text = "Search spells by name or text"
+
+[node name="SpellListScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellListColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SpellList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellListColumn/SpellListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="SpellDetailPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SpellDetailMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="SpellDetailScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel/SpellDetailMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SpellDetailContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel/SpellDetailMargin/SpellDetailScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="SpellDetailTitleLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel/SpellDetailMargin/SpellDetailScroll/SpellDetailContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "Spell Details"
+
+[node name="SpellDetailMetaLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel/SpellDetailMargin/SpellDetailScroll/SpellDetailContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Select a spell to inspect its details."
+
+[node name="SpellDetailRulesLabel" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel/SpellDetailMargin/SpellDetailScroll/SpellDetailContent"]
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = "Select a spell from the list to inspect its full rules text."
+
+[node name="SpellDetailsDialog" type="AcceptDialog" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer"]
+initial_position = 1
+title = "Spell Details"
+size = Vector2i(560, 500)
+ok_button_text = "Close"
+
+[node name="SpellDetailsMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -54.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="SpellDetailsScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog/SpellDetailsMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SpellDetailsContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog/SpellDetailsMargin/SpellDetailsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="SpellDetailsTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog/SpellDetailsMargin/SpellDetailsScroll/SpellDetailsContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Spell Name"
+
+[node name="SpellDetailsMeta" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog/SpellDetailsMargin/SpellDetailsScroll/SpellDetailsContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Spell metadata"
+
+[node name="SpellDetailsRules" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog/SpellDetailsMargin/SpellDetailsScroll/SpellDetailsContent"]
+layout_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+text = "Spell rules"
 
 [node name="ClassSpellsSection" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer"]
 visible = false

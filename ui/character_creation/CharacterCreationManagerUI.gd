@@ -106,6 +106,21 @@ const ABILITY_LABELS := {
 @onready var feat_replace_confirm_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent/FeatReplaceActions/FeatReplaceConfirmButton
 @onready var spell_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellStatusLabel
 @onready var no_spells_required_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/NoSpellsRequiredLabel
+@onready var spell_picker_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel
+@onready var spell_phase_rail: HBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPhaseRail
+@onready var spell_phase_title_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellSummaryPanel/SpellSummaryMargin/SpellSummaryContent/SpellPhaseTitleLabel
+@onready var spell_selection_summary_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellSummaryPanel/SpellSummaryMargin/SpellSummaryContent/SpellSelectionSummaryLabel
+@onready var selected_spell_chips_container: HBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellSummaryPanel/SpellSummaryMargin/SpellSummaryContent/SelectedSpellChipsScroll/SelectedSpellChips
+@onready var spell_search_line_edit: LineEdit = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellListColumn/SpellSearchLineEdit
+@onready var spell_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellListColumn/SpellListScroll/SpellList
+@onready var spell_detail_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel
+@onready var spell_detail_title_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel/SpellDetailMargin/SpellDetailScroll/SpellDetailContent/SpellDetailTitleLabel
+@onready var spell_detail_meta_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel/SpellDetailMargin/SpellDetailScroll/SpellDetailContent/SpellDetailMetaLabel
+@onready var spell_detail_rules_label: RichTextLabel = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellPickerPanel/SpellPickerMargin/SpellPickerContent/SpellPickerSplit/SpellDetailPanel/SpellDetailMargin/SpellDetailScroll/SpellDetailContent/SpellDetailRulesLabel
+@onready var spell_details_dialog: AcceptDialog = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog
+@onready var spell_details_title_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog/SpellDetailsMargin/SpellDetailsScroll/SpellDetailsContent/SpellDetailsTitle
+@onready var spell_details_meta_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog/SpellDetailsMargin/SpellDetailsScroll/SpellDetailsContent/SpellDetailsMeta
+@onready var spell_details_rules_label: RichTextLabel = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellDetailsDialog/SpellDetailsMargin/SpellDetailsScroll/SpellDetailsContent/SpellDetailsRules
 @onready var class_spells_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection
 @onready var class_cantrips_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/CantripsPanel
 @onready var class_cantrips_counter_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection/CantripsPanel/CantripsMargin/CantripsContent/CantripsCounterLabel
@@ -185,6 +200,7 @@ var selected_feat_level_one_spell_ids := {}
 var magic_initiate_spell_list := ""
 var spell_resource_cache := {}
 var current_spell_phase := ""
+var inspected_spell: SpellResource = null
 var use_default_starting_gold := false
 var selected_class_equipment_choice_state := {}
 var selected_background_equipment_choice_state := {}
@@ -338,6 +354,7 @@ func _bind_main_area_actions() -> void:
 	feat_details_select_button.pressed.connect(_on_feat_details_select_pressed)
 	feat_replace_confirm_button.pressed.connect(_on_feat_replace_confirmed)
 	feat_replace_cancel_button.pressed.connect(_on_feat_replace_cancel_pressed)
+	spell_search_line_edit.text_changed.connect(_on_spell_search_text_changed)
 	use_default_gold_checkbox.toggled.connect(_on_use_default_gold_toggled)
 	item_search_line_edit.text_changed.connect(_on_item_search_text_changed)
 
@@ -346,6 +363,7 @@ func _configure_dialog_buttons() -> void:
 	feat_details_dialog.get_ok_button().visible = false
 	feat_replace_dialog.get_ok_button().visible = false
 	feat_replace_dialog.get_cancel_button().visible = false
+	spell_details_dialog.get_ok_button().visible = false
 
 
 func _load_available_races() -> void:
@@ -2302,18 +2320,335 @@ func _refresh_spells_ui() -> void:
 
 	var has_class_spellcasting := _has_class_spellcasting()
 	var has_bonus_spell_selection := _has_bonus_spell_selection_requirements()
-	class_spells_section.visible = has_class_spellcasting and _is_class_spell_phase(current_spell_phase)
-	feat_spells_section.visible = has_bonus_spell_selection and _is_bonus_spell_phase(current_spell_phase)
+	spell_picker_panel.visible = has_class_spellcasting or has_bonus_spell_selection
+	spell_detail_panel.visible = false
+	class_spells_section.visible = false
+	feat_spells_section.visible = false
 	no_spells_required_label.visible = not has_class_spellcasting and not has_bonus_spell_selection
-	class_cantrips_panel.visible = current_spell_phase == SPELL_PHASE_CLASS_CANTRIPS
-	class_level_one_panel.visible = current_spell_phase == SPELL_PHASE_CLASS_LEVEL_ONE
-	feat_cantrips_panel.visible = current_spell_phase == SPELL_PHASE_BONUS_CANTRIPS
-	feat_level_one_panel.visible = current_spell_phase == SPELL_PHASE_BONUS_LEVEL_ONE
 
-	_rebuild_class_spell_lists()
-	_rebuild_feat_spell_lists()
+	_rebuild_spell_phase_rail()
+	_update_spell_picker_summary()
+	_rebuild_current_spell_list()
 	_update_spell_status()
 	_sync_spells_to_character()
+
+
+func _rebuild_spell_phase_rail() -> void:
+	_clear_container_children(spell_phase_rail)
+
+	for phase in _get_spell_phases():
+		var button := Button.new()
+		button.toggle_mode = true
+		button.button_pressed = phase == current_spell_phase
+		button.text = _get_spell_phase_short_title(phase)
+		button.tooltip_text = _get_spell_phase_status_text(phase)
+		button.pressed.connect(_on_spell_phase_selected.bind(phase))
+		spell_phase_rail.add_child(button)
+
+
+func _update_spell_picker_summary() -> void:
+	spell_phase_title_label.text = _get_spell_phase_title()
+
+	var selection_limit := _get_current_spell_selection_limit()
+	var selected_ids := _get_current_spell_selected_ids()
+	spell_selection_summary_label.text = "Selected %d / %d" % [selected_ids.size(), selection_limit]
+
+	_clear_container_children(selected_spell_chips_container)
+	if selected_ids.is_empty():
+		var empty_label := Label.new()
+		empty_label.add_theme_font_size_override("font_size", 12)
+		empty_label.text = "No spells selected in this phase yet."
+		selected_spell_chips_container.add_child(empty_label)
+		return
+
+	for spell_id in _get_sorted_selected_spell_ids(selected_ids):
+		var chip_button := Button.new()
+		chip_button.text = "%s x" % _get_spell_display_name(spell_id)
+		chip_button.custom_minimum_size = Vector2(0, 24)
+		chip_button.add_theme_font_size_override("font_size", 11)
+		chip_button.tooltip_text = "Remove %s from this phase" % _get_spell_display_name(spell_id)
+		chip_button.pressed.connect(_on_selected_spell_chip_pressed.bind(spell_id))
+		selected_spell_chips_container.add_child(chip_button)
+
+
+func _rebuild_current_spell_list() -> void:
+	_clear_container_children(spell_list_container)
+
+	var search_text := spell_search_line_edit.text.strip_edges().to_lower()
+	var spell_options := _get_filtered_current_spell_options(search_text)
+	if spell_options.is_empty():
+		_add_empty_state_label(spell_list_container, "No spells match the current phase and search.")
+		return
+
+	var source := _get_spell_source_for_phase(current_spell_phase)
+	for spell in spell_options:
+		spell_list_container.add_child(_build_spell_list_row(spell, _get_current_spell_selected_ids().has(spell.resource_id), source))
+
+
+func _build_spell_list_row(spell: SpellResource, selected: bool, source: String) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.14, 0.16, 0.2, 0.92) if not selected else Color(0.18, 0.24, 0.19, 0.96)
+	style.border_color = Color(0.3, 0.34, 0.4, 1.0)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_left = 8
+	style.corner_radius_bottom_right = 8
+	panel.add_theme_stylebox_override("panel", style)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin)
+
+	var content_row := HBoxContainer.new()
+	content_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_row.add_theme_constant_override("separation", 10)
+	margin.add_child(content_row)
+
+	var info_column := VBoxContainer.new()
+	info_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_column.add_theme_constant_override("separation", 4)
+	content_row.add_child(info_column)
+
+	var top_row := HBoxContainer.new()
+	top_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_row.add_theme_constant_override("separation", 8)
+	info_column.add_child(top_row)
+
+	var select_toggle := CheckBox.new()
+	select_toggle.text = ""
+	select_toggle.button_pressed = selected
+	select_toggle.custom_minimum_size = Vector2(22, 22)
+	select_toggle.tooltip_text = "Select or remove %s" % spell.display_name
+	select_toggle.pressed.connect(_on_spell_row_select_pressed.bind(spell.resource_id, spell.spell_level, source))
+	top_row.add_child(select_toggle)
+
+	var title_label := _create_card_text_label(spell.display_name, 17, 1)
+	title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_row.add_child(title_label)
+
+	var details_button := Button.new()
+	details_button.text = "?"
+	details_button.custom_minimum_size = Vector2(28, 28)
+	details_button.tooltip_text = "View spell details"
+	details_button.pressed.connect(_on_spell_details_requested.bind(spell.resource_id))
+	top_row.add_child(details_button)
+
+	info_column.add_child(_create_card_text_label(_format_spell_row_meta(spell), 0, 2))
+
+	return panel
+
+
+func _on_spell_phase_selected(phase: String) -> void:
+	current_spell_phase = phase
+	_refresh_spells_ui()
+	_update_next_button_state()
+
+
+func _on_spell_search_text_changed(_new_text: String) -> void:
+	_rebuild_current_spell_list()
+
+
+func _on_spell_row_select_pressed(resource_id: String, spell_level: int, source: String) -> void:
+	if source == "class":
+		if spell_level == 0:
+			_toggle_spell_selection(selected_class_cantrip_ids, resource_id, _get_required_class_cantrip_count())
+		else:
+			_toggle_spell_selection(selected_class_level_one_spell_ids, resource_id, _get_required_class_level_one_spell_count())
+	else:
+		if spell_level == 0:
+			_toggle_spell_selection(selected_feat_cantrip_ids, resource_id, 2)
+		else:
+			_toggle_spell_selection(selected_feat_level_one_spell_ids, resource_id, 1)
+
+	_refresh_spells_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_spell_details_requested(resource_id: String) -> void:
+	inspected_spell = spell_resource_cache.get(resource_id) as SpellResource
+	_show_spell_details_popup(inspected_spell)
+
+
+func _on_selected_spell_chip_pressed(resource_id: String) -> void:
+	_on_spell_row_select_pressed(resource_id, _get_current_spell_level(), _get_spell_source_for_phase(current_spell_phase))
+
+
+func _get_filtered_current_spell_options(search_text: String) -> Array:
+	var filtered: Array = []
+	for spell in _get_current_spell_options():
+		if search_text.is_empty() or _spell_matches_search(spell, search_text):
+			filtered.append(spell)
+	return filtered
+
+
+func _get_current_spell_options() -> Array:
+	match current_spell_phase:
+		SPELL_PHASE_CLASS_CANTRIPS:
+			return _get_class_spells_by_level(0)
+		SPELL_PHASE_CLASS_LEVEL_ONE:
+			return _get_class_spells_by_level(1)
+		SPELL_PHASE_BONUS_CANTRIPS:
+			return _get_magic_initiate_spells_by_level(0)
+		SPELL_PHASE_BONUS_LEVEL_ONE:
+			return _get_magic_initiate_spells_by_level(1)
+		_:
+			return []
+
+
+func _get_current_spell_selected_ids() -> Dictionary:
+	match current_spell_phase:
+		SPELL_PHASE_CLASS_CANTRIPS:
+			return selected_class_cantrip_ids
+		SPELL_PHASE_CLASS_LEVEL_ONE:
+			return selected_class_level_one_spell_ids
+		SPELL_PHASE_BONUS_CANTRIPS:
+			return selected_feat_cantrip_ids
+		SPELL_PHASE_BONUS_LEVEL_ONE:
+			return selected_feat_level_one_spell_ids
+		_:
+			return {}
+
+
+func _get_current_spell_selection_limit() -> int:
+	match current_spell_phase:
+		SPELL_PHASE_CLASS_CANTRIPS:
+			return _get_required_class_cantrip_count()
+		SPELL_PHASE_CLASS_LEVEL_ONE:
+			return _get_required_class_level_one_spell_count()
+		SPELL_PHASE_BONUS_CANTRIPS:
+			return 2
+		SPELL_PHASE_BONUS_LEVEL_ONE:
+			return 1
+		_:
+			return 0
+
+
+func _get_current_spell_level() -> int:
+	if current_spell_phase == SPELL_PHASE_CLASS_LEVEL_ONE or current_spell_phase == SPELL_PHASE_BONUS_LEVEL_ONE:
+		return 1
+	return 0
+
+
+func _get_spell_source_for_phase(phase: String) -> String:
+	return "feat" if _is_bonus_spell_phase(phase) else "class"
+
+
+func _get_spell_phase_short_title(phase: String) -> String:
+	match phase:
+		SPELL_PHASE_CLASS_CANTRIPS:
+			return "Cantrips"
+		SPELL_PHASE_CLASS_LEVEL_ONE:
+			return "Level 1"
+		SPELL_PHASE_BONUS_CANTRIPS:
+			return "Bonus Cantrips"
+		SPELL_PHASE_BONUS_LEVEL_ONE:
+			return "Bonus Level 1"
+		_:
+			return "Spells"
+
+
+func _get_spell_phase_status_text(phase: String) -> String:
+	var selected_ids := _get_spell_selected_ids_for_phase(phase)
+	var limit := _get_spell_selection_limit_for_phase(phase)
+	return "%s %d / %d." % [_get_current_spell_phase_status_text_for_phase(phase), selected_ids.size(), limit]
+
+
+func _get_current_spell_phase_status_text_for_phase(phase: String) -> String:
+	match phase:
+		SPELL_PHASE_CLASS_CANTRIPS:
+			return "Class cantrips"
+		SPELL_PHASE_CLASS_LEVEL_ONE:
+			return "Class level 1"
+		SPELL_PHASE_BONUS_CANTRIPS:
+			return "Bonus cantrips"
+		SPELL_PHASE_BONUS_LEVEL_ONE:
+			return "Bonus level 1"
+		_:
+			return "Spells"
+
+
+func _get_spell_selected_ids_for_phase(phase: String) -> Dictionary:
+	match phase:
+		SPELL_PHASE_CLASS_CANTRIPS:
+			return selected_class_cantrip_ids
+		SPELL_PHASE_CLASS_LEVEL_ONE:
+			return selected_class_level_one_spell_ids
+		SPELL_PHASE_BONUS_CANTRIPS:
+			return selected_feat_cantrip_ids
+		SPELL_PHASE_BONUS_LEVEL_ONE:
+			return selected_feat_level_one_spell_ids
+		_:
+			return {}
+
+
+func _get_spell_selection_limit_for_phase(phase: String) -> int:
+	match phase:
+		SPELL_PHASE_CLASS_CANTRIPS:
+			return _get_required_class_cantrip_count()
+		SPELL_PHASE_CLASS_LEVEL_ONE:
+			return _get_required_class_level_one_spell_count()
+		SPELL_PHASE_BONUS_CANTRIPS:
+			return 2
+		SPELL_PHASE_BONUS_LEVEL_ONE:
+			return 1
+		_:
+			return 0
+
+
+func _spell_matches_search(spell: SpellResource, search_text: String) -> bool:
+	var haystack := "%s %s %s %s %s %s %s" % [
+		spell.display_name,
+		spell.school,
+		spell.casting_time,
+		spell.spell_range,
+		spell.components,
+		spell.duration,
+		spell.spell_text,
+	]
+	return haystack.to_lower().contains(search_text)
+
+
+func _format_spell_row_meta(spell: SpellResource) -> String:
+	return "%s | %s | %s" % [_format_spell_level_label(spell.spell_level), spell.school, spell.casting_time]
+
+
+func _format_spell_detail_text(spell: SpellResource) -> String:
+	var sections: Array[String] = []
+	sections.append("[b]Rules Text[/b]\n%s" % spell.spell_text)
+	if not spell.higher_levels.strip_edges().is_empty():
+		sections.append("[b]At Higher Levels[/b]\n%s" % spell.higher_levels)
+	return "\n\n".join(sections)
+
+
+func _get_spell_display_name(resource_id: String) -> String:
+	var spell := spell_resource_cache.get(resource_id) as SpellResource
+	return spell.display_name if spell != null else resource_id
+
+
+func _show_spell_details_popup(spell: SpellResource) -> void:
+	if spell == null:
+		return
+
+	spell_details_title_label.text = spell.display_name
+	spell_details_meta_label.text = "%s\nRange %s | Components %s | Duration %s" % [
+		_format_spell_row_meta(spell),
+		spell.spell_range,
+		spell.components,
+		spell.duration,
+	]
+	spell_details_rules_label.text = _format_spell_detail_text(spell)
+	spell_details_dialog.popup_centered_ratio(0.52)
 
 
 func _rebuild_class_spell_lists() -> void:
@@ -2379,7 +2714,7 @@ func _update_spell_status() -> void:
 		if _is_last_spell_phase():
 			spell_status_label.text = "Spell selection complete."
 		else:
-			spell_status_label.text = "Current spell phase complete. Continue to the next spell selection."
+			spell_status_label.text = "Phase complete. Continue."
 		_set_label_color(spell_status_label, Color(0.2, 0.7, 0.3))
 	else:
 		spell_status_label.text = _get_current_spell_phase_status_text()
