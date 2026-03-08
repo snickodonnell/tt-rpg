@@ -41,6 +41,7 @@ const SPELL_PHASE_BONUS_LEVEL_ONE := "bonus_level_one"
 const ABILITY_ORDER := ["str", "dex", "con", "int", "wis", "cha"]
 const MAIN_SELECTION_CARD_MIN_WIDTH := 320
 const MAIN_SELECTION_CARD_MIN_HEIGHT := 184
+const FEAT_SELECTION_CARD_MIN_HEIGHT := 136
 const SPELL_SELECTION_CARD_MIN_WIDTH := 292
 const SPELL_SELECTION_CARD_MIN_HEIGHT := 170
 const GRID_SPACING_MAIN := 12
@@ -91,6 +92,18 @@ const ABILITY_LABELS := {
 @onready var magic_initiate_description_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel/MagicInitiateMargin/MagicInitiateContent/MagicInitiateDescriptionLabel
 @onready var magic_initiate_feat_spell_list_option: OptionButton = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/MagicInitiatePanel/MagicInitiateMargin/MagicInitiateContent/MagicInitiateFeatSpellList
 @onready var feat_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatsSelectionScroll/FeatList
+@onready var feat_details_dialog: AcceptDialog = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog
+@onready var feat_details_title_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent/FeatDetailsTitle
+@onready var feat_details_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent/FeatDetailsStatus
+@onready var feat_details_select_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent/FeatDetailsActionRow/FeatDetailsSelectButton
+@onready var feat_details_prereq_value_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent/FeatDetailsPrereqValue
+@onready var feat_details_description_value_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent/FeatDetailsDescriptionValue
+@onready var feat_details_mechanics_value: RichTextLabel = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent/FeatDetailsMechanicsValue
+@onready var feat_replace_dialog: ConfirmationDialog = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog
+@onready var feat_replace_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent/FeatReplaceLabel
+@onready var feat_replace_option: OptionButton = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent/FeatReplaceOption
+@onready var feat_replace_cancel_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent/FeatReplaceActions/FeatReplaceCancelButton
+@onready var feat_replace_confirm_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent/FeatReplaceActions/FeatReplaceConfirmButton
 @onready var spell_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/SpellStatusLabel
 @onready var no_spells_required_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/NoSpellsRequiredLabel
 @onready var class_spells_section: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SpellsStepContainer/ClassSpellsSection
@@ -156,6 +169,7 @@ var selected_race: RaceResource = null
 var selected_class: ClassResource = null
 var selected_background: BackgroundResource = null
 var selected_feat: FeatResource = null
+var inspected_feat: FeatResource = null
 var selected_feat_valid := false
 var selected_feat_validation_message := ""
 var variant_human_bonus_choices := ["", ""]
@@ -184,6 +198,7 @@ func _ready() -> void:
 	resized.connect(_schedule_selection_grid_layout_refresh)
 	_bind_step_buttons()
 	_bind_main_area_actions()
+	_configure_dialog_buttons()
 	_ensure_current_character()
 	_load_available_races()
 	_load_available_classes()
@@ -320,8 +335,17 @@ func _bind_main_area_actions() -> void:
 	variant_human_bonus_one.item_selected.connect(_on_variant_human_bonus_selected.bind(0))
 	variant_human_bonus_two.item_selected.connect(_on_variant_human_bonus_selected.bind(1))
 	magic_initiate_feat_spell_list_option.item_selected.connect(_on_magic_initiate_spell_list_selected)
+	feat_details_select_button.pressed.connect(_on_feat_details_select_pressed)
+	feat_replace_confirm_button.pressed.connect(_on_feat_replace_confirmed)
+	feat_replace_cancel_button.pressed.connect(_on_feat_replace_cancel_pressed)
 	use_default_gold_checkbox.toggled.connect(_on_use_default_gold_toggled)
 	item_search_line_edit.text_changed.connect(_on_item_search_text_changed)
+
+
+func _configure_dialog_buttons() -> void:
+	feat_details_dialog.get_ok_button().visible = false
+	feat_replace_dialog.get_ok_button().visible = false
+	feat_replace_dialog.get_cancel_button().visible = false
 
 
 func _load_available_races() -> void:
@@ -1468,23 +1492,19 @@ func _build_background_button(background: BackgroundResource, index: int) -> But
 
 
 func _build_feat_button(feat: FeatResource, index: int) -> Button:
-	var button := _create_card_button(MAIN_SELECTION_CARD_MIN_HEIGHT, MAIN_SELECTION_CARD_MIN_WIDTH)
-	button.pressed.connect(_on_feat_selected.bind(index))
+	var button := _create_card_button(FEAT_SELECTION_CARD_MIN_HEIGHT, MAIN_SELECTION_CARD_MIN_WIDTH)
+	button.pressed.connect(_on_feat_inspect_requested.bind(index))
 	button.tooltip_text = _join_tooltip_lines([
 		feat.display_name,
 		"Prerequisites: %s" % _format_feat_prerequisites(feat),
 		feat.description,
-		"Ability Score Increases: %s" % _format_feat_ability_score_increases(feat),
+		"Select to view feat details",
 	])
 
-	var content_row := _create_card_row(button)
-	content_row.add_child(_create_selection_preview(feat.resource_id, MAIN_SELECTION_PREVIEW_SIZE, "feats", feat.display_name))
-
-	var info_column := _create_info_column(content_row)
+	var info_column := _create_text_card_column(button)
 	info_column.add_child(_create_card_text_label(feat.display_name, 18, 2))
 	info_column.add_child(_create_card_text_label("Prerequisites: %s" % _format_feat_prerequisites(feat), 0, 2))
 	info_column.add_child(_create_card_text_label(feat.description, 0, 3))
-	info_column.add_child(_create_card_text_label("Ability Score Increases: %s" % _format_feat_ability_score_increases(feat), 0, 2))
 
 	return button
 
@@ -1626,6 +1646,24 @@ func _create_card_row(button: Button) -> HBoxContainer:
 	content_row.add_theme_constant_override("separation", 12)
 	content_margin.add_child(content_row)
 	return content_row
+
+
+func _create_text_card_column(button: Button) -> VBoxContainer:
+	var content_margin := MarginContainer.new()
+	content_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_margin.add_theme_constant_override("margin_left", 14)
+	content_margin.add_theme_constant_override("margin_top", 12)
+	content_margin.add_theme_constant_override("margin_right", 14)
+	content_margin.add_theme_constant_override("margin_bottom", 12)
+	button.add_child(content_margin)
+
+	var content_column := VBoxContainer.new()
+	content_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_column.add_theme_constant_override("separation", 6)
+	content_margin.add_child(content_column)
+	return content_column
 
 
 func _create_selection_preview(resource_id: String, preview_size: Vector2, portrait_group: String = "", display_name: String = "") -> Control:
@@ -2481,16 +2519,58 @@ func _on_background_selected(index: int) -> void:
 	_refresh_preview()
 
 
-func _on_feat_selected(index: int) -> void:
+func _on_feat_inspect_requested(index: int) -> void:
 	if index < 0 or index >= available_feats.size():
 		return
 
 	var feat := available_feats[index] as FeatResource
-	if selected_feat != null and selected_feat.resource_id == feat.resource_id:
-		selected_feat = null
-	else:
-		selected_feat = feat
+	_show_feat_details_popup(feat)
 
+
+func _on_feat_details_select_pressed() -> void:
+	if inspected_feat == null:
+		return
+
+	if selected_feat != null and selected_feat.resource_id == inspected_feat.resource_id:
+		selected_feat = null
+		_apply_feat_selection_refresh()
+		feat_details_dialog.hide()
+		return
+
+	if _get_selected_feats_for_replacement().size() >= _get_max_selectable_feat_count():
+		_open_feat_replace_dialog()
+		return
+
+	selected_feat = inspected_feat
+	_apply_feat_selection_refresh()
+	feat_details_dialog.hide()
+
+
+func _on_feat_replace_confirmed() -> void:
+	if inspected_feat == null or feat_replace_option.item_count <= 0:
+		return
+
+	var selected_index := feat_replace_option.selected
+	var metadata = feat_replace_option.get_item_metadata(selected_index)
+	var replacement_target_id: String = metadata if metadata is String else ""
+	if replacement_target_id.is_empty():
+		return
+
+	if selected_feat != null and selected_feat.resource_id == replacement_target_id:
+		selected_feat = inspected_feat
+	else:
+		selected_feat = inspected_feat
+
+	_apply_feat_selection_refresh()
+	feat_replace_dialog.hide()
+	feat_details_dialog.hide()
+
+
+func _on_feat_replace_cancel_pressed() -> void:
+	feat_replace_dialog.hide()
+
+
+func _apply_feat_selection_refresh() -> void:
 	_revalidate_selected_feat()
 	_recalculate_character_hp()
 	_update_selection_buttons()
@@ -2915,6 +2995,189 @@ func _format_feat_ability_score_increases(feat: FeatResource) -> String:
 			continue
 		increases.append("%s %s" % [ABILITY_LABELS[modifier.target_key], _format_signed_value(modifier.value)])
 	return ", ".join(increases) if not increases.is_empty() else "None"
+
+
+func _format_feat_bonus_summary(feat: FeatResource) -> String:
+	var parts: Array[String] = []
+	var seen := {}
+
+	var ability_increases := _format_feat_ability_score_increases(feat)
+	if ability_increases != "None":
+		seen[ability_increases] = true
+		parts.append(ability_increases)
+
+	for modifier in feat.modifiers:
+		if modifier == null or modifier.modifier_type == StatModifier.Type.ABILITY_SCORE:
+			continue
+		var summary := _format_feat_modifier_summary(modifier)
+		if summary.is_empty() or seen.has(summary):
+			continue
+		seen[summary] = true
+		parts.append(summary)
+
+	var special_rules := _format_feat_special_rules(feat.special_rules)
+	if not special_rules.is_empty() and not seen.has(special_rules):
+		parts.append(special_rules)
+
+	return ", ".join(parts) if not parts.is_empty() else "None"
+
+
+func _show_feat_details_popup(feat: FeatResource) -> void:
+	if feat == null:
+		return
+
+	inspected_feat = feat
+	feat_details_dialog.title = "Feat Details"
+	feat_details_title_label.text = feat.display_name
+	feat_details_prereq_value_label.text = _format_feat_prerequisites(feat)
+	feat_details_description_value_label.text = feat.description if not feat.description.strip_edges().is_empty() else "No description provided yet."
+	feat_details_mechanics_value.text = _format_feat_mechanics_popup_text(feat)
+	feat_details_mechanics_value.scroll_to_line(0)
+
+	if selected_feat != null and selected_feat.resource_id == feat.resource_id:
+		if selected_feat_valid:
+			feat_details_status_label.text = "Currently selected for this character."
+			_set_label_color(feat_details_status_label, Color(0.2, 0.7, 0.3))
+		else:
+			feat_details_status_label.text = selected_feat_validation_message if not selected_feat_validation_message.is_empty() else "This feat is selected, but its prerequisites are not currently met."
+			_set_label_color(feat_details_status_label, Color(0.85, 0.25, 0.25))
+	else:
+		feat_details_status_label.text = "Not currently selected."
+		_set_label_color(feat_details_status_label, Color(0.7, 0.7, 0.7))
+
+	feat_details_select_button.text = _get_feat_details_action_text(feat)
+	feat_details_dialog.popup_centered_ratio(0.48)
+
+
+func _get_feat_details_action_text(feat: FeatResource) -> String:
+	if selected_feat != null and selected_feat.resource_id == feat.resource_id:
+		return "Deselect Feat"
+	if _get_selected_feats_for_replacement().size() >= _get_max_selectable_feat_count():
+		return "Replace Current Feat"
+	return "Select Feat"
+
+
+func _get_max_selectable_feat_count() -> int:
+	return 1
+
+
+func _get_selected_feats_for_replacement() -> Array[FeatResource]:
+	var feats: Array[FeatResource] = []
+	if selected_feat != null:
+		feats.append(selected_feat)
+	return feats
+
+
+func _open_feat_replace_dialog() -> void:
+	feat_replace_option.clear()
+	var selected_feats := _get_selected_feats_for_replacement()
+	for feat in selected_feats:
+		var option_index := feat_replace_option.item_count
+		feat_replace_option.add_item(feat.display_name)
+		feat_replace_option.set_item_metadata(option_index, feat.resource_id)
+	if feat_replace_option.item_count > 0:
+		feat_replace_option.select(0)
+	feat_replace_label.text = "You already have the maximum number of feats selected. Choose which current feat to replace with %s." % inspected_feat.display_name
+	feat_replace_confirm_button.text = "Replace With %s" % inspected_feat.display_name
+	feat_details_dialog.hide()
+	feat_replace_dialog.popup_centered()
+
+
+func _format_feat_mechanics_popup_text(feat: FeatResource) -> String:
+	var lines: Array[String] = []
+
+	var ability_increases := _format_feat_ability_score_increases(feat)
+	if ability_increases != "None":
+		lines.append("[b]Ability Score Changes[/b]\n%s" % ability_increases)
+
+	var other_modifier_lines: Array[String] = []
+	for modifier in feat.modifiers:
+		if modifier == null:
+			continue
+		var summary := _format_feat_popup_modifier_summary(modifier)
+		if summary.is_empty():
+			continue
+		other_modifier_lines.append("- %s" % summary)
+	if not other_modifier_lines.is_empty():
+		lines.append("[b]Tracked Modifiers[/b]\n%s" % "\n".join(other_modifier_lines))
+
+	var special_rules := feat.special_rules.strip_edges()
+	if not special_rules.is_empty():
+		lines.append("[b]Special Rules[/b]\n%s" % _format_feat_special_rules(special_rules))
+
+	if lines.is_empty():
+		return "Mechanical details will appear here as this feat's systems are implemented."
+
+	lines.append("\nMechanical details in this panel will expand as feat systems are wired into gameplay.")
+	return "\n\n".join(lines)
+
+
+func _format_feat_popup_modifier_summary(modifier: StatModifier) -> String:
+	if modifier.modifier_type == StatModifier.Type.ABILITY_SCORE and ABILITY_LABELS.has(modifier.target_key):
+		return ""
+	if modifier.modifier_type == StatModifier.Type.ABILITY_SCORE and not modifier.target_key.strip_edges().is_empty():
+		return "%s %s" % [_format_feat_modifier_target(modifier.target_key), _format_signed_value(modifier.value)]
+	return _format_feat_modifier_summary(modifier)
+
+
+func _format_feat_modifier_summary(modifier: StatModifier) -> String:
+	var target_label := _format_feat_modifier_target(modifier.target_key)
+	match modifier.modifier_type:
+		StatModifier.Type.PROFICIENCY:
+			if target_label.is_empty():
+				return "Proficiency"
+			if modifier.target_key.begins_with("skill_"):
+				return "%s proficiency" % target_label
+			if ABILITY_LABELS.has(modifier.target_key):
+				return "%s save proficiency" % target_label
+			return "%s proficiency" % target_label
+		StatModifier.Type.AC:
+			return "AC %s" % _format_signed_value(modifier.value)
+		StatModifier.Type.HP:
+			return "HP %s" % _format_signed_value(modifier.value)
+		StatModifier.Type.SPEED:
+			return "Speed %s ft" % _format_signed_value(modifier.value)
+		StatModifier.Type.DAMAGE:
+			return "%s damage %s" % [target_label if not target_label.is_empty() else "Damage", _format_signed_value(modifier.value)]
+		StatModifier.Type.SAVE:
+			if target_label.is_empty():
+				return "Saving throws %s" % _format_signed_value(modifier.value)
+			return "%s saves %s" % [target_label, _format_signed_value(modifier.value)]
+		StatModifier.Type.SKILL:
+			if target_label.is_empty():
+				return "Skill checks %s" % _format_signed_value(modifier.value)
+			return "%s %s" % [target_label, _format_signed_value(modifier.value)]
+		_:
+			return ""
+
+
+func _format_feat_modifier_target(target_key: String) -> String:
+	var cleaned := target_key.strip_edges()
+	if cleaned.is_empty():
+		return ""
+	if ABILITY_LABELS.has(cleaned):
+		return ABILITY_LABELS[cleaned]
+	if cleaned.begins_with("skill_"):
+		return _get_skill_display_name(cleaned)
+	return _title_case_identifier(cleaned)
+
+
+func _format_feat_special_rules(special_rules: String) -> String:
+	var cleaned := special_rules.strip_edges()
+	if cleaned.is_empty():
+		return ""
+	if cleaned.contains("="):
+		var parts := cleaned.split("=", true, 1)
+		if parts.size() == 2:
+			return "%s: %s" % [_title_case_identifier(parts[0].strip_edges()), parts[1].strip_edges()]
+	return _title_case_identifier(cleaned)
+
+
+func _title_case_identifier(value: String) -> String:
+	var words: Array[String] = []
+	for segment in value.replace("_", " ").split(" ", false):
+		words.append(segment.capitalize())
+	return " ".join(words)
 
 
 func _format_race_preview(race: RaceResource) -> String:

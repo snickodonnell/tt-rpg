@@ -403,6 +403,131 @@ size_flags_horizontal = 3
 theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 12
 
+[node name="FeatDetailsDialog" type="AcceptDialog" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer"]
+initial_position = 1
+title = "Feat Details"
+size = Vector2i(520, 460)
+ok_button_text = "Close"
+
+[node name="FeatDetailsMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -54.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="FeatDetailsScroll" type="ScrollContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="FeatDetailsContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="FeatDetailsTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Feat Name"
+
+[node name="FeatDetailsStatus" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Selection status"
+
+[node name="FeatDetailsActionRow" type="HBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="FeatDetailsSelectButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent/FeatDetailsActionRow"]
+layout_mode = 2
+text = "Select Feat"
+
+[node name="FeatDetailsPrereqLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent"]
+layout_mode = 2
+text = "Prerequisites"
+
+[node name="FeatDetailsPrereqValue" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "None"
+
+[node name="FeatDetailsDescriptionLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent"]
+layout_mode = 2
+text = "Description"
+
+[node name="FeatDetailsDescriptionValue" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "-"
+
+[node name="FeatDetailsMechanicsLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent"]
+layout_mode = 2
+text = "Mechanical Details"
+
+[node name="FeatDetailsMechanicsValue" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatDetailsDialog/FeatDetailsMargin/FeatDetailsScroll/FeatDetailsContent"]
+layout_mode = 2
+bbcode_enabled = true
+scroll_active = false
+fit_content = true
+text = "Mechanical details will appear here."
+
+[node name="FeatReplaceDialog" type="ConfirmationDialog" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer"]
+initial_position = 1
+title = "Replace Feat"
+size = Vector2i(420, 180)
+ok_button_text = "Replace Feat"
+
+[node name="FeatReplaceMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -54.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="FeatReplaceContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="FeatReplaceLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Choose which currently selected feat to remove."
+
+[node name="FeatReplaceOption" type="OptionButton" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FeatReplaceActions" type="HBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent"]
+layout_mode = 2
+alignment = 2
+theme_override_constants/separation = 10
+
+[node name="FeatReplaceCancelButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent/FeatReplaceActions"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="FeatReplaceConfirmButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/FeatsStepContainer/FeatReplaceDialog/FeatReplaceMargin/FeatReplaceContent/FeatReplaceActions"]
+layout_mode = 2
+text = "Replace Feat"
+
 [node name="SpellsStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
 visible = false
 layout_mode = 2
