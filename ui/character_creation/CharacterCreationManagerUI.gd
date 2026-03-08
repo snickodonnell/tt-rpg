@@ -2168,7 +2168,7 @@ func _build_skill_choice_button(skill: SkillResource) -> Button:
 	])
 
 	var content_row := _create_card_row(button)
-	content_row.add_child(_create_selection_preview(skill.resource_id, MAIN_SELECTION_PREVIEW_SIZE))
+	content_row.add_child(_create_selection_preview(skill.resource_id, MAIN_SELECTION_PREVIEW_SIZE, "skills", skill.display_name))
 
 	var info_column := _create_info_column(content_row)
 	info_column.add_child(_create_card_text_label(skill.display_name, 17, 2))
