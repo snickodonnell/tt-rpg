@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="CharacterSheetResource" format=3]
+
+[ext_resource type="Script" path="res://data/character/CharacterSheetResource.gd" id="1_character_sheet"]
+[ext_resource type="Script" path="res://data/core/StatModifier.gd" id="2_stat_modifier"]
+[ext_resource type="Resource" path="res://data/races/race_human.tres" id="3_race_human"]
+[ext_resource type="Resource" path="res://data/classes/class_fighter.tres" id="4_class_fighter"]
+[ext_resource type="Resource" path="res://data/backgrounds/background_soldier.tres" id="5_background_soldier"]
+[ext_resource type="Resource" path="res://data/feats/feat_alert.tres" id="6_feat_alert"]
+[ext_resource type="Resource" path="res://data/items/item_longsword.tres" id="7_item_longsword"]
+[ext_resource type="Resource" path="res://data/items/item_chain_mail.tres" id="8_item_chain_mail"]
+
+[sub_resource type="Resource" script_class="StatModifier" id="StatModifier_alert_initiative"]
+script = ExtResource("2_stat_modifier")
+modifier_type = 0
+target_key = "initiative"
+value = 5
+source = "feat_alert"
+condition = ""
+
+[resource]
+script = ExtResource("1_character_sheet")
+resource_id = "test_character"
+display_name = "Test Hero"
+description = "Development fixture character."
+character_id = "11111111-2222-3333-4444-555555555555"
+campaign_id = ""
+character_name = "Test Hero"
+gender = "male"
+race = ExtResource("3_race_human")
+class_resource = ExtResource("4_class_fighter")
+background = ExtResource("5_background_soldier")
+base_ability_scores = {
+"cha": 8,
+"con": 13,
+"dex": 14,
+"int": 10,
+"str": 15,
+"wis": 12
+}
+modifiers = [SubResource("StatModifier_alert_initiative")]
+feats = [ExtResource("6_feat_alert")]
+skill_proficiencies = ["skill_athletics", "skill_intimidation", "skill_perception", "skill_survival"]
+language_proficiencies = ["common", "dwarvish"]
+tool_proficiencies = ["tool_vehicle_land"]
+inventory = [ExtResource("7_item_longsword"), ExtResource("8_item_chain_mail")]
+current_level = 1
+current_hp = 11
+metadata/_custom_type_script = "uid://croh35bq7x1f5"

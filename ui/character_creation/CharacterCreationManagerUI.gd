@@ -70,6 +70,7 @@ const GRID_MAX_COLUMNS_MAIN := 3
 const GRID_MAX_COLUMNS_SPELL := 2
 const MAIN_SELECTION_PREVIEW_SIZE := Vector2(96, 96)
 const SPELL_SELECTION_PREVIEW_SIZE := Vector2(64, 64)
+const DEFAULT_CHARACTER_SAVE_NAME := "player_character"
 const GENDER_OPTIONS := [
 	{"label": "Unspecified", "value": ""},
 	{"label": "Male", "value": "male"},
@@ -180,7 +181,9 @@ const ABILITY_LABELS := {
 @onready var step_buttons_container: VBoxContainer = $RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons
 @onready var previous_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons/PreviousButton
 @onready var next_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons/NextButton
+@onready var save_character_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons/SaveCharacterButton
 @onready var create_character_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons/CreateCharacterButton
+@onready var load_saved_character_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons/LoadSavedCharacterButton
 @onready var summary_preview: RichTextLabel = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/SummaryScroll/SummaryScrollContent/SummaryPreview
 @onready var character_name_input: LineEdit = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/CharacterNameRow/CharacterNameInput
 @onready var gender_option_button: OptionButton = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SummaryStepContainer/SummaryPanel/SummaryMargin/SummaryContent/CharacterNameRow/GenderOption
@@ -373,7 +376,9 @@ func _bind_step_buttons() -> void:
 func _bind_main_area_actions() -> void:
 	previous_button.pressed.connect(go_to_previous_step)
 	next_button.pressed.connect(go_to_next_step)
+	save_character_button.pressed.connect(_on_save_character_pressed)
 	create_character_button.pressed.connect(_on_create_character_pressed)
+	load_saved_character_button.pressed.connect(_on_load_saved_character_pressed)
 	character_name_input.text_changed.connect(_on_character_name_changed)
 	gender_option_button.item_selected.connect(_on_gender_selected)
 	skills_phase_button.pressed.connect(_on_proficiency_phase_selected.bind(PROFICIENCY_PHASE_SKILLS))
@@ -2072,7 +2077,9 @@ func _update_main_content() -> void:
 	background_section.visible = current_step == 2
 	previous_button.visible = current_step > 0 and current_step <= 8
 	next_button.visible = current_step >= 0 and current_step <= 7
+	save_character_button.visible = current_step == 8
 	create_character_button.visible = current_step == 8
+	load_saved_character_button.visible = current_step == 8
 
 	match current_step:
 		0:
@@ -2218,6 +2225,8 @@ func _update_next_button_state() -> void:
 			next_button.disabled = true
 
 	create_character_button.disabled = not _can_finalize_character()
+	save_character_button.disabled = not _can_finalize_character()
+	load_saved_character_button.disabled = not CharacterCreationManager.has_character_save(DEFAULT_CHARACTER_SAVE_NAME)
 
 
 func _refresh_skills_ui() -> void:
@@ -3710,18 +3719,48 @@ func _select_gender_option(gender_value: String) -> void:
 
 
 func _on_create_character_pressed() -> void:
-	if not _can_finalize_character():
-		push_warning("Character creation is incomplete. Finish all required selections before creating the character.")
+	if not _finalize_character_creation():
 		return
 
-	_stabilize_character_creation_state()
-	_refresh_summary_ui()
+	print("Character created successfully.")
+	CharacterCreationManager.print_character_sheet()
 
-	var save_result: Dictionary = CharacterCreationManager.save_current_character()
+
+func _on_save_character_pressed() -> void:
+	if not _finalize_character_creation():
+		return
+
+	var save_result: Dictionary = CharacterCreationManager.save_character(DEFAULT_CHARACTER_SAVE_NAME)
 	if bool(save_result.get("success", false)):
-		print("Character created and saved successfully!")
+		print("Character save slot updated: ", save_result.get("path", ""))
 	else:
 		push_error("Failed to save character. Error code: %s" % str(save_result.get("error", ERR_CANT_CREATE)))
+	_update_next_button_state()
+
+
+func _on_load_saved_character_pressed() -> void:
+	var loaded_character := CharacterCreationManager.load_character(DEFAULT_CHARACTER_SAVE_NAME)
+	if loaded_character == null:
+		push_warning("No saved character found in slot '%s'." % DEFAULT_CHARACTER_SAVE_NAME)
+		_update_next_button_state()
+		return
+
+	_ensure_base_ability_scores(loaded_character)
+	_sync_selected_state_from_manager()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
+	print("Loaded saved character slot: ", DEFAULT_CHARACTER_SAVE_NAME)
+	CharacterCreationManager.print_character_sheet()
+
+
+func _finalize_character_creation() -> bool:
+	if not _can_finalize_character():
+		push_warning("Character creation is incomplete. Finish all required selections before continuing.")
+		return false
+
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
+	return true
 
 
 func _ensure_current_character() -> void:

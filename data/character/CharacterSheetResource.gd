@@ -2,6 +2,8 @@
 extends TTResource
 class_name CharacterSheetResource
 
+@export var character_id: String = ""
+@export var campaign_id: String = ""
 @export var character_name: String = ""
 @export var gender: String = ""
 @export var race: RaceResource

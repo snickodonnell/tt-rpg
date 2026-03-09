@@ -1054,12 +1054,25 @@ layout_mode = 2
 disabled = true
 text = "Next"
 
+[node name="SaveCharacterButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons"]
+visible = false
+custom_minimum_size = Vector2(220, 56)
+layout_mode = 2
+disabled = true
+text = "Save Character"
+
 [node name="CreateCharacterButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons"]
 visible = false
 custom_minimum_size = Vector2(220, 56)
 layout_mode = 2
 disabled = true
 text = "Create Character"
+
+[node name="LoadSavedCharacterButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/NavigationButtons"]
+visible = false
+custom_minimum_size = Vector2(180, 56)
+layout_mode = 2
+text = "Load Saved Debug"
 
 [node name="RightPreviewPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout"]
 custom_minimum_size = Vector2(280, 0)

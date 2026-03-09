@@ -8,12 +8,14 @@ const ALERT_FEAT = preload("res://data/feats/feat_alert.tres")
 
 @export var run_on_play: bool = true
 @export var print_character_sheet_output: bool = true
+@export var load_prebuilt_test_character_on_play: bool = true
 
 func _ready() -> void:
 	if not run_on_play:
 		return
 
 	_run_character_creation_smoke_output()
+	_run_prebuilt_test_character_output()
 	_run_regression_suite()
 
 func _run_character_creation_smoke_output() -> void:
@@ -33,6 +35,20 @@ func _run_character_creation_smoke_output() -> void:
 
 	if print_character_sheet_output:
 		print("--- Manual Character Creation Smoke Test ---")
+		CharacterCreationManager.print_character_sheet()
+
+
+func _run_prebuilt_test_character_output() -> void:
+	if not load_prebuilt_test_character_on_play:
+		return
+
+	var test_character := CharacterCreationManager.load_test_character()
+	if test_character == null:
+		printerr("FAIL: prebuilt test character could not be loaded")
+		return
+
+	if print_character_sheet_output:
+		print("--- Prebuilt Test Character ---")
 		CharacterCreationManager.print_character_sheet()
 
 func _run_regression_suite() -> void:
