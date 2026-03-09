@@ -268,20 +268,12 @@ func _ready() -> void:
 	_load_available_spells()
 	_load_available_equipment()
 	_sync_selected_state_from_manager()
-	_refresh_allowed_equipment_options()
 	_build_ability_score_controls()
 	_setup_variant_human_ability_selectors()
+	_stabilize_character_creation_state()
 	_update_step_buttons()
 	_update_main_content()
-	_update_selection_buttons()
-	_refresh_skills_ui()
-	_refresh_ability_scores_ui()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_refresh_equipment_ui()
-	_refresh_summary_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_refresh_character_creation_ui()
 	_announce_step_change()
 	_schedule_selection_grid_layout_refresh()
 
@@ -347,19 +339,8 @@ func apply_debug_test_build() -> void:
 	character.base_ability_scores["wis"] = 8
 	character.base_ability_scores["cha"] = 8
 
-	_apply_variant_human_bonus_modifiers()
-	_refresh_allowed_equipment_options()
-	_sync_equipment_to_character()
-	_revalidate_selected_feat()
-	_recalculate_character_hp()
-	_update_selection_buttons()
-	_refresh_skills_ui()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_refresh_equipment_ui()
-	_refresh_ability_scores_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 	go_to_step(4)
 	print("Applied debug character preset: Dragonborn / Sorcerer / Charlatan / War Caster")
 
@@ -371,15 +352,10 @@ func go_to_step(index: int) -> void:
 	current_step = index
 	if current_step == 6:
 		_normalize_spell_phase()
+	_stabilize_character_creation_state()
 	_update_step_buttons()
 	_update_main_content()
-	_refresh_skills_ui()
-	_refresh_ability_scores_ui()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_refresh_equipment_ui()
-	_refresh_summary_ui()
-	_update_next_button_state()
+	_refresh_character_creation_ui()
 	if current_step == 8 and _get_character_name(CharacterCreationManager.current_character) == "-":
 		character_name_input.grab_focus()
 	_announce_step_change()
@@ -605,8 +581,6 @@ func _refresh_allowed_equipment_options() -> void:
 	for child in individual_items_list_container.get_children():
 		child.queue_free()
 
-	selected_pack = null
-	selected_individual_item_ids.clear()
 	_sanitize_class_equipment_choice_state()
 	_rebuild_equipment_choice_list()
 	_rebuild_equipment_summary_list()
@@ -3082,17 +3056,15 @@ func _on_spell_row_select_pressed(resource_id: String, spell_level: int, source:
 	var selection_limit := _get_spell_selection_limit_for_source_and_level(source, spell_level)
 	if selected_ids.has(resource_id):
 		_toggle_spell_selection(selected_ids, resource_id, selection_limit)
-		_refresh_spells_ui()
-		_update_next_button_state()
-		_refresh_preview()
+		_stabilize_character_creation_state()
+		_refresh_character_creation_ui()
 		return
 	if not _get_spell_duplicate_selection_reason(resource_id, source).is_empty():
 		return
 	_toggle_spell_selection(selected_ids, resource_id, selection_limit)
 
-	_refresh_spells_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_spell_details_requested(resource_id: String) -> void:
@@ -3434,18 +3406,8 @@ func _on_race_selected(index: int) -> void:
 	if not _is_variant_human_selected():
 		variant_human_bonus_choices = ["", ""]
 
-	_ensure_current_character()
-	CharacterCreationManager.current_character.race = selected_race
-	_apply_variant_human_bonus_modifiers()
-	_revalidate_selected_feat()
-	_recalculate_character_hp()
-	_update_selection_buttons()
-	_refresh_skills_ui()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_refresh_ability_scores_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_class_selected(index: int) -> void:
@@ -3453,20 +3415,8 @@ func _on_class_selected(index: int) -> void:
 		return
 
 	selected_class = available_classes[index] as ClassResource
-	_ensure_current_character()
-	CharacterCreationManager.current_character.class_resource = selected_class
-	_refresh_allowed_equipment_options()
-	_sync_equipment_to_character()
-	_revalidate_selected_feat()
-	_recalculate_character_hp()
-	_update_selection_buttons()
-	_refresh_skills_ui()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_refresh_equipment_ui()
-	_refresh_ability_scores_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_background_selected(index: int) -> void:
@@ -3474,18 +3424,8 @@ func _on_background_selected(index: int) -> void:
 		return
 
 	selected_background = available_backgrounds[index] as BackgroundResource
-	_ensure_current_character()
-	CharacterCreationManager.current_character.background = selected_background
-	_refresh_allowed_equipment_options()
-	_sync_equipment_to_character()
-	_update_selection_buttons()
-	_refresh_skills_ui()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_refresh_equipment_ui()
-	_refresh_ability_scores_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_feat_inspect_requested(index: int) -> void:
@@ -3540,29 +3480,16 @@ func _on_feat_replace_cancel_pressed() -> void:
 
 
 func _apply_feat_selection_refresh() -> void:
-	_revalidate_selected_feat()
-	_recalculate_character_hp()
-	_update_selection_buttons()
-	_refresh_skills_ui()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_refresh_ability_scores_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_ability_score_changed(value: float, ability_key: String) -> void:
 	var character := CharacterCreationManager.current_character
 	_ensure_base_ability_scores(character)
 	character.base_ability_scores[ability_key] = int(value)
-	_revalidate_selected_feat()
-	_recalculate_character_hp()
-	_refresh_skills_ui()
-	_refresh_ability_scores_ui()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_variant_human_bonus_selected(index: int, slot: int) -> void:
@@ -3576,15 +3503,8 @@ func _on_variant_human_bonus_selected(index: int, slot: int) -> void:
 		ability_key = metadata
 	variant_human_bonus_choices[slot] = ability_key
 
-	_apply_variant_human_bonus_modifiers()
-	_revalidate_selected_feat()
-	_recalculate_character_hp()
-	_refresh_skills_ui()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_refresh_ability_scores_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_magic_initiate_spell_list_selected(index: int) -> void:
@@ -3592,10 +3512,8 @@ func _on_magic_initiate_spell_list_selected(index: int) -> void:
 	magic_initiate_spell_list = metadata if metadata is String else ""
 	selected_feat_cantrip_ids.clear()
 	selected_feat_level_one_spell_ids.clear()
-	_refresh_feat_ui()
-	_refresh_spells_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_class_skill_toggled(resource_id: String) -> void:
@@ -3608,9 +3526,8 @@ func _on_class_skill_toggled(resource_id: String) -> void:
 	elif selected_class_skill_ids.size() < required_count:
 		selected_class_skill_ids[resource_id] = true
 
-	_refresh_skills_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_language_toggled(language_id: String) -> void:
@@ -3620,9 +3537,8 @@ func _on_language_toggled(language_id: String) -> void:
 	elif selected_language_choice_ids.size() < _get_required_language_choice_count():
 		selected_language_choice_ids[normalized_id] = true
 
-	_refresh_skills_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_flexible_skill_toggled(skill_id: String) -> void:
@@ -3631,9 +3547,8 @@ func _on_flexible_skill_toggled(skill_id: String) -> void:
 	elif _get_remaining_flexible_proficiency_slots() > 0:
 		selected_flexible_skill_ids[skill_id] = true
 
-	_refresh_skills_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_tool_toggled(group_id: String, tool_id: String) -> void:
@@ -3645,9 +3560,8 @@ func _on_tool_toggled(group_id: String, tool_id: String) -> void:
 		if selected_ids.size() < required_count:
 			selected_ids.append(tool_id)
 	_set_selected_tool_ids_for_group(group_id, selected_ids)
-	_refresh_skills_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_flexible_tool_toggled(tool_id: String) -> void:
@@ -3656,9 +3570,8 @@ func _on_flexible_tool_toggled(tool_id: String) -> void:
 	elif _get_remaining_flexible_proficiency_slots() > 0:
 		selected_flexible_tool_ids[tool_id] = true
 
-	_refresh_skills_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_class_spell_toggled(resource_id: String, spell_level: int) -> void:
@@ -3667,9 +3580,8 @@ func _on_class_spell_toggled(resource_id: String, spell_level: int) -> void:
 	else:
 		_toggle_spell_selection(selected_class_level_one_spell_ids, resource_id, _get_required_class_level_one_spell_count())
 
-	_refresh_spells_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_feat_spell_toggled(resource_id: String, spell_level: int) -> void:
@@ -3678,9 +3590,8 @@ func _on_feat_spell_toggled(resource_id: String, spell_level: int) -> void:
 	else:
 		_toggle_spell_selection(selected_feat_level_one_spell_ids, resource_id, 1)
 
-	_refresh_spells_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _toggle_spell_selection(selected_ids: Dictionary, resource_id: String, limit: int) -> void:
@@ -3704,11 +3615,8 @@ func _on_pack_selected(index: int) -> void:
 	else:
 		selected_pack = pack
 
-	_sync_equipment_to_character()
-	_update_selection_buttons()
-	_refresh_equipment_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_individual_item_toggled(resource_id: String) -> void:
@@ -3717,18 +3625,14 @@ func _on_individual_item_toggled(resource_id: String) -> void:
 	else:
 		selected_individual_item_ids[resource_id] = true
 
-	_sync_equipment_to_character()
-	_refresh_equipment_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_use_default_gold_toggled(_pressed: bool) -> void:
 	use_default_starting_gold = use_default_gold_checkbox.button_pressed
-	_sync_equipment_to_character()
-	_refresh_equipment_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_item_search_text_changed(_new_text: String) -> void:
@@ -3746,12 +3650,8 @@ func _on_equipment_group_variant_selected(index: int, scope: String, group_id: S
 			"selected_item_ids": [],
 		})
 
-	_sanitize_tool_selection_state()
-	_sync_equipment_to_character()
-	_sync_skills_to_character()
-	_refresh_equipment_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_equipment_group_slot_selected(index: int, scope: String, group_id: String, slot_index: int, selector: OptionButton) -> void:
@@ -3771,12 +3671,8 @@ func _on_equipment_group_slot_selected(index: int, scope: String, group_id: Stri
 		"selected_item_ids": selected_item_ids,
 	})
 
-	_sanitize_tool_selection_state()
-	_sync_equipment_to_character()
-	_sync_skills_to_character()
-	_refresh_equipment_ui()
-	_update_next_button_state()
-	_refresh_preview()
+	_stabilize_character_creation_state()
+	_refresh_character_creation_ui()
 
 
 func _on_character_name_changed(new_text: String) -> void:
@@ -3818,12 +3714,7 @@ func _on_create_character_pressed() -> void:
 		push_warning("Character creation is incomplete. Finish all required selections before creating the character.")
 		return
 
-	_ensure_current_character()
-	_sync_skills_to_character()
-	_sync_spells_to_character()
-	_sync_equipment_to_character()
-	_revalidate_selected_feat()
-	_recalculate_character_hp()
+	_stabilize_character_creation_state()
 	_refresh_summary_ui()
 
 	var save_result: Dictionary = CharacterCreationManager.save_current_character()
@@ -3863,8 +3754,42 @@ func _sync_selected_state_from_manager() -> void:
 	_sync_skill_state_from_character()
 	_sync_spell_state_from_character()
 	_sync_equipment_state_from_character()
+
+
+func _stabilize_character_creation_state() -> void:
+	_ensure_current_character()
+	var character := CharacterCreationManager.current_character
+	if character == null:
+		return
+
+	character.race = selected_race
+	character.class_resource = selected_class
+	character.background = selected_background
+	_ensure_base_ability_scores(character)
+	_apply_variant_human_bonus_modifiers()
+	_sanitize_class_equipment_choice_state()
 	_revalidate_selected_feat()
+	_sanitize_skill_selection_state()
+	_sanitize_language_selection_state()
+	_sanitize_tool_selection_state()
+	_sanitize_flexible_proficiency_selection_state()
+	_sync_skills_to_character()
+	_sanitize_spell_selection_state()
+	_sync_spells_to_character()
+	_sync_equipment_to_character()
 	_recalculate_character_hp()
+
+
+func _refresh_character_creation_ui() -> void:
+	_update_selection_buttons()
+	_refresh_skills_ui()
+	_refresh_ability_scores_ui()
+	_refresh_feat_ui()
+	_refresh_spells_ui()
+	_refresh_equipment_ui()
+	_refresh_summary_ui()
+	_update_next_button_state()
+	_refresh_preview()
 
 
 func _recalculate_character_hp() -> void:
@@ -5466,11 +5391,10 @@ func _revert_current_spell_phase_and_retreat() -> bool:
 		return false
 
 	_clear_spell_phase_selection(current_spell_phase)
+	_stabilize_character_creation_state()
 	var did_retreat := _retreat_spell_phase()
 	if did_retreat:
-		_refresh_spells_ui()
-		_update_next_button_state()
-		_refresh_preview()
+		_refresh_character_creation_ui()
 		return true
 
 	go_to_step(5)
