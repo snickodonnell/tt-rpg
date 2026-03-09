@@ -80,7 +80,7 @@ text = "Background"
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
-text = "Skills"
+text = "Proficiencies"
 
 [node name="AbilitiesButton" type="Button" parent="RootMargin/ThreePanelLayout/LeftSidebar/SidebarMargin/SidebarContent/StepButtons"]
 layout_mode = 2
@@ -219,25 +219,50 @@ theme_override_constants/v_separation = 12
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 16
+theme_override_constants/separation = 8
+
+[node name="ProficiencyPhaseRail" type="HBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SkillsPhaseButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPhaseRail"]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "Skills"
+
+[node name="LanguagesPhaseButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPhaseRail"]
+layout_mode = 2
+toggle_mode = true
+text = "Languages"
+
+[node name="ToolsPhaseButton" type="Button" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPhaseRail"]
+layout_mode = 2
+toggle_mode = true
+text = "Tools"
+
+[node name="ProficiencyPhaseInfoLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Skills are active now. Languages and tools are planned next."
 
 [node name="AutomaticSkillsPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer"]
 layout_mode = 2
 
 [node name="AutomaticSkillsMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="AutomaticSkillsContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 4
 
 [node name="AutomaticSkillsTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin/AutomaticSkillsContent"]
 layout_mode = 2
-text = "Automatic Proficiencies"
+text = "Automatic Skill Proficiencies"
 
 [node name="AutomaticSkillsList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin/AutomaticSkillsContent"]
 layout_mode = 2
@@ -249,19 +274,19 @@ size_flags_vertical = 3
 
 [node name="ChooseSkillsMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="ChooseSkillsContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 6
 
 [node name="ChooseSkillsTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent"]
 layout_mode = 2
-text = "Choose Skills"
+text = "Choose Skill Proficiencies"
 
 [node name="SkillsStatusLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent"]
 layout_mode = 2
@@ -275,7 +300,34 @@ horizontal_scroll_mode = 0
 [node name="ChooseSkillsList" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent/ChooseSkillsScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ProficiencyPlaceholderPanel" type="PanelContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ProficiencyPlaceholderMargin" type="MarginContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPlaceholderPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ProficiencyPlaceholderContent" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPlaceholderPanel/ProficiencyPlaceholderMargin"]
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 10
+
+[node name="ProficiencyPlaceholderTitle" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPlaceholderPanel/ProficiencyPlaceholderMargin/ProficiencyPlaceholderContent"]
+layout_mode = 2
+text = "Languages and Tools"
+
+[node name="ProficiencyPlaceholderLabel" type="Label" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPlaceholderPanel/ProficiencyPlaceholderMargin/ProficiencyPlaceholderContent"]
+layout_mode = 2
+size_flags_vertical = 3
+autowrap_mode = 3
+text = "This proficiency phase is planned next."
 
 [node name="AbilitiesStepContainer" type="VBoxContainer" parent="RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent"]
 visible = false
@@ -1104,7 +1156,7 @@ fit_content = true
 scroll_active = false
 bbcode_enabled = true
 autowrap_mode = 3
-text = "[b]Skills:[/b] -"
+text = "[b]Proficiencies:[/b] -"
 
 [node name="STRPreview" type="RichTextLabel" parent="RootMargin/ThreePanelLayout/RightPreviewPanel/PreviewMargin/PreviewContent/MainPreviewSection/MainPreviewMargin/MainPreviewScroll/PreviewLabels"]
 layout_mode = 2

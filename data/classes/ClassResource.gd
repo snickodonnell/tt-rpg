@@ -14,3 +14,8 @@ class_name ClassResource
 @export var cantrips_known: int = 0
 @export var spells_known_per_level: Dictionary = {} # e.g. {1: 2, 2: 3} for prepared casters
 @export var modifiers: Array[StatModifier] = []
+@export var language_proficiencies: Array[String] = []
+@export var language_choice_count: int = 0
+@export var language_choice_options: Array[String] = []
+@export var tool_proficiencies: Array[String] = []
+@export var tool_choice_groups: Array[Dictionary] = []

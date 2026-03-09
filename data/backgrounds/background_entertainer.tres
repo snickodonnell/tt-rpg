@@ -14,4 +14,13 @@ starting_gold_dice = "15 gp"
 starting_equipment_options = ["item_lute", "item_flute", "item_drum", "item_disguise_kit", "item_clothes_fine"]
 description = "You thrive in front of an audience as a performer."
 modifiers = []
+tool_proficiencies = ["item_disguise_kit"]
+tool_choice_groups = [{
+"available_ids": ["@musical_instruments"],
+"count": 1,
+"equipment_link": {"group_id":"background_entertainer_instrument","scope":"background","variant_id":"musical_instrument"},
+"id": "background_entertainer_instrument",
+"meta_label": "Instrument",
+"title": "Choose your musical instrument"
+}]
 metadata/_custom_type_script = "uid://25blxsg2786h"

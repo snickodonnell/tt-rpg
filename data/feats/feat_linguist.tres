@@ -10,3 +10,4 @@ prerequisites = ""
 description = "You learn three languages."
 modifiers = []
 special_rules = ""
+language_choice_count = 3

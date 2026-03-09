@@ -14,4 +14,5 @@ starting_gold_dice = "10 gp"
 starting_equipment_options = ["item_club", "item_50ft_hempen_rope", "item_trinket_lucky_rabbits_foot", "item_clothes_common", "item_pouch"]
 description = "You spent years on the sea as a sailor or pirate."
 modifiers = []
+tool_proficiencies = ["item_navigators_tools", "tool_vehicle_water"]
 metadata/_custom_type_script = "uid://25blxsg2786h"

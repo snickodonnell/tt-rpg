@@ -14,4 +14,5 @@ starting_gold_dice = "15 gp"
 starting_equipment_options = ["item_holy_symbol_amulet", "item_scholar_pack", "item_herbalism_kit", "item_clothes_common"]
 description = "You have spent your life in the service of a temple or religious order."
 modifiers = []
+language_choice_count = 2
 metadata/_custom_type_script = "uid://25blxsg2786h"

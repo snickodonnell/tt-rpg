@@ -20,4 +20,5 @@ spells_known_per_level = {
 1: 2,
 }
 modifiers = []
+language_proficiencies = ["druidic"]
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

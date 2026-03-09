@@ -10,3 +10,4 @@ prerequisites = ""
 description = "You gain proficiency in three skills or tools."
 modifiers = []
 special_rules = ""
+flexible_proficiency_choice_count = 3

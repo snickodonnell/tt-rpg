@@ -6,7 +6,7 @@ const DEFAULT_STEP_NAMES := [
 	"Race",
 	"Class",
 	"Background",
-	"Skills",
+	"Proficiencies",
 	"Abilities",
 	"Feats",
 	"Spells",
@@ -20,6 +20,7 @@ const FEAT_DATA_PATH := "res://data/feats"
 const SPELL_DATA_PATH := "res://data/spells"
 const ITEM_DATA_PATH := "res://data/items"
 const SKILL_DATA_PATH := "res://data/skills"
+const LANGUAGE_DATA_PATH := "res://data/languages"
 const PORTRAIT_ROOT_PATH := "res://assets/portraits"
 const SUPPORTED_PORTRAIT_EXTENSIONS := ["png", "webp", "jpg", "jpeg", "jiff", "jfif"]
 const PORTRAIT_EXTENSION_PRIORITY := {
@@ -38,6 +39,25 @@ const SPELL_PHASE_CLASS_CANTRIPS := "class_cantrips"
 const SPELL_PHASE_CLASS_LEVEL_ONE := "class_level_one"
 const SPELL_PHASE_BONUS_CANTRIPS := "bonus_cantrips"
 const SPELL_PHASE_BONUS_LEVEL_ONE := "bonus_level_one"
+const PROFICIENCY_PHASE_SKILLS := "skills"
+const PROFICIENCY_PHASE_LANGUAGES := "languages"
+const PROFICIENCY_PHASE_TOOLS := "tools"
+const GENERIC_LANGUAGE_EXCLUSIONS := {
+	"druidic": true,
+	"thieves_cant": true,
+}
+const TOOL_GROUP_TOKEN_ALL := "@all_tools"
+const TOOL_GROUP_TOKEN_ARTISAN := "@artisan_tools"
+const TOOL_GROUP_TOKEN_INSTRUMENTS := "@musical_instruments"
+const TOOL_GROUP_TOKEN_GAMING := "@gaming_sets"
+const SYNTHETIC_TOOL_LABELS := {
+	"tool_gaming_set_dice": "Dice Set",
+	"tool_gaming_set_dragonchess": "Dragonchess Set",
+	"tool_gaming_set_playing_cards": "Playing Card Set",
+	"tool_gaming_set_three_dragon_ante": "Three-Dragon Ante Set",
+	"tool_vehicle_land": "Land Vehicles",
+	"tool_vehicle_water": "Water Vehicles",
+}
 const ABILITY_ORDER := ["str", "dex", "con", "int", "wis", "cha"]
 const MAIN_SELECTION_CARD_MIN_WIDTH := 320
 const MAIN_SELECTION_CARD_MIN_HEIGHT := 184
@@ -80,10 +100,20 @@ const ABILITY_LABELS := {
 @onready var race_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/RaceStepContainer/RaceSelectionScroll/RaceList
 @onready var class_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/ClassSelectionScroll/ClassList
 @onready var background_list_container: GridContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/ClassBackgroundStepContainer/BackgroundSection/BackgroundSelectionScroll/BackgroundList
+@onready var proficiency_phase_rail: HBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPhaseRail
+@onready var skills_phase_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPhaseRail/SkillsPhaseButton
+@onready var languages_phase_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPhaseRail/LanguagesPhaseButton
+@onready var tools_phase_button: Button = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPhaseRail/ToolsPhaseButton
+@onready var proficiency_phase_info_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPhaseInfoLabel
+@onready var automatic_skills_title_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin/AutomaticSkillsContent/AutomaticSkillsTitle
 @onready var automatic_skills_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/AutomaticSkillsPanel/AutomaticSkillsMargin/AutomaticSkillsContent/AutomaticSkillsList
 @onready var choose_skills_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel
+@onready var choose_skills_title_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent/ChooseSkillsTitle
 @onready var skills_status_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent/SkillsStatusLabel
 @onready var choose_skills_list_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ChooseSkillsPanel/ChooseSkillsMargin/ChooseSkillsContent/ChooseSkillsScroll/ChooseSkillsList
+@onready var proficiency_placeholder_panel: PanelContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPlaceholderPanel
+@onready var proficiency_placeholder_title_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPlaceholderPanel/ProficiencyPlaceholderMargin/ProficiencyPlaceholderContent/ProficiencyPlaceholderTitle
+@onready var proficiency_placeholder_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/SkillsStepContainer/ProficiencyPlaceholderPanel/ProficiencyPlaceholderMargin/ProficiencyPlaceholderContent/ProficiencyPlaceholderLabel
 @onready var ability_rows_container: VBoxContainer = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/AbilitiesScroll/AbilityRows
 @onready var points_spent_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/PointBuySummaryPanel/PointBuySummaryMargin/PointBuySummaryContent/PointsSpentLabel
 @onready var points_remaining_label: Label = $RootMargin/ThreePanelLayout/MainArea/MainAreaMargin/MainAreaContent/AbilitiesStepContainer/PointBuySummaryPanel/PointBuySummaryMargin/PointBuySummaryContent/PointsRemainingLabel
@@ -198,7 +228,12 @@ var selected_pack: ItemResource = null
 var selected_individual_item_ids := {}
 var selected_item_resources := {}
 var selected_class_skill_ids := {}
+var selected_language_choice_ids := {}
+var selected_tool_choice_state := {}
+var selected_flexible_skill_ids := {}
+var selected_flexible_tool_ids := {}
 var skill_resource_cache := {}
+var language_resource_cache := {}
 var selected_class_cantrip_ids := {}
 var selected_class_level_one_spell_ids := {}
 var selected_feat_cantrip_ids := {}
@@ -214,6 +249,7 @@ var skill_name_cache := {}
 var ability_controls := {}
 var selection_preview_texture_cache := {}
 var portrait_file_cache := {}
+var current_proficiency_phase := PROFICIENCY_PHASE_SKILLS
 
 
 func _ready() -> void:
@@ -228,6 +264,7 @@ func _ready() -> void:
 	_load_available_backgrounds()
 	_load_available_feats()
 	_load_available_skills()
+	_load_available_languages()
 	_load_available_spells()
 	_load_available_equipment()
 	_sync_selected_state_from_manager()
@@ -250,12 +287,17 @@ func _ready() -> void:
 
 
 func go_to_next_step() -> void:
+	if current_step == 3 and _advance_proficiency_phase():
+		return
 	if current_step == 6 and _advance_spell_phase():
 		return
 	go_to_step(current_step + 1)
 
 
 func go_to_previous_step() -> void:
+	if current_step == 3:
+		if _revert_current_proficiency_phase_and_retreat():
+			return
 	if current_step == 6:
 		if _revert_current_spell_phase_and_retreat():
 			return
@@ -287,6 +329,8 @@ func apply_debug_test_build() -> void:
 	selected_pack = null
 	selected_individual_item_ids.clear()
 	selected_class_skill_ids.clear()
+	selected_language_choice_ids.clear()
+	selected_tool_choice_state.clear()
 	selected_class_skill_ids["skill_arcana"] = true
 	selected_class_skill_ids["skill_persuasion"] = true
 	use_default_starting_gold = false
@@ -356,6 +400,9 @@ func _bind_main_area_actions() -> void:
 	create_character_button.pressed.connect(_on_create_character_pressed)
 	character_name_input.text_changed.connect(_on_character_name_changed)
 	gender_option_button.item_selected.connect(_on_gender_selected)
+	skills_phase_button.pressed.connect(_on_proficiency_phase_selected.bind(PROFICIENCY_PHASE_SKILLS))
+	languages_phase_button.pressed.connect(_on_proficiency_phase_selected.bind(PROFICIENCY_PHASE_LANGUAGES))
+	tools_phase_button.pressed.connect(_on_proficiency_phase_selected.bind(PROFICIENCY_PHASE_TOOLS))
 	variant_human_bonus_one.item_selected.connect(_on_variant_human_bonus_selected.bind(0))
 	variant_human_bonus_two.item_selected.connect(_on_variant_human_bonus_selected.bind(1))
 	magic_initiate_feat_spell_list_option.item_selected.connect(_on_magic_initiate_spell_list_selected)
@@ -463,6 +510,24 @@ func _load_available_skills() -> void:
 
 		available_skills.append(skill)
 		skill_resource_cache[skill.resource_id] = skill
+
+
+func _load_available_languages() -> void:
+	language_resource_cache.clear()
+
+	var language_files := DirAccess.get_files_at(LANGUAGE_DATA_PATH)
+	language_files.sort()
+
+	for file_name in language_files:
+		if not file_name.begins_with("language_") or not file_name.ends_with(".tres"):
+			continue
+
+		var language_resource := load("%s/%s" % [LANGUAGE_DATA_PATH, file_name]) as LanguageResource
+		if language_resource == null:
+			continue
+
+		for lookup_id in _get_language_lookup_ids(language_resource.resource_id):
+			language_resource_cache[lookup_id] = language_resource
 
 
 func _load_available_feats() -> void:
@@ -1189,7 +1254,7 @@ func _get_class_equipment_spec(class_resource: ClassResource) -> Dictionary:
 					},
 					{
 						"id": "rogue_secondary_weapon",
-						"title": "Choose your ranged option",
+						"title": "Choose your secondary weapon",
 						"variants": [
 							_build_equipment_variant("shortbow", "Shortbow and 20 arrows", ["item_shortbow", "item_arrows"]),
 							_build_equipment_variant("shortsword", "Shortsword", ["item_shortsword"]),
@@ -1373,6 +1438,16 @@ func _duplicate_equipment_choice_state(choice_state: Dictionary) -> Dictionary:
 			"variant_id": str(group_state.get("variant_id", "")),
 			"selected_item_ids": selected_item_ids,
 		}
+	return duplicated
+
+
+func _duplicate_proficiency_choice_state(choice_state: Dictionary) -> Dictionary:
+	var duplicated := {}
+	for group_id in choice_state.keys():
+		var selected_ids: Array[String] = []
+		for item_id in choice_state.get(group_id, []):
+			selected_ids.append(str(item_id))
+		duplicated[str(group_id)] = selected_ids
 	return duplicated
 
 
@@ -2033,7 +2108,7 @@ func _update_main_content() -> void:
 		2:
 			current_step_content_label.text = "Background Selection"
 		3:
-			current_step_content_label.text = "Skills Selection"
+			current_step_content_label.text = _get_proficiency_phase_title()
 		4:
 			current_step_content_label.text = "Ability Scores"
 		5:
@@ -2156,7 +2231,7 @@ func _update_next_button_state() -> void:
 		2:
 			next_button.disabled = not _can_advance_from_background_step()
 		3:
-			next_button.disabled = not _can_advance_from_skills_step()
+			next_button.disabled = not _is_current_proficiency_phase_complete()
 		4:
 			next_button.disabled = _calculate_point_buy_total() != 27
 		5:
@@ -2172,16 +2247,99 @@ func _update_next_button_state() -> void:
 
 
 func _refresh_skills_ui() -> void:
+	_normalize_proficiency_phase()
+	_refresh_proficiency_phase_ui()
 	_sanitize_skill_selection_state()
-	_rebuild_automatic_skills_list()
-	_rebuild_choose_skills_list()
-	_update_skills_status()
+	_sanitize_language_selection_state()
+	_sanitize_tool_selection_state()
+	_sanitize_flexible_proficiency_selection_state()
+	match current_proficiency_phase:
+		PROFICIENCY_PHASE_LANGUAGES:
+			_rebuild_automatic_languages_list()
+			_rebuild_language_choice_list()
+			_update_language_status()
+		PROFICIENCY_PHASE_TOOLS:
+			_rebuild_automatic_tools_list()
+			_rebuild_tool_choice_list()
+			_update_tool_status()
+		_:
+			_rebuild_automatic_skills_list()
+			_rebuild_choose_skills_list()
+			_update_skills_status()
+	_sync_equipment_to_character()
 	_sync_skills_to_character()
 
 
 func _sanitize_skill_selection_state() -> void:
 	_filter_selected_ids(selected_class_skill_ids, _collect_string_id_set(_get_available_class_skill_choice_ids()))
 	_trim_selected_string_ids(selected_class_skill_ids, _get_required_class_skill_choice_count())
+
+
+func _sanitize_language_selection_state() -> void:
+	_filter_selected_ids(selected_language_choice_ids, _collect_string_id_set(_get_available_language_choice_ids()))
+	_trim_selected_string_ids(selected_language_choice_ids, _get_required_language_choice_count())
+
+
+func _sanitize_tool_selection_state() -> void:
+	_sync_linked_tool_choices_from_equipment()
+
+	var valid_group_ids := {}
+	for group in _get_tool_choice_groups():
+		var group_id := str(group.get("id", ""))
+		if group_id.is_empty():
+			continue
+		valid_group_ids[group_id] = true
+
+	var stale_group_ids: Array[String] = []
+	for group_id in selected_tool_choice_state.keys():
+		var cleaned_group_id := str(group_id)
+		if not valid_group_ids.has(cleaned_group_id):
+			stale_group_ids.append(cleaned_group_id)
+	for group_id in stale_group_ids:
+		selected_tool_choice_state.erase(group_id)
+
+	var blocked_tool_ids := _collect_fixed_tool_id_set()
+	for group in _get_tool_choice_groups():
+		var group_id := str(group.get("id", ""))
+		if group_id.is_empty():
+			continue
+		var selected_ids := _get_selected_tool_ids_for_group(group_id)
+		var valid_ids := _collect_string_id_set(_get_available_tool_choice_ids_for_group(group_id))
+		var sanitized_ids: Array[String] = []
+		for tool_id in selected_ids:
+			if not valid_ids.has(tool_id):
+				continue
+			if blocked_tool_ids.has(tool_id):
+				continue
+			if sanitized_ids.has(tool_id):
+				continue
+			sanitized_ids.append(tool_id)
+		var required_count := _get_required_tool_choice_count_for_group(group_id)
+		while sanitized_ids.size() > required_count:
+			sanitized_ids.remove_at(sanitized_ids.size() - 1)
+		_set_selected_tool_ids_for_group(group_id, sanitized_ids)
+		for tool_id in sanitized_ids:
+			blocked_tool_ids[tool_id] = true
+
+	_sync_linked_equipment_from_tool_choices()
+
+
+func _sanitize_flexible_proficiency_selection_state() -> void:
+	_filter_selected_ids(selected_flexible_skill_ids, _collect_string_id_set(_get_available_flexible_skill_ids()))
+	_filter_selected_ids(selected_flexible_tool_ids, _collect_string_id_set(_get_available_flexible_tool_ids()))
+	var remaining_slots := _get_required_flexible_proficiency_choice_count()
+	var sorted_skill_ids := _get_sorted_skill_ids_from_dictionary(selected_flexible_skill_ids)
+	var sorted_tool_ids := _get_sorted_tool_ids_from_dictionary(selected_flexible_tool_ids)
+	for skill_id in sorted_skill_ids:
+		if remaining_slots <= 0:
+			selected_flexible_skill_ids.erase(skill_id)
+			continue
+		remaining_slots -= 1
+	for tool_id in sorted_tool_ids:
+		if remaining_slots <= 0:
+			selected_flexible_tool_ids.erase(tool_id)
+			continue
+		remaining_slots -= 1
 
 
 func _rebuild_automatic_skills_list() -> void:
@@ -2193,11 +2351,15 @@ func _rebuild_automatic_skills_list() -> void:
 		_add_empty_state_label(automatic_skills_list_container, "No automatic skill proficiencies granted yet.")
 		return
 
+	var summary_parts: Array[String] = []
 	for skill_id in skill_ids:
-		var skill_label := Label.new()
-		skill_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		skill_label.text = "%s (%s)" % [_get_skill_display_name(skill_id), ", ".join(_get_skill_source_labels(source_map.get(skill_id, [])))]
-		automatic_skills_list_container.add_child(skill_label)
+		summary_parts.append("%s (%s)" % [_get_skill_display_name(skill_id), ", ".join(_get_skill_source_labels(source_map.get(skill_id, [])))])
+
+	var skill_label := Label.new()
+	skill_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	skill_label.add_theme_font_size_override("font_size", 12)
+	skill_label.text = ", ".join(summary_parts)
+	automatic_skills_list_container.add_child(skill_label)
 
 
 func _rebuild_choose_skills_list() -> void:
@@ -2205,23 +2367,67 @@ func _rebuild_choose_skills_list() -> void:
 
 	var required_count := _get_required_class_skill_choice_count()
 	var available_choice_ids := _get_available_class_skill_choice_ids()
-	choose_skills_panel.visible = selected_class != null and required_count > 0
+	var flexible_choice_count := _get_required_flexible_proficiency_choice_count()
+	var available_flexible_skill_ids := _get_available_flexible_skill_ids()
+	choose_skills_panel.visible = selected_class != null and (required_count > 0 or flexible_choice_count > 0)
 	if not choose_skills_panel.visible:
 		return
 
-	if available_choice_ids.is_empty():
+	if required_count > 0 and available_choice_ids.is_empty():
 		_add_empty_state_label(choose_skills_list_container, "No remaining skills are available to choose from.")
+	elif required_count > 0:
+		for skill_id in available_choice_ids:
+			var skill := skill_resource_cache.get(skill_id) as SkillResource
+			if skill == null:
+				continue
+			choose_skills_list_container.add_child(_build_skill_choice_button(skill))
+
+	if flexible_choice_count <= 0:
 		return
 
-	for skill_id in available_choice_ids:
+	if required_count > 0:
+		var separator := HSeparator.new()
+		choose_skills_list_container.add_child(separator)
+
+	var header := Label.new()
+	header.text = "Flexible Feat Choices"
+	header.add_theme_font_size_override("font_size", 14)
+	choose_skills_list_container.add_child(header)
+
+	var helper := Label.new()
+	helper.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	helper.add_theme_font_size_override("font_size", 12)
+	helper.text = "Choose %d total skills or tools. You can split these picks between this phase and the Tools phase." % flexible_choice_count
+	choose_skills_list_container.add_child(helper)
+
+	if available_flexible_skill_ids.is_empty() and selected_flexible_skill_ids.is_empty():
+		_add_empty_state_label(choose_skills_list_container, "No additional skills are available from flexible feat choices.")
+		return
+
+	for skill_id in available_flexible_skill_ids:
 		var skill := skill_resource_cache.get(skill_id) as SkillResource
 		if skill == null:
 			continue
-		choose_skills_list_container.add_child(_build_skill_choice_button(skill))
+		var selected := selected_flexible_skill_ids.has(skill.resource_id)
+		var is_at_limit := _get_remaining_flexible_proficiency_slots() <= 0 and not selected
+		choose_skills_list_container.add_child(_build_proficiency_choice_button(
+			skill.resource_id,
+			skill.display_name,
+			"Flexible skill proficiency",
+			selected,
+			_on_flexible_skill_toggled.bind(skill.resource_id),
+			[
+				skill.display_name,
+				"Ability: %s" % ABILITY_LABELS.get(skill.ability_key, skill.ability_key.to_upper()),
+				"Flexible proficiency choice",
+			],
+			is_at_limit,
+			"Remove another flexible proficiency choice before selecting this skill."
+		))
 
 
 func _build_skill_choice_button(skill: SkillResource) -> Button:
-	var button := _create_card_button(MAIN_SELECTION_CARD_MIN_HEIGHT)
+	var button := _create_card_button(58)
 	button.toggle_mode = true
 	button.button_pressed = selected_class_skill_ids.has(skill.resource_id)
 	button.pressed.connect(_on_class_skill_toggled.bind(skill.resource_id))
@@ -2231,15 +2437,40 @@ func _build_skill_choice_button(skill: SkillResource) -> Button:
 		skill.description,
 	])
 
-	var content_row := _create_card_row(button)
-	content_row.add_child(_create_selection_preview(skill.resource_id, MAIN_SELECTION_PREVIEW_SIZE, "skills", skill.display_name))
+	var content_margin := MarginContainer.new()
+	content_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_margin.add_theme_constant_override("margin_left", 10)
+	content_margin.add_theme_constant_override("margin_top", 8)
+	content_margin.add_theme_constant_override("margin_right", 10)
+	content_margin.add_theme_constant_override("margin_bottom", 8)
+	button.add_child(content_margin)
 
-	var info_column := _create_info_column(content_row)
-	info_column.add_child(_create_card_text_label(skill.display_name, 17, 2))
-	info_column.add_child(_create_card_text_label("Ability: %s" % ABILITY_LABELS.get(skill.ability_key, skill.ability_key.to_upper()), 0, 1))
+	var content_row := HBoxContainer.new()
+	content_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_row.alignment = BoxContainer.ALIGNMENT_BEGIN
+	content_row.add_theme_constant_override("separation", 10)
+	content_margin.add_child(content_row)
 
-	if not skill.description.strip_edges().is_empty():
-		info_column.add_child(_create_card_text_label(skill.description, 0, 2))
+	var selected_indicator := CheckBox.new()
+	selected_indicator.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	selected_indicator.focus_mode = Control.FOCUS_NONE
+	selected_indicator.disabled = true
+	selected_indicator.button_pressed = button.button_pressed
+	selected_indicator.custom_minimum_size = Vector2(22, 22)
+	content_row.add_child(selected_indicator)
+
+	var info_column := VBoxContainer.new()
+	info_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info_column.add_theme_constant_override("separation", 2)
+	content_row.add_child(info_column)
+
+	var title_label := _create_card_text_label(skill.display_name, 16, 1)
+	info_column.add_child(title_label)
+	var meta_label := _create_card_text_label("Ability: %s" % ABILITY_LABELS.get(skill.ability_key, skill.ability_key.to_upper()), 12, 1)
+	info_column.add_child(meta_label)
 
 	return button
 
@@ -2251,18 +2482,387 @@ func _update_skills_status() -> void:
 		return
 
 	var required_count := _get_required_class_skill_choice_count()
-	if required_count <= 0:
-		skills_status_label.text = "No class skill choices are required for this character."
+	var selected_count := selected_class_skill_ids.size()
+	var flexible_choice_count := _get_required_flexible_proficiency_choice_count()
+	var flexible_selected_count := _get_selected_flexible_proficiency_count()
+	var status_parts: Array[String] = []
+	var has_warning := false
+	if required_count > 0:
+		if selected_count == required_count:
+			status_parts.append("Class skills %d / %d" % [selected_count, required_count])
+		else:
+			status_parts.append("Class skills %d / %d" % [selected_count, required_count])
+			has_warning = true
+	elif flexible_choice_count <= 0:
+		skills_status_label.text = "No skill choices are required for this character."
 		_set_label_color(skills_status_label, Color(0.7, 0.7, 0.7))
 		return
 
-	var selected_count := selected_class_skill_ids.size()
+	if flexible_choice_count > 0:
+		status_parts.append("Flexible picks %d / %d" % [flexible_selected_count, flexible_choice_count])
+		if flexible_selected_count < flexible_choice_count:
+			has_warning = true
+
+	skills_status_label.text = " | ".join(status_parts)
+	if has_warning:
+		_set_label_color(skills_status_label, Color(0.85, 0.65, 0.2))
+	else:
+		_set_label_color(skills_status_label, Color(0.2, 0.7, 0.3))
+
+
+func _rebuild_automatic_languages_list() -> void:
+	_clear_container_children(automatic_skills_list_container)
+	var source_map := _get_current_language_source_map()
+	var language_ids := _get_sorted_language_ids_from_array(source_map.keys())
+	if language_ids.is_empty():
+		_add_empty_state_label(automatic_skills_list_container, "No automatic languages granted yet.")
+		return
+
+	var summary_parts: Array[String] = []
+	for language_id in language_ids:
+		summary_parts.append("%s (%s)" % [_get_language_display_name(language_id), ", ".join(_get_skill_source_labels(source_map.get(language_id, [])))])
+	var language_label := Label.new()
+	language_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	language_label.add_theme_font_size_override("font_size", 12)
+	language_label.text = ", ".join(summary_parts)
+	automatic_skills_list_container.add_child(language_label)
+
+
+func _rebuild_language_choice_list() -> void:
+	_clear_container_children(choose_skills_list_container)
+	var required_count := _get_required_language_choice_count()
+	if required_count <= 0:
+		_add_empty_state_label(choose_skills_list_container, "No extra language choices are required for this build.")
+		return
+
+	var available_ids := _get_available_language_choice_ids()
+	if available_ids.is_empty() and selected_language_choice_ids.is_empty():
+		_add_empty_state_label(choose_skills_list_container, "No languages are available to choose.")
+		return
+
+	for language_id in available_ids:
+		var selected := selected_language_choice_ids.has(language_id)
+		var is_at_limit := selected_language_choice_ids.size() >= required_count and not selected
+		choose_skills_list_container.add_child(_build_proficiency_choice_button(
+			language_id,
+			_get_language_display_name(language_id),
+			"Language",
+			selected,
+			_on_language_toggled.bind(language_id),
+			[
+				_get_language_display_name(language_id),
+				"Extra language choice",
+			],
+			is_at_limit,
+			"Remove a selected language before choosing another one."
+		))
+
+
+func _update_language_status() -> void:
+	var required_count := _get_required_language_choice_count()
+	if required_count <= 0:
+		skills_status_label.text = "No extra language choices are required."
+		_set_label_color(skills_status_label, Color(0.7, 0.7, 0.7))
+		return
+
+	var selected_count := selected_language_choice_ids.size()
 	if selected_count == required_count:
-		skills_status_label.text = "Class skill choices complete: %d / %d selected." % [selected_count, required_count]
+		skills_status_label.text = "Selected %d / %d languages." % [selected_count, required_count]
 		_set_label_color(skills_status_label, Color(0.2, 0.7, 0.3))
 	else:
-		skills_status_label.text = "Select %d class skill(s): %d / %d chosen." % [required_count, selected_count, required_count]
+		skills_status_label.text = "Need %d more. Selected %d / %d." % [required_count - selected_count, selected_count, required_count]
 		_set_label_color(skills_status_label, Color(0.85, 0.65, 0.2))
+
+
+func _rebuild_automatic_tools_list() -> void:
+	_clear_container_children(automatic_skills_list_container)
+	var source_map := _get_current_tool_source_map()
+	var tool_ids := _get_sorted_tool_ids_from_array(source_map.keys())
+	if tool_ids.is_empty():
+		_add_empty_state_label(automatic_skills_list_container, "No automatic tool proficiencies granted yet.")
+		return
+
+	var summary_parts: Array[String] = []
+	for tool_id in tool_ids:
+		summary_parts.append("%s (%s)" % [_get_tool_display_name(tool_id), ", ".join(_get_skill_source_labels(source_map.get(tool_id, [])))])
+	var tool_label := Label.new()
+	tool_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	tool_label.add_theme_font_size_override("font_size", 12)
+	tool_label.text = ", ".join(summary_parts)
+	automatic_skills_list_container.add_child(tool_label)
+
+
+func _rebuild_tool_choice_list() -> void:
+	_clear_container_children(choose_skills_list_container)
+	var choice_groups := _get_tool_choice_groups()
+	var flexible_choice_count := _get_required_flexible_proficiency_choice_count()
+	var available_flexible_tool_ids := _get_available_flexible_tool_ids()
+	if choice_groups.is_empty() and flexible_choice_count <= 0:
+		_add_empty_state_label(choose_skills_list_container, "No tool proficiency choices are required for this build.")
+		return
+
+	var rendered_any_group := false
+	for group in choice_groups:
+		var group_id := str(group.get("id", ""))
+		var required_count := _get_required_tool_choice_count_for_group(group_id)
+		var available_ids := _get_available_tool_choice_ids_for_group(group_id)
+		var selected_ids := _get_selected_tool_ids_for_group(group_id)
+		if required_count <= 0 and selected_ids.is_empty():
+			continue
+
+		rendered_any_group = true
+		var header := Label.new()
+		header.text = str(group.get("title", "Tool Choices"))
+		header.add_theme_font_size_override("font_size", 14)
+		choose_skills_list_container.add_child(header)
+
+		var helper := Label.new()
+		helper.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		helper.add_theme_font_size_override("font_size", 12)
+		helper.text = "Selected %d / %d" % [selected_ids.size(), required_count]
+		choose_skills_list_container.add_child(helper)
+
+		for tool_id in available_ids:
+			var selected := selected_ids.has(tool_id)
+			var is_at_limit := selected_ids.size() >= required_count and not selected
+			choose_skills_list_container.add_child(_build_proficiency_choice_button(
+				tool_id,
+				_get_tool_display_name(tool_id),
+				str(group.get("meta_label", "Tool proficiency")),
+				selected,
+				_on_tool_toggled.bind(group_id, tool_id),
+				[
+					_get_tool_display_name(tool_id),
+					str(group.get("title", "Tool choice")),
+				],
+				is_at_limit,
+				"Remove a selected tool choice before choosing another one in this group."
+			))
+
+	if not rendered_any_group:
+		if flexible_choice_count <= 0:
+			_add_empty_state_label(choose_skills_list_container, "No tool proficiency choices are required for this build.")
+
+	if flexible_choice_count <= 0:
+		return
+
+	if rendered_any_group:
+		var separator := HSeparator.new()
+		choose_skills_list_container.add_child(separator)
+
+	var header := Label.new()
+	header.text = "Flexible Feat Choices"
+	header.add_theme_font_size_override("font_size", 14)
+	choose_skills_list_container.add_child(header)
+
+	var helper := Label.new()
+	helper.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	helper.add_theme_font_size_override("font_size", 12)
+	helper.text = "Choose %d total skills or tools. You can split these picks between the Skills and Tools phases." % flexible_choice_count
+	choose_skills_list_container.add_child(helper)
+
+	if available_flexible_tool_ids.is_empty() and selected_flexible_tool_ids.is_empty():
+		_add_empty_state_label(choose_skills_list_container, "No additional tools are available from flexible feat choices.")
+		return
+
+	for tool_id in available_flexible_tool_ids:
+		var selected := selected_flexible_tool_ids.has(tool_id)
+		var is_at_limit := _get_remaining_flexible_proficiency_slots() <= 0 and not selected
+		choose_skills_list_container.add_child(_build_proficiency_choice_button(
+			tool_id,
+			_get_tool_display_name(tool_id),
+			"Flexible tool proficiency",
+			selected,
+			_on_flexible_tool_toggled.bind(tool_id),
+			[
+				_get_tool_display_name(tool_id),
+				"Flexible proficiency choice",
+			],
+			is_at_limit,
+			"Remove another flexible proficiency choice before selecting this tool."
+		))
+
+
+func _update_tool_status() -> void:
+	var choice_groups := _get_tool_choice_groups()
+	var flexible_choice_count := _get_required_flexible_proficiency_choice_count()
+	if choice_groups.is_empty() and flexible_choice_count <= 0:
+		skills_status_label.text = "No tool proficiency choices are required."
+		_set_label_color(skills_status_label, Color(0.7, 0.7, 0.7))
+		return
+
+	for group in choice_groups:
+		var group_id := str(group.get("id", ""))
+		var required_count := _get_required_tool_choice_count_for_group(group_id)
+		var selected_count := _get_selected_tool_ids_for_group(group_id).size()
+		if selected_count < required_count:
+			skills_status_label.text = "Finish tool choices: %s (%d / %d)." % [str(group.get("title", "Tool Choices")), selected_count, required_count]
+			_set_label_color(skills_status_label, Color(0.85, 0.65, 0.2))
+			return
+
+	if flexible_choice_count > 0 and not _is_flexible_proficiency_complete():
+		skills_status_label.text = "Flexible picks %d / %d." % [_get_selected_flexible_proficiency_count(), flexible_choice_count]
+		_set_label_color(skills_status_label, Color(0.85, 0.65, 0.2))
+		return
+
+	var status_parts: Array[String] = []
+	if not choice_groups.is_empty():
+		status_parts.append("Tool groups complete")
+	if flexible_choice_count > 0:
+		status_parts.append("Flexible picks %d / %d" % [_get_selected_flexible_proficiency_count(), flexible_choice_count])
+	skills_status_label.text = " | ".join(status_parts)
+	_set_label_color(skills_status_label, Color(0.2, 0.7, 0.3))
+
+
+func _on_proficiency_phase_selected(phase: String) -> void:
+	current_proficiency_phase = phase
+	_refresh_skills_ui()
+	if current_step == 3:
+		current_step_content_label.text = _get_proficiency_phase_title()
+
+
+func _refresh_proficiency_phase_ui() -> void:
+	skills_phase_button.button_pressed = current_proficiency_phase == PROFICIENCY_PHASE_SKILLS
+	languages_phase_button.button_pressed = current_proficiency_phase == PROFICIENCY_PHASE_LANGUAGES
+	tools_phase_button.button_pressed = current_proficiency_phase == PROFICIENCY_PHASE_TOOLS
+
+	var skills_active := current_proficiency_phase == PROFICIENCY_PHASE_SKILLS
+	var automatic_skills_panel := automatic_skills_list_container.get_parent().get_parent().get_parent() as Control
+	if automatic_skills_panel != null:
+		automatic_skills_panel.visible = true
+		automatic_skills_panel.custom_minimum_size = Vector2.ZERO
+	choose_skills_panel.visible = true
+	proficiency_placeholder_panel.visible = false
+	proficiency_phase_info_label.visible = false
+
+	match current_proficiency_phase:
+		PROFICIENCY_PHASE_LANGUAGES:
+			automatic_skills_title_label.text = "Known Languages"
+			choose_skills_title_label.text = "Choose Languages"
+		PROFICIENCY_PHASE_TOOLS:
+			automatic_skills_title_label.text = "Automatic Tool Proficiencies"
+			choose_skills_title_label.text = "Choose Tool Proficiencies"
+		_:
+			automatic_skills_title_label.text = "Automatic Skill Proficiencies"
+			choose_skills_title_label.text = "Choose Skill Proficiencies"
+
+
+func _get_proficiency_phase_title() -> String:
+	match current_proficiency_phase:
+		PROFICIENCY_PHASE_LANGUAGES:
+			return "Proficiencies: Languages"
+		PROFICIENCY_PHASE_TOOLS:
+			return "Proficiencies: Tools"
+		_:
+			return "Proficiencies: Skills"
+
+
+func _build_proficiency_choice_button(resource_id: String, title: String, meta_text: String, selected: bool, callback: Callable, tooltip_lines: Array[String], disabled: bool = false, disabled_reason: String = "") -> Button:
+	var button := _create_card_button(58)
+	button.toggle_mode = true
+	button.button_pressed = selected
+	button.disabled = disabled
+	button.pressed.connect(callback)
+	button.tooltip_text = disabled_reason if disabled and not disabled_reason.is_empty() else _join_tooltip_lines(tooltip_lines)
+
+	var content_margin := MarginContainer.new()
+	content_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_margin.add_theme_constant_override("margin_left", 10)
+	content_margin.add_theme_constant_override("margin_top", 8)
+	content_margin.add_theme_constant_override("margin_right", 10)
+	content_margin.add_theme_constant_override("margin_bottom", 8)
+	button.add_child(content_margin)
+
+	var content_row := HBoxContainer.new()
+	content_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content_row.add_theme_constant_override("separation", 10)
+	content_margin.add_child(content_row)
+
+	var selected_indicator := CheckBox.new()
+	selected_indicator.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	selected_indicator.focus_mode = Control.FOCUS_NONE
+	selected_indicator.disabled = true
+	selected_indicator.button_pressed = selected
+	selected_indicator.custom_minimum_size = Vector2(22, 22)
+	content_row.add_child(selected_indicator)
+
+	var info_column := VBoxContainer.new()
+	info_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	info_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info_column.add_theme_constant_override("separation", 2)
+	content_row.add_child(info_column)
+
+	var title_label := _create_card_text_label(title, 16, 1)
+	if disabled:
+		title_label.modulate = Color(0.72, 0.72, 0.72, 1.0)
+	info_column.add_child(title_label)
+	info_column.add_child(_create_card_text_label(meta_text, 12, 1))
+	return button
+
+
+func _get_proficiency_phases() -> Array[String]:
+	return [PROFICIENCY_PHASE_SKILLS, PROFICIENCY_PHASE_LANGUAGES, PROFICIENCY_PHASE_TOOLS]
+
+
+func _normalize_proficiency_phase() -> void:
+	var phases := _get_proficiency_phases()
+	if phases.has(current_proficiency_phase):
+		return
+	current_proficiency_phase = PROFICIENCY_PHASE_SKILLS
+
+
+func _advance_proficiency_phase() -> bool:
+	var phases := _get_proficiency_phases()
+	var current_index := phases.find(current_proficiency_phase)
+	if current_index == -1:
+		current_proficiency_phase = PROFICIENCY_PHASE_SKILLS
+		_update_main_content()
+		_refresh_skills_ui()
+		_update_next_button_state()
+		return true
+	if current_index >= phases.size() - 1:
+		return false
+	current_proficiency_phase = phases[current_index + 1]
+	_update_main_content()
+	_refresh_skills_ui()
+	_update_next_button_state()
+	return true
+
+
+func _revert_current_proficiency_phase_and_retreat() -> bool:
+	var phases := _get_proficiency_phases()
+	var current_index := phases.find(current_proficiency_phase)
+	if current_index == -1:
+		current_proficiency_phase = PROFICIENCY_PHASE_SKILLS
+		return false
+	if current_index <= 0:
+		go_to_step(2)
+		return true
+	current_proficiency_phase = phases[current_index - 1]
+	_update_main_content()
+	_refresh_skills_ui()
+	_update_next_button_state()
+	return true
+
+
+func _is_current_proficiency_phase_complete() -> bool:
+	return _is_proficiency_phase_complete(current_proficiency_phase)
+
+
+func _is_proficiency_phase_complete(phase: String) -> bool:
+	match phase:
+		PROFICIENCY_PHASE_LANGUAGES:
+			return selected_language_choice_ids.size() == _get_required_language_choice_count()
+		PROFICIENCY_PHASE_TOOLS:
+			for group in _get_tool_choice_groups():
+				var group_id := str(group.get("id", ""))
+				if _get_selected_tool_ids_for_group(group_id).size() < _get_required_tool_choice_count_for_group(group_id):
+					return false
+			return _is_flexible_proficiency_complete()
+		_:
+			return selected_class_skill_ids.size() == _get_required_class_skill_choice_count()
 
 
 func _refresh_ability_scores_ui() -> void:
@@ -2798,7 +3398,7 @@ func _refresh_preview() -> void:
 	background_preview.text = "[b]Background:[/b] %s" % _format_background_preview(character)
 	hp_preview.text = "[b]HP:[/b] %s" % _format_hp_preview(character, race)
 	spellcasting_preview.text = "[b]Spellcasting:[/b] %s" % _format_spellcasting_preview(character, race)
-	skills_preview.text = "[b]Skills:[/b]%s" % _format_skills_preview(character)
+	skills_preview.text = "[b]Proficiencies:[/b]%s" % _format_skills_preview(character)
 
 	var ability_previews := {
 		"str": str_preview,
@@ -3013,6 +3613,54 @@ func _on_class_skill_toggled(resource_id: String) -> void:
 	_refresh_preview()
 
 
+func _on_language_toggled(language_id: String) -> void:
+	var normalized_id := _normalize_language_id(language_id)
+	if selected_language_choice_ids.has(normalized_id):
+		selected_language_choice_ids.erase(normalized_id)
+	elif selected_language_choice_ids.size() < _get_required_language_choice_count():
+		selected_language_choice_ids[normalized_id] = true
+
+	_refresh_skills_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_flexible_skill_toggled(skill_id: String) -> void:
+	if selected_flexible_skill_ids.has(skill_id):
+		selected_flexible_skill_ids.erase(skill_id)
+	elif _get_remaining_flexible_proficiency_slots() > 0:
+		selected_flexible_skill_ids[skill_id] = true
+
+	_refresh_skills_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_tool_toggled(group_id: String, tool_id: String) -> void:
+	var selected_ids := _get_selected_tool_ids_for_group(group_id)
+	if selected_ids.has(tool_id):
+		selected_ids.erase(tool_id)
+	else:
+		var required_count := _get_required_tool_choice_count_for_group(group_id)
+		if selected_ids.size() < required_count:
+			selected_ids.append(tool_id)
+	_set_selected_tool_ids_for_group(group_id, selected_ids)
+	_refresh_skills_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
+func _on_flexible_tool_toggled(tool_id: String) -> void:
+	if selected_flexible_tool_ids.has(tool_id):
+		selected_flexible_tool_ids.erase(tool_id)
+	elif _get_remaining_flexible_proficiency_slots() > 0:
+		selected_flexible_tool_ids[tool_id] = true
+
+	_refresh_skills_ui()
+	_update_next_button_state()
+	_refresh_preview()
+
+
 func _on_class_spell_toggled(resource_id: String, spell_level: int) -> void:
 	if spell_level == 0:
 		_toggle_spell_selection(selected_class_cantrip_ids, resource_id, _get_required_class_cantrip_count())
@@ -3098,7 +3746,9 @@ func _on_equipment_group_variant_selected(index: int, scope: String, group_id: S
 			"selected_item_ids": [],
 		})
 
+	_sanitize_tool_selection_state()
 	_sync_equipment_to_character()
+	_sync_skills_to_character()
 	_refresh_equipment_ui()
 	_update_next_button_state()
 	_refresh_preview()
@@ -3121,7 +3771,9 @@ func _on_equipment_group_slot_selected(index: int, scope: String, group_id: Stri
 		"selected_item_ids": selected_item_ids,
 	})
 
+	_sanitize_tool_selection_state()
 	_sync_equipment_to_character()
+	_sync_skills_to_character()
 	_refresh_equipment_ui()
 	_update_next_button_state()
 	_refresh_preview()
@@ -3246,7 +3898,10 @@ func _can_advance_from_background_step() -> bool:
 func _can_advance_from_skills_step() -> bool:
 	if selected_class == null or selected_background == null:
 		return false
-	return selected_class_skill_ids.size() == _get_required_class_skill_choice_count()
+	for phase in _get_proficiency_phases():
+		if not _is_proficiency_phase_complete(phase):
+			return false
+	return true
 
 
 func _can_advance_from_feats_step() -> bool:
@@ -3696,7 +4351,7 @@ func _format_summary_preview(character: CharacterSheetResource) -> String:
 	sections.append("[b]Combat[/b]\n%s" % "\n".join(_format_summary_combat_lines(character, race)))
 	sections.append("[b]Ability Scores[/b]\n%s" % "\n".join(_format_summary_ability_lines(character, race)))
 	sections.append("[b]Saving Throws[/b]\n%s" % "\n".join(_format_summary_save_lines(character, race)))
-	sections.append("[b]Skills[/b]\n%s" % "\n".join(_format_summary_skill_lines(character, race)))
+	sections.append("[b]Skill Checks[/b]\n%s" % "\n".join(_format_summary_skill_lines(character, race)))
 	sections.append("[b]Proficiencies[/b]\n%s" % "\n".join(_format_summary_proficiency_lines(character, race)))
 	sections.append("[b]Features[/b]\n%s" % "\n".join(_format_summary_feature_lines(character)))
 	sections.append("[b]Spells[/b]\n%s" % "\n".join(_format_summary_spell_lines(character)))
@@ -3754,14 +4409,17 @@ func _format_summary_save_lines(character: CharacterSheetResource, race: RaceRes
 
 
 func _format_summary_skill_lines(character: CharacterSheetResource, race: RaceResource) -> Array[String]:
-	if available_skills.is_empty():
+	if available_skills.is_empty() or character == null:
 		return ["- None"]
 
 	var lines: Array[String] = []
 	var skill_ids := _get_all_skill_ids_sorted()
 	for skill_id in skill_ids:
-		var proficient_prefix := "* " if _has_skill_proficiency(character, skill_id) else "  "
-		lines.append("%s%s %s" % [proficient_prefix, _get_skill_display_name(skill_id), _format_signed_value(_get_skill_roll_modifier(character, race, skill_id))])
+		if not _has_skill_proficiency(character, skill_id):
+			continue
+		lines.append("* %s %s" % [_get_skill_display_name(skill_id), _format_signed_value(_get_skill_roll_modifier(character, race, skill_id))])
+	if lines.is_empty():
+		return ["- None"]
 	return lines
 
 
@@ -3770,8 +4428,12 @@ func _format_summary_proficiency_lines(character: CharacterSheetResource, race: 
 	if character.class_resource != null:
 		lines.append("Armor: %s" % _format_list_or_dash(character.class_resource.armor_proficiencies))
 		lines.append("Weapons: %s" % _format_list_or_dash(character.class_resource.weapon_proficiencies))
-	var language_names := _get_language_display_names(race.languages if race != null else [])
+	var skill_names := _get_skill_names(character.skill_proficiencies if character != null else [])
+	lines.append("Skills: %s" % _format_list_or_dash(skill_names))
+	var language_ids: Array = character.language_proficiencies if character != null and not character.language_proficiencies.is_empty() else (race.languages if race != null else [])
+	var language_names := _get_language_display_names(language_ids)
 	lines.append("Languages: %s" % _format_list_or_dash(language_names))
+	lines.append("Tools: %s" % _format_list_or_dash(_get_tool_display_names(character.tool_proficiencies if character != null else [])))
 	return lines
 
 
@@ -3842,19 +4504,22 @@ func _format_summary_equipment_lines(character: CharacterSheetResource) -> Array
 
 
 func _format_skills_preview(character: CharacterSheetResource) -> String:
-	if character == null or character.skill_proficiencies.is_empty():
+	var parts: Array[String] = []
+	if character == null:
 		return " -"
 
-	var proficiency_bonus := AbilitySystem.get_proficiency_bonus(max(character.current_level, 1))
-	var parts: Array[String] = []
-	parts.append("Proficiency Bonus: %s" % _format_signed_value(proficiency_bonus))
+	parts.append("Bonus: %s" % _format_signed_value(AbilitySystem.get_proficiency_bonus(max(character.current_level, 1))))
+
+	var skill_names: Array[String] = []
 	for skill_id in _get_sorted_skill_ids_from_array(character.skill_proficiencies):
-		var roll_modifier := _get_skill_roll_modifier(character, selected_race, skill_id)
-		var source_labels := _get_skill_source_labels(character.skill_proficiency_sources.get(skill_id, []))
-		if source_labels.is_empty():
-			parts.append("- %s (%s)" % [_get_skill_display_name(skill_id), _format_signed_value(roll_modifier)])
-		else:
-			parts.append("- %s (%s, %s)" % [_get_skill_display_name(skill_id), _format_signed_value(roll_modifier), ", ".join(source_labels)])
+		skill_names.append("%s %s" % [_get_skill_display_name(skill_id), _format_signed_value(_get_skill_roll_modifier(character, selected_race, skill_id))])
+	parts.append("Skills: %s" % _format_list_or_dash(skill_names))
+
+	var language_names := _get_language_display_names(character.language_proficiencies)
+	parts.append("Languages: %s" % _format_list_or_dash(language_names))
+
+	var tool_names := _get_tool_display_names(character.tool_proficiencies)
+	parts.append("Tools: %s" % _format_list_or_dash(tool_names))
 	return "\n%s" % "\n".join(parts)
 
 
@@ -3921,10 +4586,13 @@ func _get_required_class_skill_choice_count() -> int:
 func _get_available_class_skill_choice_ids() -> Array[String]:
 	var available_ids: Array[String] = []
 	var automatic_skill_sources := _get_automatic_skill_source_map()
+	var blocked_by_flexible := _collect_string_id_set(_get_sorted_skill_ids_from_dictionary(selected_flexible_skill_ids))
 	for skill in available_skills:
 		if skill == null:
 			continue
 		if automatic_skill_sources.has(skill.resource_id):
+			continue
+		if blocked_by_flexible.has(skill.resource_id) and not selected_class_skill_ids.has(skill.resource_id):
 			continue
 		available_ids.append(skill.resource_id)
 	return _get_sorted_skill_ids_from_array(available_ids)
@@ -3937,11 +4605,6 @@ func _get_automatic_skill_source_map() -> Dictionary:
 	_append_modifier_skill_sources(source_map, selected_class.modifiers if selected_class != null else [], "Class")
 	for feat in _get_active_feats():
 		_append_modifier_skill_sources(source_map, feat.modifiers, "Feat")
-
-	if _has_selected_feat_id("feat_skilled"):
-		var skilled_ids := _get_skilled_feat_auto_skill_ids(source_map)
-		for skill_id in skilled_ids:
-			_append_skill_source(source_map, skill_id, "Feat")
 
 	return source_map
 
@@ -3978,36 +4641,551 @@ func _append_skill_source(source_map: Dictionary, skill_id: String, source_label
 	source_map[skill_id] = labels
 
 
-func _get_skilled_feat_auto_skill_ids(existing_source_map: Dictionary) -> Array[String]:
-	var skill_ids: Array[String] = []
-	for candidate_id in _get_sorted_skill_ids_from_array(_get_all_skill_ids()):
-		if existing_source_map.has(candidate_id):
+func _get_current_language_source_map() -> Dictionary:
+	var source_map := _get_fixed_language_source_map()
+	for language_id in _get_sorted_language_ids_from_dictionary(selected_language_choice_ids):
+		_append_skill_source(source_map, language_id, "Choice")
+	return source_map
+
+
+func _get_fixed_language_source_map() -> Dictionary:
+	var source_map := {}
+	_append_resource_language_proficiencies(source_map, selected_race, "Race", selected_race.languages if selected_race != null else [])
+	_append_resource_language_proficiencies(source_map, selected_background, "Background")
+	_append_resource_language_proficiencies(source_map, selected_class, "Class")
+	for feat in _get_active_feats():
+		_append_resource_language_proficiencies(source_map, feat, "Feat")
+	return source_map
+
+
+func _get_required_language_choice_count() -> int:
+	var count := 0
+	count += _get_resource_language_choice_count(selected_race)
+	count += _get_resource_language_choice_count(selected_background)
+	count += _get_resource_language_choice_count(selected_class)
+	for feat in _get_active_feats():
+		count += _get_resource_language_choice_count(feat)
+	return count
+
+
+func _get_available_language_choice_ids() -> Array[String]:
+	var available_ids: Array[String] = []
+	var fixed_source_map := _get_fixed_language_source_map()
+	var explicit_choice_ids := {}
+	var has_generic_choice_pool := false
+	for definition in _get_language_choice_definitions():
+		var options: Array[String] = definition.get("options", [])
+		if options.is_empty():
+			has_generic_choice_pool = true
 			continue
-		skill_ids.append(candidate_id)
-		if skill_ids.size() >= 3:
-			break
-	return skill_ids
+		for language_id in options:
+			explicit_choice_ids[_normalize_language_id(language_id)] = true
+	if has_generic_choice_pool:
+		for language_id in _get_all_language_ids_sorted():
+			if not _is_generic_selectable_language(language_id):
+				continue
+			if fixed_source_map.has(language_id):
+				continue
+			available_ids.append(language_id)
+	for explicit_language_id in explicit_choice_ids.keys():
+		var normalized_id := _normalize_language_id(str(explicit_language_id))
+		if normalized_id.is_empty() or fixed_source_map.has(normalized_id) or available_ids.has(normalized_id):
+			continue
+		available_ids.append(normalized_id)
+	return _get_sorted_language_ids_from_array(available_ids)
+
+
+func _is_generic_selectable_language(language_id: String) -> bool:
+	return not GENERIC_LANGUAGE_EXCLUSIONS.has(language_id)
+
+
+func _get_language_choice_definitions() -> Array:
+	var definitions: Array = []
+	_append_resource_language_choice_definition(definitions, selected_race, "Race")
+	_append_resource_language_choice_definition(definitions, selected_background, "Background")
+	_append_resource_language_choice_definition(definitions, selected_class, "Class")
+	for feat in _get_active_feats():
+		_append_resource_language_choice_definition(definitions, feat, "Feat")
+	return definitions
+
+
+func _append_resource_language_choice_definition(definitions: Array, resource: Resource, source_label: String) -> void:
+	if resource == null:
+		return
+	var count := _get_resource_language_choice_count(resource)
+	if count <= 0:
+		return
+	definitions.append({
+		"source_label": source_label,
+		"count": count,
+		"options": _get_resource_language_choice_options(resource),
+	})
+
+
+func _append_resource_language_proficiencies(source_map: Dictionary, resource: Resource, source_label: String, legacy_language_ids: Array = []) -> void:
+	for language_id in legacy_language_ids:
+		var normalized_id := _normalize_language_id(str(language_id))
+		if normalized_id.is_empty():
+			continue
+		_append_skill_source(source_map, normalized_id, source_label)
+	if resource == null:
+		return
+	var language_ids = resource.get("language_proficiencies")
+	if language_ids is Array:
+		for language_id in language_ids:
+			var normalized_id := _normalize_language_id(str(language_id))
+			if normalized_id.is_empty():
+				continue
+			_append_skill_source(source_map, normalized_id, source_label)
+
+
+func _get_resource_language_choice_count(resource: Resource) -> int:
+	if resource == null:
+		return 0
+	return max(int(resource.get("language_choice_count")), 0)
+
+
+func _get_resource_language_choice_options(resource: Resource) -> Array[String]:
+	var option_ids: Array[String] = []
+	if resource == null:
+		return option_ids
+	var options = resource.get("language_choice_options")
+	if options is Array:
+		for language_id in options:
+			var normalized_id := _normalize_language_id(str(language_id))
+			if normalized_id.is_empty() or option_ids.has(normalized_id):
+				continue
+			option_ids.append(normalized_id)
+	return _get_sorted_language_ids_from_array(option_ids)
+
+
+func _get_current_tool_source_map() -> Dictionary:
+	var source_map := _get_fixed_tool_source_map()
+	for group in _get_tool_choice_groups():
+		var group_id := str(group.get("id", ""))
+		var source_label := str(group.get("source_label", "Choice"))
+		for tool_id in _get_selected_tool_ids_for_group(group_id):
+			_append_skill_source(source_map, tool_id, source_label)
+	for tool_id in _get_sorted_tool_ids_from_dictionary(selected_flexible_tool_ids):
+		_append_skill_source(source_map, tool_id, "Feat")
+	return source_map
+
+
+func _get_fixed_tool_source_map() -> Dictionary:
+	var source_map := {}
+	_append_resource_tool_proficiencies(source_map, selected_background, "Background")
+	_append_resource_tool_proficiencies(source_map, selected_class, "Class")
+	for feat in _get_active_feats():
+		_append_resource_tool_proficiencies(source_map, feat, "Feat")
+	return source_map
+
+
+func _collect_fixed_tool_id_set() -> Dictionary:
+	return _collect_string_id_set(_get_sorted_tool_ids_from_array(_get_fixed_tool_source_map().keys()))
+
+
+func _get_tool_choice_groups() -> Array:
+	var groups: Array = []
+	_append_resource_tool_choice_groups(groups, selected_background, "Background")
+	_append_resource_tool_choice_groups(groups, selected_class, "Class")
+	for feat in _get_active_feats():
+		_append_resource_tool_choice_groups(groups, feat, "Feat")
+	groups.append_array(_get_duplicate_fixed_tool_choice_groups())
+	return groups
+
+
+func _build_tool_choice_group(group_id: String, title: String, source_label: String, available_ids: Array[String], count: int, meta_label: String = "Tool proficiency", equipment_link: Dictionary = {}) -> Dictionary:
+	return {
+		"id": group_id,
+		"title": title,
+		"source_label": source_label,
+		"available_ids": available_ids.duplicate(),
+		"count": count,
+		"meta_label": meta_label,
+		"equipment_link": equipment_link.duplicate(),
+	}
+
+
+func _get_required_tool_choice_count_for_group(group_id: String) -> int:
+	for group in _get_tool_choice_groups():
+		if str(group.get("id", "")) == group_id:
+			return int(group.get("count", 0))
+	return 0
+
+
+func _get_available_tool_choice_ids_for_group(group_id: String) -> Array[String]:
+	var available_ids: Array[String] = []
+	var group := _find_tool_choice_group(group_id)
+	if group.is_empty():
+		return available_ids
+
+	var blocked_ids := _collect_fixed_tool_id_set()
+	for tool_id in _get_sorted_tool_ids_from_dictionary(selected_flexible_tool_ids):
+		blocked_ids[tool_id] = true
+	for other_group in _get_tool_choice_groups():
+		var other_group_id := str(other_group.get("id", ""))
+		if other_group_id == group_id:
+			continue
+		for tool_id in _get_selected_tool_ids_for_group(other_group_id):
+			blocked_ids[tool_id] = true
+
+	for tool_id in group.get("available_ids", []):
+		var cleaned_id := str(tool_id)
+		if cleaned_id.is_empty():
+			continue
+		if blocked_ids.has(cleaned_id):
+			continue
+		available_ids.append(cleaned_id)
+
+	for tool_id in _get_selected_tool_ids_for_group(group_id):
+		if not available_ids.has(tool_id):
+			available_ids.append(tool_id)
+	return _get_sorted_tool_ids_from_array(available_ids)
+
+
+func _find_tool_choice_group(group_id: String) -> Dictionary:
+	for group in _get_tool_choice_groups():
+		if str(group.get("id", "")) == group_id:
+			return group
+	return {}
+
+
+func _get_selected_tool_ids_for_group(group_id: String) -> Array[String]:
+	var selected_ids: Array[String] = []
+	for tool_id in selected_tool_choice_state.get(group_id, []):
+		selected_ids.append(str(tool_id))
+	return selected_ids
+
+
+func _set_selected_tool_ids_for_group(group_id: String, selected_ids: Array[String]) -> void:
+	var deduped_ids: Array[String] = []
+	for tool_id in selected_ids:
+		var cleaned_id := str(tool_id)
+		if cleaned_id.is_empty() or deduped_ids.has(cleaned_id):
+			continue
+		deduped_ids.append(cleaned_id)
+	selected_tool_choice_state[group_id] = deduped_ids
+
+
+func _append_resource_tool_proficiencies(source_map: Dictionary, resource: Resource, source_label: String) -> void:
+	if resource == null:
+		return
+	var tool_ids = resource.get("tool_proficiencies")
+	if tool_ids is Array:
+		for tool_id in tool_ids:
+			var cleaned_id := str(tool_id).strip_edges()
+			if cleaned_id.is_empty():
+				continue
+			_append_skill_source(source_map, cleaned_id, source_label)
+
+
+func _append_resource_tool_choice_groups(groups: Array, resource: Resource, source_label: String) -> void:
+	if resource == null:
+		return
+	var raw_groups = resource.get("tool_choice_groups")
+	if not raw_groups is Array:
+		return
+	for raw_group in raw_groups:
+		if not raw_group is Dictionary:
+			continue
+		var group_id := str(raw_group.get("id", "")).strip_edges()
+		var title := str(raw_group.get("title", "Tool Choices")).strip_edges()
+		if group_id.is_empty() or title.is_empty():
+			continue
+		groups.append(_build_tool_choice_group(
+			group_id,
+			title,
+			str(raw_group.get("source_label", source_label)),
+			_resolve_tool_choice_ids(raw_group.get("available_ids", [])),
+			int(raw_group.get("count", 0)),
+			str(raw_group.get("meta_label", "Tool proficiency")),
+			raw_group.get("equipment_link", {}).duplicate() if raw_group.get("equipment_link", {}) is Dictionary else {}
+		))
+
+
+func _get_duplicate_fixed_tool_choice_groups() -> Array:
+	var groups: Array = []
+	var duplicate_counts := _get_duplicate_fixed_tool_counts()
+	var duplicate_tool_ids := _get_sorted_tool_ids_from_array(duplicate_counts.keys())
+	for tool_id in duplicate_tool_ids:
+		var extra_count := int(duplicate_counts.get(tool_id, 0))
+		for replacement_index in range(extra_count):
+			groups.append(_build_tool_choice_group(
+				"duplicate_tool_%s_%d" % [tool_id, replacement_index],
+				"Replace duplicate %s proficiency" % _get_tool_display_name(tool_id),
+				"Replacement",
+				_resolve_tool_choice_ids([TOOL_GROUP_TOKEN_ALL]),
+				1,
+				"Replacement tool proficiency"
+			))
+	return groups
+
+
+func _get_duplicate_fixed_tool_counts() -> Dictionary:
+	var tool_counts := {}
+	for tool_id in _get_fixed_tool_source_entries():
+		tool_counts[tool_id] = int(tool_counts.get(tool_id, 0)) + 1
+	var duplicate_counts := {}
+	for tool_id in tool_counts.keys():
+		var count := int(tool_counts[tool_id])
+		if count > 1:
+			duplicate_counts[str(tool_id)] = count - 1
+	return duplicate_counts
+
+
+func _get_fixed_tool_source_entries() -> Array[String]:
+	var tool_ids: Array[String] = []
+	tool_ids.append_array(_get_resource_tool_proficiency_ids(selected_background))
+	tool_ids.append_array(_get_resource_tool_proficiency_ids(selected_class))
+	for feat in _get_active_feats():
+		tool_ids.append_array(_get_resource_tool_proficiency_ids(feat))
+	return tool_ids
+
+
+func _get_resource_tool_proficiency_ids(resource: Resource) -> Array[String]:
+	var tool_ids: Array[String] = []
+	if resource == null:
+		return tool_ids
+	var values = resource.get("tool_proficiencies")
+	if values is Array:
+		for value in values:
+			var cleaned_id := str(value).strip_edges()
+			if cleaned_id.is_empty():
+				continue
+			tool_ids.append(cleaned_id)
+	return tool_ids
+
+
+func _resolve_tool_choice_ids(values: Variant) -> Array[String]:
+	var resolved_ids: Array[String] = []
+	if values is Array:
+		for value in values:
+			var cleaned_value := str(value).strip_edges()
+			if cleaned_value.is_empty():
+				continue
+			if cleaned_value.begins_with("@"):
+				for tool_id in _get_tool_ids_for_token(cleaned_value):
+					if not resolved_ids.has(tool_id):
+						resolved_ids.append(tool_id)
+				continue
+			if not resolved_ids.has(cleaned_value):
+				resolved_ids.append(cleaned_value)
+	return _get_sorted_tool_ids_from_array(resolved_ids)
+
+
+func _get_tool_ids_for_token(token: String) -> Array[String]:
+	match token:
+		TOOL_GROUP_TOKEN_ARTISAN:
+			return _filter_existing_item_ids([
+				"item_alchemists_supplies",
+				"item_carpenters_tools",
+				"item_cooks_utensils",
+				"item_glassblowers_tools",
+				"item_jewelers_tools",
+				"item_leatherworkers_tools",
+				"item_masons_tools",
+				"item_painters_supplies",
+				"item_potters_tools",
+				"item_smiths_tools",
+				"item_tinkers_tools",
+				"item_weavers_tools",
+				"item_woodcarvers_tools",
+			])
+		TOOL_GROUP_TOKEN_INSTRUMENTS:
+			return _filter_existing_item_ids([
+				"item_bagpipes",
+				"item_drum",
+				"item_flute",
+				"item_horn",
+				"item_lute",
+				"item_lyre",
+			])
+		TOOL_GROUP_TOKEN_GAMING:
+			return _get_sorted_tool_ids_from_array([
+				"tool_gaming_set_dice",
+				"tool_gaming_set_dragonchess",
+				"tool_gaming_set_playing_cards",
+				"tool_gaming_set_three_dragon_ante",
+			])
+		TOOL_GROUP_TOKEN_ALL:
+			return _get_all_selectable_tool_ids()
+		_:
+			return []
+
+
+func _get_all_selectable_tool_ids() -> Array[String]:
+	var tool_ids: Array[String] = []
+	for item in selected_item_resources.values():
+		var item_resource := item as ItemResource
+		if item_resource == null or item_resource.category != ItemResource.Category.TOOL:
+			continue
+		tool_ids.append(item_resource.resource_id)
+	for tool_id in SYNTHETIC_TOOL_LABELS.keys():
+		if not tool_ids.has(tool_id):
+			tool_ids.append(str(tool_id))
+	return _get_sorted_tool_ids_from_array(tool_ids)
+
+
+func _sync_linked_equipment_from_tool_choices() -> void:
+	for group in _get_tool_choice_groups():
+		var equipment_link: Dictionary = group.get("equipment_link", {})
+		if equipment_link.is_empty():
+			continue
+		var group_id := str(group.get("id", ""))
+		var selected_ids := _get_selected_tool_ids_for_group(group_id)
+		var equipment_group_id := str(equipment_link.get("group_id", ""))
+		var variant_id := str(equipment_link.get("variant_id", ""))
+		if equipment_group_id.is_empty() or variant_id.is_empty():
+			continue
+		var choice_state := _get_equipment_choice_state(str(equipment_link.get("scope", "background")))
+		if selected_ids.is_empty():
+			choice_state.erase(equipment_group_id)
+			continue
+		choice_state[equipment_group_id] = {
+			"variant_id": variant_id,
+			"selected_item_ids": [selected_ids[0]],
+		}
+
+
+func _sync_linked_tool_choices_from_equipment() -> void:
+	for group in _get_tool_choice_groups():
+		var equipment_link: Dictionary = group.get("equipment_link", {})
+		if equipment_link.is_empty():
+			continue
+		var equipment_group_id := str(equipment_link.get("group_id", ""))
+		var choice_state := _get_equipment_choice_state(str(equipment_link.get("scope", "background")))
+		var equipment_state: Dictionary = choice_state.get(equipment_group_id, {})
+		if equipment_state.is_empty():
+			continue
+		var linked_item_ids: Array[String] = []
+		for item_id in equipment_state.get("selected_item_ids", []):
+			var cleaned_id := str(item_id)
+			if not cleaned_id.is_empty():
+				linked_item_ids.append(cleaned_id)
+		if linked_item_ids.is_empty():
+			continue
+		var group_id := str(group.get("id", ""))
+		if int(group.get("count", 0)) <= 1:
+			_set_selected_tool_ids_for_group(group_id, [linked_item_ids[0]])
+			continue
+		var selected_ids := _get_selected_tool_ids_for_group(group_id)
+		if selected_ids.has(linked_item_ids[0]):
+			continue
+		selected_ids.insert(0, linked_item_ids[0])
+		while selected_ids.size() > int(group.get("count", 0)):
+			selected_ids.remove_at(selected_ids.size() - 1)
+		_set_selected_tool_ids_for_group(group_id, selected_ids)
 
 
 func _get_final_skill_source_map() -> Dictionary:
 	var source_map := _get_automatic_skill_source_map()
 	for skill_id in _get_sorted_skill_ids_from_dictionary(selected_class_skill_ids):
 		_append_skill_source(source_map, skill_id, "Class")
+	for skill_id in _get_sorted_skill_ids_from_dictionary(selected_flexible_skill_ids):
+		_append_skill_source(source_map, skill_id, "Feat")
 	return source_map
+
+
+func _get_required_flexible_proficiency_choice_count() -> int:
+	var count := 0
+	for feat in _get_active_feats():
+		count += max(int(feat.flexible_proficiency_choice_count), 0)
+	return count
+
+
+func _get_selected_flexible_proficiency_count() -> int:
+	return selected_flexible_skill_ids.size() + selected_flexible_tool_ids.size()
+
+
+func _get_remaining_flexible_proficiency_slots() -> int:
+	return max(_get_required_flexible_proficiency_choice_count() - _get_selected_flexible_proficiency_count(), 0)
+
+
+func _is_flexible_proficiency_complete() -> bool:
+	return _get_selected_flexible_proficiency_count() == _get_required_flexible_proficiency_choice_count()
+
+
+func _get_available_flexible_skill_ids() -> Array[String]:
+	var available_ids: Array[String] = []
+	var blocked_ids := _collect_string_id_set(_get_sorted_skill_ids_from_source_map(_get_final_skill_source_map()))
+	for skill_id in _get_sorted_skill_ids_from_dictionary(selected_flexible_skill_ids):
+		blocked_ids.erase(skill_id)
+	for skill_id in _get_all_skill_ids_sorted():
+		if blocked_ids.has(skill_id):
+			continue
+		available_ids.append(skill_id)
+	for skill_id in _get_sorted_skill_ids_from_dictionary(selected_flexible_skill_ids):
+		if not available_ids.has(skill_id):
+			available_ids.append(skill_id)
+	return _get_sorted_skill_ids_from_array(available_ids)
+
+
+func _get_available_flexible_tool_ids() -> Array[String]:
+	var available_ids: Array[String] = []
+	var blocked_ids := _collect_fixed_tool_id_set()
+	for group in _get_tool_choice_groups():
+		var group_id := str(group.get("id", ""))
+		for tool_id in _get_selected_tool_ids_for_group(group_id):
+			blocked_ids[tool_id] = true
+	for tool_id in _get_sorted_tool_ids_from_dictionary(selected_flexible_tool_ids):
+		blocked_ids.erase(tool_id)
+	for tool_id in _get_all_selectable_tool_ids():
+		if blocked_ids.has(tool_id):
+			continue
+		available_ids.append(tool_id)
+	for tool_id in _get_sorted_tool_ids_from_dictionary(selected_flexible_tool_ids):
+		if not available_ids.has(tool_id):
+			available_ids.append(tool_id)
+	return _get_sorted_tool_ids_from_array(available_ids)
 
 
 func _sync_skill_state_from_character() -> void:
 	selected_class_skill_ids.clear()
+	selected_language_choice_ids.clear()
+	selected_tool_choice_state.clear()
+	selected_flexible_skill_ids.clear()
+	selected_flexible_tool_ids.clear()
 	var character := CharacterCreationManager.current_character
 	if character == null:
 		return
 
-	var selection_state: Dictionary = character.skill_selection_state
+	var selection_state: Dictionary = character.proficiency_selection_state if not character.proficiency_selection_state.is_empty() else character.skill_selection_state
 	var stored_choices: Variant = selection_state.get("class_choices", [])
 	if stored_choices is Array:
 		for value in stored_choices:
 			if value is String:
 				selected_class_skill_ids[value] = true
+
+	var stored_languages: Variant = selection_state.get("language_choices", [])
+	if stored_languages is Array:
+		for value in stored_languages:
+			if value is String:
+				var normalized_id := _normalize_language_id(value)
+				if not normalized_id.is_empty():
+					selected_language_choice_ids[normalized_id] = true
+
+	var stored_flexible_skills: Variant = selection_state.get("flex_skill_choices", [])
+	if stored_flexible_skills is Array:
+		for value in stored_flexible_skills:
+			if value is String:
+				selected_flexible_skill_ids[value] = true
+
+	var stored_flexible_tools: Variant = selection_state.get("flex_tool_choices", [])
+	if stored_flexible_tools is Array:
+		for value in stored_flexible_tools:
+			if value is String:
+				selected_flexible_tool_ids[value] = true
+
+	var stored_tools: Variant = selection_state.get("tool_choice_state", {})
+	if stored_tools is Dictionary:
+		for group_id in stored_tools.keys():
+			var selected_ids: Array[String] = []
+			var group_values = stored_tools.get(group_id, [])
+			if group_values is Array:
+				for value in group_values:
+					if value is String:
+						selected_ids.append(value)
+			_set_selected_tool_ids_for_group(str(group_id), selected_ids)
 
 
 func _sync_skills_to_character() -> void:
@@ -4021,8 +5199,17 @@ func _sync_skills_to_character() -> void:
 	character.skill_proficiency_sources.clear()
 	for skill_id in skill_ids:
 		character.skill_proficiency_sources[skill_id] = _get_skill_source_labels(source_map.get(skill_id, []))
+	character.language_proficiencies = _get_current_language_proficiencies()
+	character.tool_proficiencies = _get_current_tool_proficiencies()
 	character.skill_selection_state = {
 		"class_choices": _get_sorted_skill_ids_from_dictionary(selected_class_skill_ids),
+	}
+	character.proficiency_selection_state = {
+		"class_choices": _get_sorted_skill_ids_from_dictionary(selected_class_skill_ids),
+		"language_choices": _get_sorted_language_ids_from_dictionary(selected_language_choice_ids),
+		"flex_skill_choices": _get_sorted_skill_ids_from_dictionary(selected_flexible_skill_ids),
+		"flex_tool_choices": _get_sorted_tool_ids_from_dictionary(selected_flexible_tool_ids),
+		"tool_choice_state": _duplicate_proficiency_choice_state(selected_tool_choice_state),
 	}
 
 
@@ -4050,7 +5237,12 @@ func _collect_string_id_set(values: Array[String]) -> Dictionary:
 func _trim_selected_string_ids(selected_ids: Dictionary, limit: int) -> void:
 	if limit < 0:
 		return
-	var resource_ids := _get_sorted_skill_ids_from_dictionary(selected_ids)
+	var resource_ids: Array[String] = []
+	for resource_id in selected_ids.keys():
+		var cleaned_id := str(resource_id)
+		if not cleaned_id.is_empty():
+			resource_ids.append(cleaned_id)
+	resource_ids.sort()
 	for index in range(limit, resource_ids.size()):
 		selected_ids.erase(resource_ids[index])
 
@@ -4091,6 +5283,62 @@ func _get_sorted_skill_ids_from_array(skill_ids: Array) -> Array[String]:
 func _sort_skill_ids_by_display_name(left: String, right: String) -> bool:
 	var left_name := _get_skill_display_name(left).to_lower()
 	var right_name := _get_skill_display_name(right).to_lower()
+	if left_name == right_name:
+		return left < right
+	return left_name < right_name
+
+
+func _get_sorted_language_ids_from_dictionary(source: Dictionary) -> Array[String]:
+	var language_ids: Array[String] = []
+	for language_id in source.keys():
+		var cleaned_id := _normalize_language_id(str(language_id))
+		if not cleaned_id.is_empty():
+			language_ids.append(cleaned_id)
+	return _get_sorted_language_ids_from_array(language_ids)
+
+
+func _get_sorted_language_ids_from_array(language_ids: Array) -> Array[String]:
+	var sorted_language_ids: Array[String] = []
+	for language_id in language_ids:
+		var cleaned_id := _normalize_language_id(str(language_id))
+		if cleaned_id.is_empty() or sorted_language_ids.has(cleaned_id):
+			continue
+		sorted_language_ids.append(cleaned_id)
+	sorted_language_ids.sort_custom(_sort_language_ids_by_display_name)
+	return sorted_language_ids
+
+
+func _sort_language_ids_by_display_name(left: String, right: String) -> bool:
+	var left_name := _get_language_display_name(left).to_lower()
+	var right_name := _get_language_display_name(right).to_lower()
+	if left_name == right_name:
+		return left < right
+	return left_name < right_name
+
+
+func _get_sorted_tool_ids_from_dictionary(source: Dictionary) -> Array[String]:
+	var tool_ids: Array[String] = []
+	for tool_id in source.keys():
+		var cleaned_id := str(tool_id).strip_edges()
+		if not cleaned_id.is_empty():
+			tool_ids.append(cleaned_id)
+	return _get_sorted_tool_ids_from_array(tool_ids)
+
+
+func _get_sorted_tool_ids_from_array(tool_ids: Array) -> Array[String]:
+	var sorted_tool_ids: Array[String] = []
+	for tool_id in tool_ids:
+		var cleaned_id := str(tool_id).strip_edges()
+		if cleaned_id.is_empty() or sorted_tool_ids.has(cleaned_id):
+			continue
+		sorted_tool_ids.append(cleaned_id)
+	sorted_tool_ids.sort_custom(_sort_tool_ids_by_display_name)
+	return sorted_tool_ids
+
+
+func _sort_tool_ids_by_display_name(left: String, right: String) -> bool:
+	var left_name := _get_tool_display_name(left).to_lower()
+	var right_name := _get_tool_display_name(right).to_lower()
 	if left_name == right_name:
 		return left < right
 	return left_name < right_name
@@ -4569,6 +5817,7 @@ func _sync_equipment_state_from_character() -> void:
 	_load_equipment_choice_state(selection_state.get("class_choice_state", {}), selected_class_equipment_choice_state)
 	_load_equipment_choice_state(selection_state.get("background_choice_state", {}), selected_background_equipment_choice_state)
 	_sanitize_class_equipment_choice_state()
+	_sync_linked_tool_choices_from_equipment()
 
 
 func _sync_equipment_to_character() -> void:
@@ -4918,16 +6167,71 @@ func _get_all_skill_ids_sorted() -> Array[String]:
 func _get_language_display_names(language_ids: Array) -> Array[String]:
 	var names: Array[String] = []
 	for language_id in language_ids:
-		names.append(_get_language_display_name(language_id))
+		names.append(_get_language_display_name(str(language_id)))
 	return names
 
 
 func _get_language_display_name(language_id: String) -> String:
-	var resource_path := "res://data/languages/language_%s.tres" % language_id
-	var language_resource := load(resource_path) as LanguageResource
+	var normalized_id := _normalize_language_id(language_id)
+	var language_resource := language_resource_cache.get(normalized_id) as LanguageResource
+	if language_resource == null:
+		language_resource = language_resource_cache.get("language_%s" % normalized_id) as LanguageResource
 	if language_resource != null and not language_resource.common_name.is_empty():
 		return language_resource.common_name
-	return _title_case_identifier(language_id)
+	return _title_case_identifier(normalized_id)
+
+
+func _normalize_language_id(language_id: String) -> String:
+	return language_id.strip_edges().trim_prefix("language_")
+
+
+func _get_language_lookup_ids(language_id: String) -> Array[String]:
+	var normalized_id := _normalize_language_id(language_id)
+	var lookup_ids: Array[String] = []
+	if normalized_id.is_empty():
+		return lookup_ids
+	lookup_ids.append(normalized_id)
+	lookup_ids.append("language_%s" % normalized_id)
+	return lookup_ids
+
+
+func _get_current_language_proficiencies() -> Array[String]:
+	return _get_sorted_language_ids_from_array(_get_current_language_source_map().keys())
+
+
+func _get_current_tool_proficiencies() -> Array[String]:
+	return _get_sorted_tool_ids_from_array(_get_current_tool_source_map().keys())
+
+
+func _get_all_language_ids_sorted() -> Array[String]:
+	var language_ids: Array[String] = []
+	var seen := {}
+	for lookup_id in language_resource_cache.keys():
+		var normalized_id := _normalize_language_id(str(lookup_id))
+		if normalized_id.is_empty() or seen.has(normalized_id):
+			continue
+		seen[normalized_id] = true
+		language_ids.append(normalized_id)
+	return _get_sorted_language_ids_from_array(language_ids)
+
+
+func _get_tool_display_names(tool_ids: Array) -> Array[String]:
+	var names: Array[String] = []
+	for tool_id in tool_ids:
+		names.append(_get_tool_display_name(str(tool_id)))
+	return names
+
+
+func _get_tool_display_name(tool_id: String) -> String:
+	var normalized_id := tool_id.strip_edges()
+	if normalized_id.is_empty():
+		return ""
+	if SYNTHETIC_TOOL_LABELS.has(normalized_id):
+		return str(SYNTHETIC_TOOL_LABELS[normalized_id])
+	var item := selected_item_resources.get(normalized_id) as ItemResource
+	if item != null and not item.display_name.is_empty():
+		return item.display_name
+	return _title_case_identifier(normalized_id.trim_prefix("item_"))
 
 
 func _format_list_or_dash(values: Array[String]) -> String:

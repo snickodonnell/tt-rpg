@@ -14,4 +14,5 @@ starting_gold_dice = "10 gp"
 starting_equipment_options = ["item_dagger", "item_trinket_old_map_fragment", "item_clothes_common", "item_pouch"]
 description = "You grew up on the streets with nothing but your wits."
 modifiers = []
+tool_proficiencies = ["item_disguise_kit", "item_thieves_tools"]
 metadata/_custom_type_script = "uid://25blxsg2786h"

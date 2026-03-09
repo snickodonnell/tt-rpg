@@ -15,4 +15,6 @@ weapon_proficiencies = ["Simple", "Hand Crossbows", "Longswords", "Rapiers", "Sh
 starting_gold_dice = "4d4 × 10 gp"
 starting_equipment_options = ["item_rapier", "item_shortsword", "item_shortbow", "item_arrows", "item_burglar_pack", "item_dungeoneer_pack", "item_explorer_pack", "item_leather_armor", "item_dagger", "item_dagger", "item_thieves_tools"]
 modifiers = []
+language_proficiencies = ["thieves_cant"]
+tool_proficiencies = ["item_thieves_tools"]
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

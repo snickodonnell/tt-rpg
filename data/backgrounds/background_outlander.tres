@@ -14,4 +14,11 @@ starting_gold_dice = "10 gp"
 starting_equipment_options = ["item_spear", "item_hunter_pack", "item_clothes_traveler", "item_pouch"]
 description = "You come from a distant land and know the wilds."
 modifiers = []
+tool_choice_groups = [{
+"available_ids": ["@musical_instruments"],
+"count": 1,
+"id": "background_outlander_instrument",
+"meta_label": "Instrument",
+"title": "Choose a musical instrument"
+}]
 metadata/_custom_type_script = "uid://25blxsg2786h"

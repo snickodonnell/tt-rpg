@@ -13,4 +13,5 @@ darkvision = false
 ability_increases = {"str": 1, "dex": 1, "con": 1, "int": 1, "wis": 1, "cha": 1}
 modifiers = []
 languages = ["common"]
+language_choice_count = 1
 metadata/_custom_type_script = "uid://cfa4c0oss23wn"

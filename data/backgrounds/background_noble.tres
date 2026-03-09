@@ -14,4 +14,11 @@ starting_gold_dice = "25 gp"
 starting_equipment_options = ["item_clothes_fine", "item_trinket_broken_crown_piece", "item_pouch"]
 description = "You were born into a noble family."
 modifiers = []
+tool_choice_groups = [{
+"available_ids": ["@gaming_sets"],
+"count": 1,
+"id": "background_noble_gaming_set",
+"meta_label": "Gaming set",
+"title": "Choose a gaming set"
+}]
 metadata/_custom_type_script = "uid://25blxsg2786h"

@@ -13,4 +13,5 @@ darkvision = true
 ability_increases = {"cha": 2}
 modifiers = []
 languages = ["common", "elvish"]
+language_choice_count = 1
 metadata/_custom_type_script = "uid://cfa4c0oss23wn"

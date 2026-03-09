@@ -14,4 +14,12 @@ starting_gold_dice = "15 gp"
 starting_equipment_options = ["item_thieves_tools", "item_clothes_common", "item_pouch", "item_50ft_hempen_rope"]
 description = "You are an experienced criminal with contacts in the underworld."
 modifiers = []
+tool_proficiencies = ["item_thieves_tools"]
+tool_choice_groups = [{
+"available_ids": ["@gaming_sets"],
+"count": 1,
+"id": "background_criminal_gaming_set",
+"meta_label": "Gaming set",
+"title": "Choose a gaming set"
+}]
 metadata/_custom_type_script = "uid://25blxsg2786h"

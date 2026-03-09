@@ -20,4 +20,12 @@ spells_known_per_level = {
 1: 4,
 }
 modifiers = []
+tool_choice_groups = [{
+"available_ids": ["@musical_instruments"],
+"count": 3,
+"equipment_link": {"group_id":"bard_instrument","scope":"class","variant_id":"musical_instrument"},
+"id": "class_bard_instruments",
+"meta_label": "Instrument",
+"title": "Choose three musical instruments"
+}]
 metadata/_custom_type_script = "uid://bv3hhsuo2v7yk"

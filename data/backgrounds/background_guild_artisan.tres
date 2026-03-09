@@ -14,4 +14,12 @@ starting_gold_dice = "15 gp"
 starting_equipment_options = ["item_smiths_tools", "item_clothes_traveler", "item_pouch"]
 description = "You are a skilled artisan with guild connections."
 modifiers = []
+tool_choice_groups = [{
+"available_ids": ["@artisan_tools"],
+"count": 1,
+"equipment_link": {"group_id":"background_guild_artisan_tools","scope":"background","variant_id":"artisan_tools"},
+"id": "background_guild_artisan_tools",
+"meta_label": "Artisan's tools",
+"title": "Choose your artisan's tools"
+}]
 metadata/_custom_type_script = "uid://25blxsg2786h"

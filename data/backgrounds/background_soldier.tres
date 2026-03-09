@@ -14,4 +14,12 @@ starting_gold_dice = "10 gp"
 starting_equipment_options = ["item_dagger", "item_clothes_common", "item_pouch"]
 description = "You trained as a soldier and fought in wars."
 modifiers = []
+tool_proficiencies = ["tool_vehicle_land"]
+tool_choice_groups = [{
+"available_ids": ["@gaming_sets"],
+"count": 1,
+"id": "background_soldier_gaming_set",
+"meta_label": "Gaming set",
+"title": "Choose a gaming set"
+}]
 metadata/_custom_type_script = "uid://25blxsg2786h"

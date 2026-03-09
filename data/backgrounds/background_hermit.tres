@@ -14,4 +14,5 @@ starting_gold_dice = "5 gp"
 starting_equipment_options = ["item_herbalism_kit", "item_blanket", "item_clothes_common"]
 description = "You lived in seclusion and discovered great truths."
 modifiers = []
+tool_proficiencies = ["item_herbalism_kit"]
 metadata/_custom_type_script = "uid://25blxsg2786h"
