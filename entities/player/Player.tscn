@@ -5,12 +5,23 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(20, 12)
 
+[sub_resource type="Gradient" id="Gradient_player"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.247059, 0.639216, 0.901961, 1, 0.247059, 0.639216, 0.901961, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_player"]
+gradient = SubResource("Gradient_player")
+width = 24
+height = 24
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_player_script")
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_player")
 centered = true
-position = Vector2(0, -16)
+position = Vector2(0, -14)
+scale = Vector2(1.25, 1.25)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_player")

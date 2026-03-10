@@ -19,10 +19,6 @@ config/icon="res://icon.svg"
 
 CharacterCreationManager="*res://systems/CharacterCreationManager.gd"
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/lpc_to_godot/plugin.cfg")
-
 [physics]
 
 3d/physics_engine="Jolt Physics"

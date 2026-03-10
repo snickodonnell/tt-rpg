@@ -3,3 +3,5 @@
 /android/
 .venv-rembg/
 tools/portraits/__pycache__/
+tools/aseprite_iso/.cache/
+tools/aseprite_iso/out/
