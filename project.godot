@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="tt-rpg"
-run/main_scene="res://ui/character_creation/CharacterCreationUI.tscn"
+run/main_scene="res://world/IsometricWorld.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
