@@ -1,15 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://dkixvm0erf7h7"]
+[gd_scene load_steps=3 format=3 uid="uid://dkixvm0erf7h7"]
 
 [ext_resource type="Script" path="res://entities/player/Player.gd" id="1_player_script"]
-
-[sub_resource type="Gradient" id="Gradient_player"]
-offsets = PackedFloat32Array(0, 1)
-colors = PackedColorArray(0.286275, 0.509804, 0.941176, 1, 0.286275, 0.509804, 0.941176, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_player"]
-gradient = SubResource("Gradient_player")
-width = 32
-height = 32
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(20, 12)
@@ -17,9 +8,9 @@ size = Vector2(20, 12)
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_player_script")
 
-[node name="Sprite" type="Sprite2D" parent="."]
-texture = SubResource("GradientTexture2D_player")
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
 centered = true
+position = Vector2(0, -16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_player")
